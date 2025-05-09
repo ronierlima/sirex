@@ -1,0 +1,213 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	template="/WEB-INF/layout/template.xhtml">
+
+
+	<ui:define name="title">Movimentação de Materiais</ui:define>
+
+	<ui:define name="breadcrumb">
+		<f:metadata>
+			<f:viewParam name="homeOutcome" value="/paginas/principal.xhtml" />			
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="content">
+		<h:form id="form">
+
+			<div class="grid">
+				<div class="col-12 md:col-12">
+					<div class="card ui-fluid">
+						<h5>Movimentação de Materiais</h5>
+						<div class="formgrid grid">
+
+							<div class="field col-12 md:col-2">
+								<p:outputLabel value="Data de Início:" />
+								<p:datePicker id="dataInicio" selectionMode="single" maxdate="#{movimentacaoMateriaisFarmaciaBean.dataAtual}" monthNavigator="true" 
+								yearNavigator="true" validatorMessage="A data inicial informada é inválida!" pattern="dd/MM/yyyy" mask="99/99/9999" value="#{movimentacaoMateriaisFarmaciaBean.filtro.dataInicial}" 
+								hideOnRangeSelection="true" yearRange="#{movimentacaoMateriaisFarmaciaBean.yearRange}"/>
+							</div>
+
+							<div class="field col-12 md:col-2">
+								<p:outputLabel value="Data de Fim:" />
+								<p:datePicker id="dataFinal" selectionMode="single" maxdate="#{movimentacaoMateriaisFarmaciaBean.dataAtual}" monthNavigator="true" 
+								yearNavigator="true" validatorMessage="A data final informada é inválida!" pattern="dd/MM/yyyy" mask="99/99/9999" value="#{movimentacaoMateriaisFarmaciaBean.filtro.dataFinal}" 
+								hideOnRangeSelection="true" yearRange="#{movimentacaoMateriaisFarmaciaBean.yearRange}"/>								
+							</div>
+
+							<div class="field col-12 md:col-4">
+								<p:outputLabel value="Categoria:" />
+								<p:selectCheckboxMenu multiple="true" converter="omnifaces.SelectItemsConverter"
+								emptyLabel="Selecione uma Categoria" updateLabel="true" style="min-width: 15rem" panelStyle="width: 30rem" scrollHeight="250"
+									id="categoria" value="#{movimentacaoMateriaisFarmaciaBean.filtro.categoriasSelecionadas}">
+									<p:ajax event="toggleSelect" listener="#{movimentacaoMateriaisFarmaciaBean.onToggleSelect}" update="marca item"/>	
+									<p:ajax event="change" listener="#{movimentacaoMateriaisFarmaciaBean.onCategoriaChange}" update="marca item"/>																								
+									<f:selectItems value="#{movimentacaoMateriaisFarmaciaBean.categoriasAtivas}"
+										var="categoria" itemValue="#{categoria}"
+										itemLabel="#{categoria.descricao}" />									
+								</p:selectCheckboxMenu>
+							</div>
+							
+							<div class="field col-12 md:col-4">
+								<p:outputLabel value="Marca:"/>
+								<p:selectCheckboxMenu converter="omnifaces.SelectItemsConverter" multiple="true" filter="true" filterMatchMode="contains"
+								 emptyLabel="Selecione uma Marca" style="min-width: 15rem" panelStyle="width: 30rem" scrollHeight="250"
+									id="marca" value="#{movimentacaoMateriaisFarmaciaBean.filtro.marcasSelecionadas}">									
+									<p:ajax event="toggleSelect" listener="#{movimentacaoMateriaisFarmaciaBean.onToggleMarcaSelect}" update="item"/>	
+									<p:ajax event="change" listener="#{movimentacaoMateriaisFarmaciaBean.onMarcaChange}" update="item"/>
+									<f:selectItems value="#{movimentacaoMateriaisFarmaciaBean.marcasAtivas}"
+										var="marca" itemValue="#{marca}"
+										itemLabel="#{marca.descricao}"/>
+								</p:selectCheckboxMenu>
+								<p:tooltip for="marca">Selecione a(s) Categoria(s) para Listar as Marcas</p:tooltip>
+							</div>
+							
+							<div class="field col-12 md:col-5">
+								<p:outputLabel value="Produto:"/>
+								<p:selectCheckboxMenu converter="omnifaces.SelectItemsConverter" multiple="true" 
+									emptyLabel="Selecione um Produto" style="min-width: 15rem" panelStyle="width: 30rem" scrollHeight="250" id="item" 
+									value="#{movimentacaoMateriaisFarmaciaBean.filtro.produtosSelecionados}" filter="true" filterMatchMode="contains">									
+									<f:selectItems value="#{movimentacaoMateriaisFarmaciaBean.produtosAtivos}"
+										var="produto" itemValue="#{produto}" itemDescription="#{produto.descricao}"
+										itemLabel="#{produto.marca.descricao} - #{produto.descricaoReduzida}" />
+								</p:selectCheckboxMenu>
+								<p:tooltip for="item">Selecione a(s) Marca(s) para Listar os Produtos</p:tooltip>
+							</div>
+							
+							<div class="field col-12 md:col-2">
+								<p:outputLabel value="Protocolo:"/>
+								<p:inputText id="protocolo" type="text" placeholder="Protocolo" maxlength="30"
+									value="#{movimentacaoMateriaisFarmaciaBean.filtro.codigoSolicitacao}" style="text-transform: uppercase;"
+									styleClass="mr-2 mb-2" />
+								<p:tooltip for="protocolo">Informe o Protocolo de Solicitação/Liberação</p:tooltip>
+							</div>
+							
+							<br/>
+
+							<div class="ui-lg-2 ui-sm-12">
+
+								<br />
+								<p:commandButton value="Pesquisar" styleClass="ui-g-nopad"
+									action="#{movimentacaoMateriaisFarmaciaBean.pesquisar}"
+									update="@form" icon="pi pi-search" />
+
+							</div>
+
+							<div class="ui-lg-2 ui-sm-12 ">
+
+								<br/>
+								<p:commandButton value="Limpar" styleClass="ui-button-danger ui-g-nopad"
+									process="@this" update="@form"
+									action="#{movimentacaoMateriaisFarmaciaBean.inicializar}"
+									icon="pi pi-trash" />
+
+							</div>
+
+						</div>
+				</div>
+			</div>
+			</div>
+
+			<div class="grid table-demo">
+				<div class="col-12">
+					<div class="card">
+
+						<p:dataTable widgetVar="customersDT2" var="movimento"
+							id="tabelaDados" lazy="true"
+							value="#{movimentacaoMateriaisFarmaciaBean.model}" selectionMode="single"
+							reflow="true" rows="10" paginator="true"
+							paginatorAlwaysVisible="tr"
+							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+							currentPageReportTemplate="Exibindo de {startRecord} a {endRecord} no total de {totalRecords} registros - Página: {currentPage}/{totalPages}"
+							rowKey="#{saida.id}" scrollable="true" scrollHeight="500"
+							styleClass="ui-datatable-striped ui-datatable-sm ui-datatable-gridlines">
+
+							<f:facet name="header">
+								<div class="customers-table-header">
+									<span style="font-weight: bold">Registros Encontrados</span>
+
+									<div>
+
+									<p:commandButton immediate="true" icon="fa fa-file-excel-o"
+										id="btnxls" value="Excel"
+										disabled="#{movimentacaoMateriaisFarmaciaBean.model.rowCount eq 0}"
+										styleClass="ui-button-success mr-2 mb-2">
+
+										<p:dataExporter type="xls" target="tabelaDados"
+											fileName="registros_encontrados" bufferSize="1"
+											postProcessor="#{utilExportacaoBean.postProcessXLS}"
+											encoding="utf-8" />
+
+									</p:commandButton>
+									
+									<p:commandButton value="PDF" actionListener="#{movimentacaoMateriaisFarmaciaBean.gerarRelatorioPDF}" styleClass="mr-2 mb-2 ui-button-danger" icon="fa fa-file-pdf-o">
+										<p:fileDownload value="#{utilRelatorioMBean.documento}" />
+									</p:commandButton>
+									
+									</div>
+
+								</div>
+							</f:facet>
+							
+							<p:column headerText="Movimento" style="text-align:center" styleClass="ui-lg-1">
+								<h:outputText style="vertical-align: middle;"
+									value="#{movimento.solicitacaoEstoque.movimento}" />
+							</p:column>
+
+							<p:column headerText="Data-Hora" style="text-align:center" styleClass="ui-lg-1">
+								<h:outputText value="#{movimento.dataHoraSolicitacaoLiberacao}">
+									<f:convertDateTime pattern="dd/MM/yyyy - HH:mm" />
+								</h:outputText>
+							</p:column>	
+							
+							<p:column headerText="Protocolo" style="text-align:center" styleClass="ui-lg-1"
+								sortBy="#{movimento.solicitacaoEstoque.codigoSolicitacao}">
+								<h:outputText style="vertical-align: middle;"
+									value="#{movimento.solicitacaoEstoque.codigoSolicitacao}" />
+							</p:column>
+							
+							<p:column headerText="Produto" style="text-align:center" styleClass="ui-lg-6"
+							sortBy="#{movimento.produto.descricao}">
+								<h:outputText style="vertical-align: middle;"
+									value="#{movimento.produto.descricao}" />
+							</p:column>
+							
+							<p:column headerText="Marca" style="text-align:center" sortBy="#{movimento.produto.marca.descricao}" styleClass="ui-lg-1">
+								<h:outputText style="vertical-align: middle;" value="#{movimento.produto.marca.descricao}" />
+							</p:column>
+							
+							<p:column headerText="QTD" styleClass="ui-lg-1" style="text-align:center">
+								<h:outputText style="vertical-align: middle;"
+									value="#{movimento.quantidadeEstoque}" />
+							</p:column>												
+
+							<p:column headerText="Solicitante" style="text-align:center" styleClass="ui-lg-2">
+								<h:outputText style="vertical-align: middle;" value="#{movimento.solicitantePorTipoMovimento}"/>																
+							</p:column>
+							
+							<p:column headerText="QTD Atual" styleClass="ui-lg-1" style="text-align:center">
+								<h:outputText style="vertical-align: middle;" value="#{movimento.saldoEmEstoqueAtual}" />
+							</p:column>
+
+						</p:dataTable>
+
+					</div>
+				</div>
+			</div>
+
+
+		</h:form>
+
+		<style>
+.superWide {
+	width: 200px;
+	min-width: 200px;
+	max-width: 200px;
+}
+</style>
+	</ui:define>
+
+</ui:composition>

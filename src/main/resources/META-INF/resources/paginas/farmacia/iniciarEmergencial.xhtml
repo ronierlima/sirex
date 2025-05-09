@@ -1,0 +1,220 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	template="/WEB-INF/layout/template.xhtml">
+
+	<ui:define name="title">Liberação de Produtos - Emergencial</ui:define>
+
+	<ui:define name="breadcrumb">
+		<f:metadata>
+			<f:viewParam name="homeOutcome" value="/paginas/principal" />
+			<f:viewParam name="value" value="Farmácia,Atendimento Emergencial" />
+			<f:viewParam name="outcome"
+				value="/paginas/atendimento/listarAtendimentos.xhtml" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="content">
+
+
+		<h:form id="frm">
+			<div class="grid">
+
+				<div class="col-12">
+
+					<div class="card">
+						<p:fieldset legend="Informações do Paciente" toggleable="true"
+							toggleSpeed="500">
+
+
+							<div class="grid">
+								<div class="col-12">
+									<div class="ui-fluid">
+										<div class="formgrid grid">
+
+											<div class="field col">
+												<p:outputLabel value="Nome" />
+
+												<div class="ui-inputgroup">
+													<p:inputText readonly="true"
+														value="#{atendimentoEmergencialBean.atendimentoSelecionado.paciente.nomeCompleto}" />
+
+													<p:commandButton value="Histórico" process="@this"
+														pt:data-tooltip="Clique p/ Visualizar o Histórico de Retiradas."
+														actionListener="#{atendimentoEmergencialBean.abrirDlgHistorico}"
+														icon="fa fa-history" />
+
+												</div>
+											</div>
+
+											<div class="field col">
+												<p:outputLabel value="CPF" />
+												<p:inputText readonly="true"
+													value="#{atendimentoEmergencialBean.atendimentoSelecionado.paciente.cpf}" />
+											</div>
+
+											<div class="field col">
+												<p:outputLabel value="Nº do Prontuário" />
+												<p:inputText readonly="true"
+													value="#{atendimentoEmergencialBean.atendimentoSelecionado.paciente.prontuario}" />
+											</div>
+
+											<div class="field col">
+												<p:outputLabel value="Data da Próxima Entrega" />
+
+												<p:inputText readonly="true" id="dtUltimaEntrega"
+													value="#{atendimentoEmergencialBean.atendimentoSelecionado.paciente.dataProximaRetirada}">
+													<f:convertDateTime type="localDate" pattern="dd/MM/yyyy" />
+												</p:inputText>
+
+											</div>
+
+											<div class="field col-12 md:col-12">
+												<p:outputLabel value="Observação" for="@next" />
+												<p:inputTextarea placeholder="Motivo do Atendimento"
+													required="true"
+													requiredMessage="Informe o Motivo do Atendimento"
+													value="#{atendimentoEmergencialBean.atendimentoSelecionado.observacao}" />
+											</div>
+
+
+										</div>
+
+
+									</div>
+
+								</div>
+
+							</div>
+
+
+						</p:fieldset>
+
+
+						<p:fieldset legend="Itens" id="fielSet">
+
+							<div class="formgroup-inline">
+
+								<div class="field">
+
+									<p:commandButton value="Estoque da Farmácia" process="@this"
+										style="margin-left:2px" styleClass="ui-button-success"
+										actionListener="#{atendimentoEmergencialBean.abrirDlgEstoque}"
+										pt:data-tooltip="Clique p/ Visualizar o Estoque da Farmácia."
+										icon="fa fa-fw fa-house-medical" />
+
+								</div>
+
+								<div class="field">
+
+									<p:commandButton process=":frm:fielSet @this"
+										update=":frm:fielSet :frm:btnFinalizar"
+										action="#{atendimentoEmergencialBean.addAdjuvante}"
+										value="Adicionar Adjuvante" icon="pi pi-plus" />
+								</div>
+
+								<div class="field">
+
+									<p:commandButton process=":frm:fielSet @this"
+										update=":frm:fielSet :frm:btnFinalizar"
+										action="#{atendimentoEmergencialBean.addBolsa}"
+										value="Adicionar Bolsa" icon="pi pi-plus" />
+								</div>
+
+							</div>
+
+
+
+							<ui:repeat var="itemDto" value="#{atendimentoEmergencialBean.itens}">
+								<div class="ui-fluid formgrid grid">
+									<p:outputPanel styleClass="field col-12 md:col-2"
+										rendered="#{itemDto.bolsa}">
+
+										<p:outputLabel value="Marca" for="@next" />
+
+										<p:selectOneMenu value="#{itemDto.marca}" autoWidth="false"
+											converter="omnifaces.SelectItemsConverter" filter="true"
+											filterMatchMode="contains">
+
+											<p:ajax process="@this" update="tipoBolsa"
+												listener="#{atendimentoEmergencialBean.listarBolsas(itemDto)}" />
+
+											<f:selectItem itemLabel="Selecione" itemValue="#{null}"
+												noSelectionOption="true" />
+
+											<f:selectItems value="#{itemDto.marcas}" var="marcas"
+												itemLabel="#{marcas.descricao}" itemValue="#{marcas}" />
+
+										</p:selectOneMenu>
+									</p:outputPanel>
+
+									<div
+										class="field col-12 #{itemDto.bolsa ? 'md:col-4' : 'md:col-6'}">
+
+										<p:outputLabel value="#{itemDto.descricao}" for="@next" />
+
+										<p:selectOneMenu value="#{itemDto.produto}" id="tipoBolsa"
+											autoWidth="false" converter="omnifaces.SelectItemsConverter"
+											filter="true" filterMatchMode="contains">
+
+											<f:selectItem itemLabel="Selecione" itemValue="#{null}"
+												noSelectionOption="true" />
+
+											<f:selectItems value="#{itemDto.produtos}" var="produto"
+												itemDescription="#{produto.descricao}"
+												itemLabel="#{produto.descricaoReduzida}"
+												itemValue="#{produto}" />
+
+										</p:selectOneMenu>
+									</div>
+
+									<div class="field col-12 md:col-2">
+
+										<p:outputLabel value="Quantidade Solicitada" for="@next" />
+										<div class="ui-inputgroup">
+											<p:inputText value="#{itemDto.quantidadeSolicitada}" />
+											<p:commandButton
+												action="#{atendimentoEmergencialBean.removerItem(itemDto)}"
+												update=":frm:fielSet :frm:btnFinalizar" process="@this"
+												styleClass="ui-button-danger" value="Excluir"
+												icon="pi pi-trash" />
+										</div>
+
+									</div>
+
+								
+								</div>
+							</ui:repeat>
+
+						</p:fieldset>
+
+
+
+						<div align="left">
+
+							<p:commandButton value="Finalizar" icon="pi pi-check"
+								id="btnFinalizar"
+								action="#{atendimentoEmergencialBean.finalizarLiberacao}"
+								disabled="#{atendimentoEmergencialBean.isDesabilitarBtnFinalizar()}"
+								styleClass="ui-button-success" update="@form"
+								style="margin-top: 10px;" />
+
+							<p:button outcome="/paginas/atendimento/listarAtendimentos.xhtml"
+								value="Cancelar" icon="pi pi-delete-left"
+								style="margin-top: 10px;margin-left:2px"
+								styleClass="ui-button-danger" />
+
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>

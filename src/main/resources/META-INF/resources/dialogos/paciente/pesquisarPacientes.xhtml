@@ -1,0 +1,96 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	template="/dialogos/LayoutDlgPadrao.xhtml">
+
+	<ui:define name="title">Pesquisa de Pacientes Ativos</ui:define>
+
+	<ui:define name="content">
+		<h:form id="form">
+			<div class="grid table-demo">
+				<div class="col-12">
+					<div class="card">
+						<p:dataTable widgetVar="customersDT" var="paciente"
+							value="#{pesquisarPacientesMBean.model}" reflow="true"
+							lazy="true" rowHover="true" rowKey="#{paciente.id}"
+							paginator="true" rows="5" paginatorPosition="bottom"
+							rowSelectMode="add">
+							<f:facet name="header">
+								<div class="customers-table-header">
+									<span class="ui-input-icon-left filter-container"> <i
+										class="pi pi-search" /> 										
+										<p:inputText value="#{pesquisarPacientesMBean.filtro.nome}"
+											id="globalFilter" placeholder="Nome | Prontuário ou Código p/ Pesquisar" 
+											style="text-transform:uppercase"/>
+											<p:commandButton update="@form" action="#{pesquisarPacientesMBean.pesquisar}"
+											icon="pi pi-search" value="Pesquisar" style="margin-left:5px;margin-right:10px"/>
+											<p:commandButton update="@form" action="#{pesquisarPacientesMBean.limpar}"
+											icon="pi pi-trash" value="Limpar" styleClass="ui-button-danger mr-2 mb-2" />
+									</span>										
+									<p:commandButton value="Cadastrar Paciente" icon="pi pi-plus"
+								action="#{pesquisarPacientesMBean.incluirPaciente}"
+								process="@this" rendered="#{seguranca.podeIncluirPaciente}"
+								styleClass="ui-button-success mr-2 mb-2" />
+										
+								</div>
+
+							</f:facet>
+
+							<p:column style="width: 8rem; text-align: center;"
+								headerText="Opções">
+								<p:commandButton icon="pi pi-check" process="@this"
+									value="Selecionar"
+									pt:data-tooltip="Adicionar Paciente a Lista de Espera."
+									action="#{pesquisarPacientesMBean.selecionarPacienteDoDialogo(paciente)}"
+									styleClass="ui-button-success" />
+							</p:column>
+
+
+							<p:column headerText="Código do paciente" sortBy="#{paciente.id}">
+								<h:outputText value="#{paciente.id}" />
+							</p:column>
+
+							<p:column headerText="Prontuário" sortBy="#{paciente.prontuario}">
+								<h:outputText value="#{paciente.prontuario}" />
+							</p:column>
+
+							<p:column headerText="Nome" sortBy="#{paciente.nomeCompleto}">
+								<h:outputText value="#{paciente.nomeCompleto}" />
+							</p:column>
+
+							<p:column headerText="Data Nascimento"
+								sortBy="#{paciente.dataNascimento}">
+								<h:outputText value="#{paciente.dataNascimento}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="CPF" sortBy="#{paciente.cpf}"
+								filterBy="#{paciente.cpf}">
+								<h:outputText value="#{paciente.cpf}" />
+							</p:column>
+							
+							<p:column headerText="Status de Reavaliação"
+								style="width: 8rem; text-align: center;"
+								sortBy="#{paciente.statusReavaliacao.descricao}">
+								<span class="#{paciente.statusReavaliacao.estiloCss}">#{paciente.statusReavaliacao.descricao}</span>
+							</p:column>
+
+							<p:column headerText="Próxima Retirada">
+								<p:outputLabel value="#{paciente.dataProximaRetirada}">
+									<f:convertDateTime type="localDate" pattern="dd/MM/yyyy" />
+								</p:outputLabel>
+							</p:column>
+
+
+						</p:dataTable>
+					</div>
+				</div>
+
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

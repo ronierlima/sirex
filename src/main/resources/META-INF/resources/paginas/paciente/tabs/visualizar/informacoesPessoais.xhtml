@@ -1,0 +1,165 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:p="http://primefaces.org/ui">
+
+	<div class="col-12">
+		<div class="card">
+		
+		<div class="ui-g">
+		
+			<div class="field-checkbox" style="margin-right:10px">
+				<p:selectBooleanCheckbox disabled="true"
+					value="#{visualizarPacienteBean.paciente.pessoaEmSituacaoDeRua}"
+					id="city1" />
+				<p:outputLabel for="city1">Pessoa em Situação de Vulnerabilidade Social</p:outputLabel>
+			</div>
+			
+			<div class="field-checkbox">
+				<p:selectBooleanCheckbox value="#{incluirPacienteBean.paciente.pacienteJudicializado}" id="jud" disabled="true"/>
+				<p:outputLabel for="jud">Paciente Judicializado</p:outputLabel>
+			</div>
+
+			</div>
+
+			<div class="ui-fluid formgrid grid">
+
+				<div class="field col-12 md:col-2">
+					<p:outputLabel value="Número do Prontuário" />
+					<p:inputText value="#{visualizarPacienteBean.paciente.prontuario}"
+						readonly="true" />
+				</div>
+
+				<div class="field col-12 md:col-4">
+					<p:outputLabel value="Nome Completo" />
+					<div class="ui-inputgroup">
+						<p:inputText
+							value="#{visualizarPacienteBean.paciente.nomeCompleto}"
+							readonly="true" />
+						<p:commandButton value="Histórico" process="@this" rendered="#{incluirPacienteBean.paciente.id != null}"
+							pt:data-tooltip="Clique para Visualizar o Histórico de Reavaliações do Paciente."
+							actionListener="#{visualizarPacienteBean.abrirDlgHistorico}"
+							icon="fa fa-history" />
+					</div>
+				</div>
+
+				<div class="field col-12 md:col-2">
+					<p:outputLabel value="CPF" />
+					<p:inputText value="#{visualizarPacienteBean.paciente.cpf}"
+						readonly="true" />
+				</div>
+
+				<div class="field col-12 md:col-2">
+					<p:outputLabel value="Data de Nascimento" />
+					<p:inputText
+						value="#{visualizarPacienteBean.paciente.dataNascimento}"
+						readonly="true">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</p:inputText>
+
+				</div>
+
+
+				<div class="field col-2">
+					<p:outputLabel value="RG" />
+					<p:inputText value="#{visualizarPacienteBean.paciente.rg}"
+						readonly="true" />
+				</div>
+
+				<div class="field col-2">
+					<p:outputLabel value="Orgão Expedidor" />
+					<p:inputText
+						value="#{visualizarPacienteBean.paciente.orgaoExpedidor}"
+						readonly="true" />
+				</div>
+
+				<div class="field col-2">
+					<p:outputLabel value="UF Expedição" />
+					<p:inputText value="#{visualizarPacienteBean.paciente.rgUf}"
+						readonly="true" />
+				</div>
+
+				<div class="field col-12 md:col-2">
+					<p:outputLabel value="Gênero" />
+					<p:inputText value="#{visualizarPacienteBean.paciente.genero.nome}"
+						readonly="true" />
+				</div>
+
+				<div class="field col-12 md:col-4">
+					<p:outputLabel value="Email" />
+					<p:inputText value="#{visualizarPacienteBean.paciente.email}"
+						readonly="true" />
+				</div>
+
+				<div class="field col-12 md:col-2">
+					<p:outputLabel value="Cartão do SUS" />
+					<p:inputText value="#{visualizarPacienteBean.paciente.cartaoSus}"
+						readonly="true" />
+				</div>
+
+				<div class="field col-12 md:col-4">
+					<p:outputLabel value="Nome da Mãe" />
+					<p:inputText value="#{visualizarPacienteBean.paciente.nomeMae}"
+						readonly="true" />
+				</div>
+
+				<div class="field col-12 md:col-3">
+					<p:outputLabel value="Contato" />
+					<p:inputText value="#{visualizarPacienteBean.paciente.telefone}"
+						readonly="true" />
+				</div>
+
+				<div class="field col-12 md:col-3">
+					<p:outputLabel value="Contato 2" />
+					<p:inputText readonly="true"
+						value="#{visualizarPacienteBean.paciente.celular}" />
+				</div>
+
+				<div class="field col-12 md:col-2">
+					<p:outputLabel value="CEP" />
+					<p:inputText
+						value="#{visualizarPacienteBean.paciente.endereco.cep}"
+						readonly="true" />
+				</div>
+
+				<div class="field col-12 md:col-3">
+					<p:outputLabel value="Logradouro" />
+					<p:inputText
+						value="#{visualizarPacienteBean.paciente.endereco.logradouro}"
+						readonly="true" />
+				</div>
+
+				<div class="field col-12 md:col-1">
+					<p:outputLabel value="Número" />
+					<p:inputText readonly="true"
+						value="#{visualizarPacienteBean.paciente.endereco.numero}" />
+				</div>
+
+				<div class="field col-12 md:col-3">
+					<p:outputLabel value="Bairro" />
+					<p:inputText
+						value="#{visualizarPacienteBean.paciente.endereco.bairro}"
+						readonly="true" />
+				</div>
+
+				<div class="field col-12 md:col-2">
+					<p:outputLabel value="Cidade" />
+					<p:inputText
+						value="#{visualizarPacienteBean.paciente.endereco.municipio}"
+						readonly="true" />
+				</div>
+
+				<div class="field col-12 md:col-1">
+					<p:outputLabel value="UF" for="@next" />
+					<p:inputText
+						value="#{visualizarPacienteBean.paciente.endereco.estado.sigla}"
+						readonly="true" />
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+</ui:composition>

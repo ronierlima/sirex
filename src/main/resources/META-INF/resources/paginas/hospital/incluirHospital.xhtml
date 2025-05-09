@@ -1,0 +1,137 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/layout/template.xhtml">
+
+	<ui:define name="title">Incluir Hospital</ui:define>
+
+	<ui:define name="">
+		<f:metadata>
+			<f:viewParam name="paginaAnterior" value="/paginas/hospital/listarHospitais.xhtml" />
+			<f:viewParam name="homeOutcome" value="/paginas/principal" />
+			<f:viewParam name="value" value="Hospital,Incluir Hospital" />
+			<f:viewParam name="outcome" value="/paginas/hospital/incluirHospital" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="content">
+	
+		<h:form>
+			<div class="grid">
+				<div class="col-12 md:col-12">
+					<div class="card ui-fluid">
+						<h5>Incluir Hospital</h5>
+
+						<div class="formgrid grid">
+
+							<div class="field col-12 md:col-4">
+								<p:outputLabel for="name2" value="Nome" />
+								<p:inputText id="name2"
+									value="#{incluirHospitalBean.hospital.nome}" required="true" />
+							</div>
+
+							<div class="field col-12 md:col-4">
+								<p:outputLabel for="cnpj" value="CNPJ" />
+								<p:inputMask slotChar="" mask="99.999.999/9999-99" id="cnpj"
+									value="#{incluirHospitalBean.hospital.cnpj}" required="true" />
+							</div>
+
+							<div class="field col-12 md:col-4">
+								<p:outputLabel value="Sigla" />
+								<p:inputText type="text" required="true"
+									value="#{incluirHospitalBean.hospital.sigla}" />
+							</div>
+
+							<div class="field col-12 md:col-4">
+
+								<p:outputLabel value="Macro" />
+								<p:selectOneMenu required="true"
+									requiredMessage="Macro é obrigatório"
+									value="#{incluirHospitalBean.hospital.municipio.gere.macroRegiao}"
+									converter="omnifaces.SelectItemsConverter">
+
+									<p:ajax process="@this"
+										listener="#{incluirHospitalBean.aoSelecionarMacro}"
+										update="geres" />
+
+									<f:selectItem itemLabel="Selecione" itemValue="#{null}"
+										noSelectionOption="true" />
+
+									<f:selectItems value="#{incluirHospitalBean.macros}"
+										var="macro" itemLabel="#{macro.nome}" itemValue="#{macro}" />
+
+								</p:selectOneMenu>
+							</div>
+
+							<div class="field col-12 md:col-4">
+
+								<p:outputLabel value="Geres" for="@next" />
+								<p:selectOneMenu id="geres" required="true"
+									requiredMessage="Geres é obrigatório"
+									disabled="#{empty incluirHospitalBean.geres}"
+									value="#{incluirHospitalBean.hospital.municipio.gere}"
+									converter="omnifaces.SelectItemsConverter">
+
+									<p:ajax process="@this"
+										listener="#{incluirHospitalBean.aoSelecionarGere}"
+										update="municipios" />
+
+									<f:selectItem itemLabel="Selecione" itemValue="#{null}"
+										noSelectionOption="true" />
+
+									<f:selectItems value="#{incluirHospitalBean.geres}" var="gere"
+										itemLabel="#{gere.nome}" itemValue="#{gere}" />
+
+								</p:selectOneMenu>
+							</div>
+
+							<div class="field col-12 md:col-4">
+
+								<p:outputLabel value="Municipio" for="@next" />
+								<p:selectOneMenu id="municipios"
+									disabled="#{empty incluirHospitalBean.geres}" required="true"
+									filter="true" filterMatchMode="contains" filterNormalize="true"
+									requiredMessage="Municipio é obrigatório"
+									value="#{incluirHospitalBean.hospital.municipio}"
+									converter="omnifaces.SelectItemsConverter">
+
+
+									<f:selectItem itemLabel="Selecione" itemValue="#{null}"
+										noSelectionOption="true" />
+
+									<f:selectItems value="#{incluirHospitalBean.municipios}"
+										var="municipio" itemLabel="#{municipio.nome}"
+										itemValue="#{municipio}" />
+
+								</p:selectOneMenu>
+												
+							</div>
+
+						</div>
+
+						<div class="grid">
+						
+							<div class="col-2">
+								<p:commandButton value="Salvar" icon="pi pi-save"
+									action="#{incluirHospitalBean.cadastrar}" update="@form"
+									styleClass="mr-2 mb-2" />
+							</div>
+
+							<div class="col-2">
+								<p:button outcome="/paginas/hospital/listarHospitais"
+									value="Voltar" icon="pi pi-arrow-left"
+									styleClass="ui-button-danger" />
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>

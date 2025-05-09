@@ -1,0 +1,190 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/layout/template.xhtml">
+
+	<ui:define name="title">Detalhe da Solicitação</ui:define>
+
+	<ui:define name="breadcrumb">
+		<f:metadata>
+			<f:viewParam name="homeOutcome" value="/paginas/principal" />
+			<f:viewParam name="value"
+				value="Estoque Geral,Solicitações da Farmácia" />
+			<f:viewParam name="outcome"
+				value="/paginas/estoqueGeral/listarSolicitacoesFarmacia" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="content">
+
+		<h:form prependId="false">
+			<div class="grid">
+				<div class="col-12 md:col-12">
+					<div class="card ui-fluid">
+
+						<h5>
+
+							<p:outputLabel value="Detalhes da Solicitação"
+								style="font-size:19px" />
+
+						</h5>
+
+						<p:outputPanel styleClass="formgrid grid"
+							rendered="#{visualizarSolicitacaoFarmaciaBean.solicitacao.id!=null}">
+
+							<div class="field col-12 md:col-3">
+								<p:outputLabel value="Código da Solicitação:"
+									style="font-size:16px" />
+								<p:outputLabel
+									value=" #{visualizarSolicitacaoFarmaciaBean.solicitacao.codigoSolicitacao}"
+									style="font-weight: bold;font-size:16px;margin-left:5px" />
+							</div>
+
+							<div class="field col-12 md:col-2">
+								<p:outputLabel value="Solicitante: " style="font-size:16px" />
+								<p:outputLabel
+									value="#{visualizarSolicitacaoFarmaciaBean.solicitacao.usuarioInclusao.nome}"
+									style="font-weight: bold;font-size:16px;margin-left:5px" />
+							</div>
+
+							<div class="field col-12 md:col-3">
+								<p:outputLabel value="Status da Solicitação: "
+									style="font-size:16px" />
+								<p:outputLabel
+									value="#{visualizarSolicitacaoFarmaciaBean.solicitacao.statusSolicitacao.descricao}"
+									style="font-weight: bold;font-size:16px;margin-left:5px" />
+							</div>
+
+							<div class="field col-12 md:col-3">
+								<p:outputLabel value="Data-hora da Solicitação:"
+									style="font-size:16px" />
+								<p:outputLabel
+									value="#{visualizarSolicitacaoFarmaciaBean.solicitacao.dataInclusao}"
+									style="font-weight: bold;font-size:16px;margin-left:5px">
+									<f:convertDateTime timeZone="GMT-03:00" dateStyle="long"
+										pattern="dd/MM/yyyy - HH:mm" />
+								</p:outputLabel>
+							</div>
+							
+							<div class="field col-12 md:col-3">						
+								<p:outputLabel value="Estoquista Responsável: " style="font-size:16px"/>								
+								<p:outputLabel value="#{visualizarEstoqueFarmaciaBean.solicitacao.usuarioAlteracao.nome}" rendered="#{!visualizarEstoqueFarmaciaBean.solicitacao.statusPendente}" style="font-weight: bold;font-size:16px;margin-left:5px"/>
+							</div>
+							
+							<div class="field col-12 md:col-3">						
+								<p:outputLabel value="Data-Hora do Atendimento:" style="font-size:16px"/>								
+								<p:outputLabel value="#{visualizarEstoqueFarmaciaBean.solicitacao.dataAlteracao}" rendered="#{!visualizarEstoqueFarmaciaBean.solicitacao.statusPendente}" style="font-weight: bold;font-size:16px;margin-left:5px">
+									<f:convertDateTime timeZone="GMT-03:00" dateStyle="long" pattern="dd/MM/yyyy - HH:mm" />
+								</p:outputLabel>
+							</div>
+
+						</p:outputPanel>
+
+						<div class="grid table-demo">
+							<div class="col-12">
+								<div class="card">
+
+									<p:dataTable id="dtitens" widgetVar="itemDT" var="item"
+										style="text-align:center!important"
+										value="#{visualizarSolicitacaoFarmaciaBean.solicitacao.itensDaSolicitacao}"
+										reflow="true" rowKey="#{item.id}"
+										emptyMessage="Nenhum Produto Incluído">
+
+										<f:facet name="header">
+											<div align="center" class="ui-lg-12 ui-sm-12">
+												<span style="font-weight: bold">PRODUTOS DA
+													SOLICITAÇÃO</span>
+											</div>
+										</f:facet>
+
+										<p:column headerText="Tipo" style="text-align: center;"
+											styleClass="col-12 md:col-3">
+											<h:outputText value="#{item.produto.categoria.descricao}" />
+										</p:column>
+
+										<p:column headerText="Produto" style="text-align: center;"
+											styleClass="col-12 md:col-7">
+											<h:outputText value="#{item.produto.descricao}" />
+										</p:column>
+										
+										<p:column headerText="Marca" style="text-align: center;"
+											styleClass="col-12 md:col-2">
+											<h:outputText value="#{item.produto.marca.descricao}" />
+										</p:column>
+
+										<p:column headerText="Quantidade Solicitada"
+											style="text-align: center;" styleClass="col-12 md:col-2">
+											<h:outputText value="#{item.quantidadeSolicitada}" />
+										</p:column>
+
+										<p:column headerText="Quantidade Aprovada"
+											style="text-align: center;" styleClass="col-12 md:col-2">
+											<h:outputText value="#{item.quantidadeEstoque}" />
+										</p:column>
+
+										<p:column headerText="Status do Item"
+											style="text-align: center;" styleClass="col-12 md:col-2">
+											<h:outputText value="#{item.statusSolicitacaoItem.descricao}"
+												rendered="#{!item.pendente}" />
+										</p:column>
+
+										<p:column headerText="Justificativa"
+											style="text-align: center;" styleClass="col-12 md:col-2">
+											<p:commandButton icon="pi pi-eye" process="@this"
+												title="Visualizar justificativa"
+												disabled="#{item.justificativaStatus eq null}"
+												action="#{visualizarSolicitacaoFarmaciaBean.openDlgJustificativa(item)}"
+												update="dlgjustificativa">
+												<f:setPropertyActionListener value="#{item}"
+													target="#{visualizarSolicitacaoFarmaciaBean.itemSelecionado}" />
+											</p:commandButton>
+										</p:column>
+
+									</p:dataTable>
+								</div>
+							</div>
+						</div>
+
+						<div align="center">
+						
+							<div class="ui-lg-1">
+
+							<p:button outcome="/paginas/estoqueGeral/listarSolicitacoesFarmacia"
+								value="Voltar" icon="pi pi-arrow-left"
+								styleClass="ui-button-danger" />
+								
+							</div>
+
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+
+			<p:dialog header="Justificativa" id="dlgjustificativa"
+				showEffect="fade" modal="true" widgetVar="dlgJustificativa"
+				responsive="true">
+				<p:outputPanel id="pnljust" class="ui-fluid">
+					<div class="field">
+						<h:outputText
+							value="#{visualizarSolicitacaoFarmaciaBean.itemSelecionado.justificativaStatus}" />
+					</div>
+				</p:outputPanel>
+
+				<f:facet name="footer">
+					<div align="center">
+						<p:commandButton value="Fechar" icon="pi pi-times"
+							onclick="PF('dlgJustificativa').hide()"
+							styleClass="ui-button-danger" process="@this" />
+					</div>
+				</f:facet>
+			</p:dialog>
+
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,68 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	template="/dialogos/LayoutDlgPadrao.xhtml">
+
+	<ui:define name="title">Cadastrar Responsável</ui:define>
+
+	<ui:define name="content">
+		<h:form id="form">
+			<div class="grid">
+				<div class="col-12">
+					<div class="card ui-fluid">
+
+						<div class="formgrid grid">
+
+							<div class="field col-12 md:col-3">
+								<p:outputLabel value="Nome" for="@next" />
+								<p:inputText id="nomeResp"
+									value="#{cadastrarResponsavelMBean.responsavel.nome}"
+									required="true"
+									requiredMessage="Nome do Responsavel é obrigatório">
+									<p:ajax event="change" />
+								</p:inputText>
+							</div>
+
+							<div class="field col-12 md:col-2">
+								<p:outputLabel value="CNPJ" for="@next" />
+								<p:inputMask mask="99.999.999/9999-99" slotChar="" id="cpfResp"
+									value="#{cadastrarResponsavelMBean.responsavel.cpf}"
+									required="true"
+									requiredMessage="CPF do Responsavel é obrigatório" />
+							</div>
+
+							<div class="field col-12 md:col-2">
+								<p:outputLabel value="Contato" for="@next" />
+								<p:inputMask mask="(99)99999-9999" slotChar="" id="contatoResp"
+									value="#{cadastrarResponsavelMBean.responsavel.contato}"
+									required="true"
+									requiredMessage="Contato do Responsavel é obrigatório" />
+							</div>
+
+
+
+							<div class="field col-12 md:col-3">
+								<p:outputLabel value="Motivo" for="@next" />
+								<p:inputText
+									value="#{cadastrarResponsavelMBean.responsavel.motivo}"
+									required="true" requiredMessage="Motivo é obrigatório"
+									maxlength="255" />
+							</div>
+
+							<div class="col-12 md:col-2">
+
+								<p:commandButton action="#{cadastrarResponsavelMBean.cadastrar}"
+									value="Adicionar" style="margin-top: 2rem" icon="pi pi-user" />
+							</div>
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

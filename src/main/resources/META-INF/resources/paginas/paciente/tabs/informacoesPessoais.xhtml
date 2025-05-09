@@ -1,0 +1,308 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:p="http://primefaces.org/ui">
+
+	<div class="col-12">
+		<div class="card">
+		
+		<div class="ui-g">
+		
+			<div class="field-checkbox" style="margin-right:10px">
+				<p:selectBooleanCheckbox
+					value="#{incluirPacienteBean.paciente.pessoaEmSituacaoDeRua}"
+					id="city1">
+					<p:ajax event="change" update="@form" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="city1">Pessoa em Situação de Vulnerabilidade Social</p:outputLabel>
+			</div>
+			
+			<div class="field-checkbox">
+				<p:selectBooleanCheckbox value="#{incluirPacienteBean.paciente.pacienteJudicializado}" id="jud"/>
+				<p:outputLabel for="jud">Paciente Judicializado</p:outputLabel>
+			</div>
+			
+			</div>
+
+			<div class="ui-fluid formgrid grid">
+
+				<div class="field col-12 md:col-2">
+					<p:outputLabel value="Número do Prontuário" for="@next" />
+					<p:inputText value="#{incluirPacienteBean.paciente.prontuario}"
+						onkeypress="if(event.keyCode == 13){ event.preventDefault(); return false; }"
+						id="prontuario" required="true" maxlength="10" style="text-transform:uppercase;"
+						requiredMessage="Número do Prontuário é obrigatório" />
+				</div>
+
+				<div class="field col-12 md:col-4">
+					<p:outputLabel value="Nome Completo" for="@next" />
+					<p:inputText value="#{incluirPacienteBean.paciente.nomeCompleto}"
+						onkeypress="if(event.keyCode == 13){ event.preventDefault(); return false; }"
+						id="nomeCompleto" required="true" maxlength="100"
+						style="text-transform:uppercase;"
+						requiredMessage="Nome é obrigatório" />
+				</div>
+
+
+				<div class="field col-12 md:col-2">
+					<p:outputLabel value="CPF" for="@next" />
+					<p:inputMask value="#{incluirPacienteBean.paciente.cpf}"
+						onkeypress="if(event.keyCode == 13){ event.preventDefault(); return false; }"
+						mask="999.999.999-99" slotChar="" id="cpf"
+						required="#{incluirPacienteBean.campoObrigatorio}"
+						requiredMessage="CPF é obrigatório" />
+				</div>
+
+				<div class="field col-12 md:col-2">
+					<p:outputLabel value="Data de Nascimento" for="@next" />
+					<p:calendar value="#{incluirPacienteBean.paciente.dataNascimento}"
+						mask="99/99/9999" navigator="true" yearRange="c-100:c+100"
+						pattern="dd/MM/yyyy" maxdate="today()"
+						required="#{incluirPacienteBean.campoObrigatorio}"
+						requiredMessage="Data de Nascimento é obrigatório">
+						<p:ajax event="change" update="idade" />
+						<p:ajax event="dateSelect" update="idade" />
+					</p:calendar>
+				</div>
+
+				<div class="field col-12 md:col-2">
+					<p:outputLabel value="Idade" for="idade" />
+					<p:inputText value="#{incluirPacienteBean.paciente.idade}"
+						id="idade" disabled="true" />
+				</div>
+
+				<div class="field col-2">
+					<p:outputLabel value="RG" for="@next" />
+					
+					<p:inputNumber value="#{incluirPacienteBean.paciente.rg}" modifyValueOnWheel="false"
+					    onkeypress="if(event.keyCode == 13){ event.preventDefault(); return false; }"
+						decimalPlaces="0" thousandSeparator="" decimalSeparator=""  minValue="0" maxValue="999999999999999">
+						<p:ajax event="change" update="lbOrgao orgaoExpedidor lblUf oneUf" />	
+					</p:inputNumber>
+				</div>
+
+				<div class="field col-2">
+					<p:outputLabel id="lbOrgao" value="Orgão Expedidor" for="@next" />
+					<p:inputText value="#{incluirPacienteBean.paciente.orgaoExpedidor}" maxlength="40"
+						id="orgaoExpedidor" required="#{incluirPacienteBean.rgPreenchido}"
+						onkeypress="if(event.keyCode == 13){ event.preventDefault(); return false; }" style="text-transform:uppercase;"
+						requiredMessage="Orgão Expedidor é obrigatório" />
+				</div>
+
+				<div class="field col-2">
+					<p:outputLabel id="lblUf" value="UF" for="@next" />
+
+					<p:selectOneMenu value="#{incluirPacienteBean.paciente.rgUf}"
+						converter="omnifaces.SelectItemsConverter" id="oneUf"
+						required="#{incluirPacienteBean.rgPreenchido}"
+						requiredMessage="UF é obrigatório">
+
+						<f:selectItem itemLabel="Selecione" itemValue="#{null}"
+							noSelectionOption="true" />
+
+						<f:selectItems value="#{incluirPacienteBean.estados}" var="estado"
+							itemLabel="#{estado.sigla}" itemValue="#{estado.sigla}" />
+
+					</p:selectOneMenu>
+
+				</div>
+
+				<div class="field col-12 md:col-2">
+					<p:outputLabel value="Gênero" for="@next" />
+					<p:selectOneMenu value="#{incluirPacienteBean.paciente.genero}"
+						converter="omnifaces.SelectItemsConverter" required="true"
+						requiredMessage="Gênero é obrigatório">
+
+						<f:selectItem itemLabel="Selecione" itemValue="#{null}"
+							noSelectionOption="true" />
+
+						<f:selectItems value="#{incluirPacienteBean.generos}" var="genero"
+							itemLabel="#{genero.nome}" itemValue="#{genero}" />
+
+					</p:selectOneMenu>
+				</div>
+
+				<div class="field col-12 md:col-4">
+					<p:outputLabel value="Email" for="@next" />
+					<p:inputText value="#{incluirPacienteBean.paciente.email}" maxlength="100"
+					onkeypress="if(event.keyCode == 13){ event.preventDefault(); return false; }"/>
+				</div>
+
+				<div class="field col-12 md:col-2">
+					<p:outputLabel value="Cartão do SUS" for="@next" />
+					<p:inputNumber value="#{incluirPacienteBean.paciente.cartaoSus}" modifyValueOnWheel="false"
+					    onkeypress="if(event.keyCode == 13){ event.preventDefault(); return false; }"
+						decimalPlaces="0" thousandSeparator="" decimalSeparator=""  minValue="1" maxValue="999999999999999"/>
+				</div>
+
+				<div class="field col-12 md:col-4">
+					<p:outputLabel value="Nome da Mãe" for="@next" />
+					<p:inputText value="#{incluirPacienteBean.paciente.nomeMae}" maxlength="100"
+						onkeypress="if(event.keyCode == 13){ event.preventDefault(); return false; }"
+						style="text-transform:uppercase;"
+						required="#{incluirPacienteBean.campoObrigatorio}"
+						requiredMessage="Nome da Mãe é obrigatório" />
+				</div>
+
+				<div class="field col-12 md:col-3">
+					<p:outputLabel value="Contato" for="@next" />
+					<p:inputMask mask="(99)99999-9999" slotChar=""
+						onkeypress="if(event.keyCode == 13){ event.preventDefault(); return false; }"
+						value="#{incluirPacienteBean.paciente.telefone}"
+						required="#{incluirPacienteBean.campoObrigatorio}"
+						requiredMessage="Contato é obrigatório" />
+				</div>
+
+				<div class="field col-12 md:col-3">
+					<p:outputLabel value="Contato 2" for="@next" />
+					<p:inputMask mask="(99)99999-9999" slotChar=""
+						onkeypress="if(event.keyCode == 13){ event.preventDefault(); return false; }"
+						value="#{incluirPacienteBean.paciente.celular}" />
+				</div>
+
+				<div class="field col-12 md:col-2">
+					<p:outputLabel value="CEP" for="@next" />
+
+					<div class="ui-inputgroup">
+						<p:inputMask value="#{incluirPacienteBean.paciente.endereco.cep}"
+							id="cep" mask="99.999-999" slotChar=""
+							onkeypress="if(event.keyCode==13){document.getElementById('frmPrincipal:btnCep').click();return false;}"
+							required="#{incluirPacienteBean.campoObrigatorio}"
+							requiredMessage="CEP é obrigatório" />
+
+						<p:commandButton value="Buscar" icon="pi pi-map-marker" id="btnCep"
+							action="#{incluirPacienteBean.buscarEndereco}"
+							process="@this cep" update="logradouro bairro cidade uf" />
+					</div>
+				</div>
+
+				<div class="field col-12 md:col-2">
+					<p:outputLabel value="Logradouro" for="@next" />
+					<p:inputText maxlength="100"
+						onkeypress="if(event.keyCode == 13){ event.preventDefault(); return false; }"
+						style="text-transform:uppercase;"
+						value="#{incluirPacienteBean.paciente.endereco.logradouro}"
+						id="logradouro" required="#{incluirPacienteBean.campoObrigatorio}"
+						requiredMessage="Logradouro é obrigatório" />
+				</div>
+
+				<div class="field col-12 md:col-1">
+					<p:outputLabel value="Número" for="@next" />
+					<p:inputText maxlength="30"
+						onkeypress="if(event.keyCode == 13){ event.preventDefault(); return false; }"
+						style="text-transform:uppercase;"
+						value="#{incluirPacienteBean.paciente.endereco.numero}" />
+				</div>
+
+				<div class="field col-12 md:col-2">
+					<p:outputLabel value="Bairro" for="@next" />
+					<p:inputText maxlength="100"
+						onkeypress="if(event.keyCode == 13){ event.preventDefault(); return false; }"
+						style="text-transform:uppercase;"
+						value="#{incluirPacienteBean.paciente.endereco.bairro}"
+						id="bairro" required="#{incluirPacienteBean.campoObrigatorio}"
+						requiredMessage="Bairro é obrigatório" />
+				</div>
+
+				<div class="field col-12 md:col-2">
+					<p:outputLabel value="Cidade" for="@next" />
+					<p:inputText maxlength="100"
+						onkeypress="if(event.keyCode == 13){ event.preventDefault(); return false; }"
+						style="text-transform:uppercase;"
+						value="#{incluirPacienteBean.paciente.endereco.municipio}"
+						id="cidade" required="#{incluirPacienteBean.campoObrigatorio}"
+						requiredMessage="Cidade é obrigatório" />
+				</div>
+
+				<div class="field col-12 md:col-1">
+					<p:outputLabel value="UF" for="@next" />
+					<p:selectOneMenu id="uf" converter="omnifaces.SelectItemsConverter"
+						value="#{incluirPacienteBean.paciente.endereco.estado}">
+
+						<f:selectItem itemLabel="Selecione" itemValue="#{null}"
+							noSelectionOption="true" />
+
+						<f:selectItems value="#{incluirPacienteBean.estados}" var="estado"
+							itemLabel="#{estado.sigla}" itemValue="#{estado}" />
+
+					</p:selectOneMenu>
+				</div>
+
+				<div class="field col-12 md:col-2">
+					<p:outputLabel value="Complemento" for="@next" />
+					<p:inputText value="#{incluirPacienteBean.paciente.endereco.complemento}" 
+					onkeypress="if(event.keyCode == 13){ event.preventDefault(); return false; }"
+					style="text-transform:uppercase;" maxlength="150"/>
+				</div>
+			</div>
+
+
+
+			<p:fieldset legend="Comorbidades" id="fielSetComorbidades">
+				<div class="col-12">
+					<div class="ui-fluid formgrid grid">
+
+						<div class="field col-12 md:col-6">
+
+							<p:outputLabel value="Comorbidades" for="@next" />
+
+							<p:selectCheckboxMenu panelStyleClass="without-selectall"
+								value="#{incluirPacienteBean.paciente.comorbidadesSelecionadas}"
+								converter="omnifaces.SelectItemsConverter" multiple="true"
+								emptyLabel="Selecione." updateLabel="true"
+								style="min-width: 15rem" panelStyle="width: 30rem"
+								scrollHeight="250">
+
+								<p:ajax process="@this filhas" global="false"
+									update=":frmPrincipal:filhas" />
+
+
+								<f:selectItems
+									value="#{incluirPacienteBean.comorbidadesPrincipais}"
+									var="comorbidade" itemLabel="#{comorbidade.descricao}"
+									itemValue="#{comorbidade}" />
+
+							</p:selectCheckboxMenu>
+						</div>
+
+						<p:outputPanel styleClass="field col-12 md:col-3" id="filhas">
+
+							<p:outputLabel id="lblFilhas" value="Doença Oncológica"
+								for="@next" rendered="#{incluirPacienteBean.obrigaDoencaOncologica}"/>
+
+							<p:selectOneMenu rendered="#{incluirPacienteBean.obrigaDoencaOncologica}"
+								value="#{incluirPacienteBean.paciente.doencaOncologica}"
+								converter="omnifaces.SelectItemsConverter">
+
+								<f:selectItem itemLabel="Selecione" itemValue="#{null}"
+									noSelectionOption="true" />
+
+								<f:selectItems value="#{incluirPacienteBean.doencasOncologias}"
+									var="comorbidade" itemLabel="#{comorbidade.descricao}"
+									itemValue="#{comorbidade}" />
+
+							</p:selectOneMenu>
+
+						</p:outputPanel>
+
+						<p:outputPanel styleClass="field col-12 md:col-3"
+							rendered="#{incluirPacienteBean.obrigaOutrasComorbidades}">
+
+							<p:outputLabel id="outrasLabel" value="Outras" for="@next" />
+
+							<p:inputText id="outras" placeholder="Especifique a comorbidade"
+								value="#{incluirPacienteBean.paciente.outrasComorbidades}" />
+						</p:outputPanel>
+
+					</div>
+
+				</div>
+			</p:fieldset>
+		</div>
+	</div>
+
+
+
+</ui:composition>

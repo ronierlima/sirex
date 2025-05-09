@@ -1,0 +1,194 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	template="/WEB-INF/layout/template.xhtml">
+
+
+	<ui:define name="title">Relatório de Atividades</ui:define>
+
+	<ui:define name="breadcrumb">
+		<f:metadata>
+			<f:viewParam name="homeOutcome" value="/paginas/principal.xhtml" />			
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="content">
+		<h:form id="form">
+		
+		<style> 
+		.break-line { 
+		white-space: pre-line; 
+		} 
+		</style>
+
+			<div class="grid">
+				<div class="col-12 md:col-12">
+					<div class="card ui-fluid">
+						<h5>Relatório de Atividades</h5>
+						<div class="formgrid grid">
+						
+						<div class="field col-12 md:col-2">
+								<p:outputLabel value="Intervalo de Datas:" for="@next"/>
+								<p:datePicker required="true" requiredMessage="O intervalo de datas para consulta é obrigatório!" maxdate="#{relatorioAtividadesBean.dataMaxima}" selectionMode="range" value="#{relatorioAtividadesBean.filtro.rangeDatas}" hideOnRangeSelection="true" yearRange="c-100:c+100"/>
+						</div>
+						
+						<div class="field col-12 md:col-3">
+								<p:outputLabel value="Tipo de Ação:" />
+								<p:selectOneMenu value="#{relatorioAtividadesBean.filtro.tipoRevisao}" id="tpacao">
+									<f:selectItem itemLabel="Selecione" itemValue="#{null}"
+										noSelectionOption="true" />
+									<f:selectItems value="#{relatorioAtividadesBean.tiposRevisao}"
+										var="t" itemLabel="#{t.descricao}" itemValue="#{t}" />
+								</p:selectOneMenu>
+								<p:tooltip for="tpacao">Selecione o Tipo de Ação</p:tooltip>
+						</div>
+
+							<div class="field col-12 md:col-3">
+								<p:outputLabel value="Usuário:" />
+								<p:selectOneMenu value="#{relatorioAtividadesBean.filtro.usuario}"
+									converter="omnifaces.SelectItemsConverter">									
+									<f:selectItem itemLabel="Selecione" itemValue="#{null}" noSelectionOption="true" />
+									<f:selectItems value="#{relatorioAtividadesBean.usuariosDoHospital}"
+										var="usuario" itemLabel="#{usuario.nome}" itemValue="#{usuario}" />
+								</p:selectOneMenu>
+							</div>
+
+							<div class="field col-12 md:col-3">
+								<h:outputLabel for="entidade" value="Selecione a Entidade:" />
+								<p:selectOneMenu id="entidade" value="#{relatorioAtividadesBean.filtro.nomeEntidade}" effect="fade" filter="true" filterMatchMode="contains">
+									<f:selectItem itemLabel="Selecione uma entidade" itemValue="" />
+									<f:selectItems value="#{geralBean.entidades}"
+										var="entidade" itemLabel="#{entidade}" itemValue="#{entidade}" />
+								</p:selectOneMenu>
+							</div>
+							
+							<div class="field col-12 md:col-1">
+								<p:outputLabel value="Id da Entidade:"/>
+								<p:inputNumber id="pront" type="text" placeholder="Id da Entidade" maxlength="30" decimalSeparator="" thousandSeparator="" decimalPlaces="0"
+									value="#{relatorioAtividadesBean.filtro.idEntidade}" styleClass="mr-2 mb-2"/>									
+								<p:tooltip for="pront">Informe o ID da Entidade</p:tooltip>
+							</div>
+
+
+							<div class="ui-lg-2 ui-sm-12">								
+								<p:commandButton value="Pesquisar" styleClass="ui-g-nopad"
+									action="#{relatorioAtividadesBean.pesquisar}"
+									update="@form" icon="pi pi-search" />
+
+							</div>
+
+							<div class="ui-lg-2 ui-sm-12 ">								
+								<p:commandButton value="Limpar" styleClass="ui-button-danger ui-g-nopad"
+									process="@this" update="@form"
+									action="#{relatorioAtividadesBean.inicializar}"
+									icon="pi pi-trash" />
+
+							</div>
+
+						</div>
+				</div>
+			</div>
+			</div>
+
+			<div class="grid table-demo">
+				<div class="col-12">
+					<div class="card">
+						
+						<p:dataTable widgetVar="customersDT2" var="historico" id="tabelaDados" 
+							value="#{relatorioAtividadesBean.historicoGeral}"
+							reflow="true" rows="25" paginator="true" 
+							paginatorAlwaysVisible="true" paginatorPosition="bottom"
+							rowsPerPageTemplate="25,50,100,200" scrollHeight="600"
+							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+							currentPageReportTemplate="Exibindo de {startRecord} a {endRecord} no total de {totalRecords} registros - Página: {currentPage}/{totalPages}"
+							scrollable="true" styleClass="ui-datatable-striped ui-datatable-sm ui-datatable-gridlines">
+
+							<f:facet name="header">
+								<div class="customers-table-header">
+									<span style="font-weight: bold">Registros Encontrados</span>
+
+									<div>
+									
+									<p:commandButton id="toggler" type="button" styleClass="mr-2 mb-2" value="Colunas para Exibição" icon="pi pi-align-justify"/>
+                   					<p:columnToggler datasource="tabelaDados" trigger="toggler"/>
+
+									<p:commandButton immediate="true" icon="fa fa-file-excel-o"
+										id="btnxls" value="Excel" styleClass="ui-button-success mr-1 mb-1">
+
+										<p:dataExporter type="xls" target="tabelaDados" bufferSize="1"
+											fileName="registros_encontrados" visibleOnly="true"
+											postProcessor="#{utilExportacaoBean.postProcessXLS}"
+											encoding="utf-8" />
+
+									</p:commandButton>
+									
+									</div>
+
+								</div>
+							</f:facet>
+
+							<p:column headerText="Usuário" style="text-align:center" 
+								styleClass="ui-lg-2" sortBy="#{historico.usuario.usuario}">
+								<h:outputText style="vertical-align: middle;"
+									value="#{historico.usuario.usuario}" />
+							</p:column>
+
+							<p:column headerText="Data-Hora" style="text-align:center"  
+								styleClass="ui-lg-1" sortBy="#{historico.usuario.data}">
+								<h:outputText value="#{historico.usuario.data}">
+									<f:convertDateTime pattern="dd/MM/yyyy - HH:mm:ss" />
+								</h:outputText>
+							</p:column>
+							
+							<p:column headerText="Entidade" style="text-align:center"
+								styleClass="ui-lg-2" sortBy="#{historico.nomeSimplesEntidade}">
+								<h:outputText style="vertical-align: middle;"
+									value="#{historico.nomeSimplesEntidade}" />
+							</p:column>
+							
+							<p:column headerText="Id da Entidade" style="text-align:center"
+								styleClass="ui-lg-1" sortBy="#{historico.idEntidade}">
+								<h:outputText style="vertical-align: middle;"
+									value="#{historico.idEntidade}" />
+							</p:column>
+							
+							<p:column headerText="Atributos Modificados (Se atualização)" style="text-align:center"
+								styleClass="ui-lg-3" sortBy="#{historico.atributosModificados}">
+								<h:outputText style="vertical-align: middle;"
+									value="#{historico.atributosModificados}" />
+							</p:column>
+							
+							<p:column headerText="Tipo" style="text-align:center"
+								styleClass="ui-lg-1" sortBy="#{historico.tipoAcao}">
+								<h:outputText style="vertical-align: middle;"
+									value="#{historico.tipoAcao}" />
+							</p:column>
+							
+							<p:column headerText="Detalhes" style="text-align:center"
+								styleClass="ui-lg-3" sortBy="#{historico.detalhesEntidade}">
+								<h:outputText style="vertical-align: middle;" styleClass="break-line"
+									value="#{historico.detalhesEntidade}" />
+							</p:column>							
+
+						</p:dataTable>											
+
+					</div>
+				</div>
+			</div>
+
+
+		</h:form>
+
+		<style>
+.superWide {
+	width: 200px;
+	min-width: 200px;
+	max-width: 200px;
+}
+</style>
+	</ui:define>
+
+</ui:composition>

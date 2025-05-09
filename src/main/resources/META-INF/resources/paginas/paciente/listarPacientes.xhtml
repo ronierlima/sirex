@@ -1,0 +1,233 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/layout/template.xhtml">
+
+	<ui:define name="title">Listar Pacientes</ui:define>
+
+	<ui:define name="breadcrumb">
+		<f:metadata>
+			<f:viewParam name="homeOutcome" value="/paginas/principal.xhtml" />
+			<f:viewParam name="value" value="Cadastros,Paciente" />
+			<f:viewParam name="outcome"
+				value="/paginas/paciente/listarPacientes.xhtml" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="content">
+		<h:form id="frmPacientes">
+			<div class="grid panel-demo">
+				<div class="col-12">
+
+					<p:panel id="custom">
+
+						<f:facet name="header">
+							<i class="fa fa-hospital-user"></i>
+							<h:outputText value=" Paciente" />
+						</f:facet>
+
+						<f:facet name="actions">
+						
+							<p:commandButton value="Novo" icon="pi pi-plus"
+								action="#{listarPacientesBean.incluirPaciente}"
+								process="@this" rendered="#{seguranca.podeIncluirPaciente}"
+								styleClass="ui-button-success mr-2 mb-2" />
+								
+						</f:facet>
+
+						<h5>Parâmetros de Pesquisa</h5>
+						<div class="formgroup-inline">
+
+							<div class="field ui-lg-3 ui-sm-12 ui-g-nopad">
+								<p:inputText id="nome" type="text" placeholder="Nome" 
+									value="#{listarPacientesBean.filtro.nome}" style="text-transform: uppercase;width:100%"
+									onkeypress="if(event.keyCode==13){document.getElementById('frmPacientes:btnBusca').click();return false;}"/>
+							</div>
+
+							<div class="field ui-lg-1 ui-sm-12 ui-g-nopad">
+								<p:inputText id="pront" type="text" placeholder="Prontuário" style="text-transform: uppercase;;width:100%"
+									onkeypress="if(event.keyCode==13){document.getElementById('frmPacientes:btnBusca').click();return false;}" 
+									value="#{listarPacientesBean.filtro.prontuario}"/>
+							</div>
+
+							<div class="field ui-lg-3 ui-sm-12 ui-g-nopad">
+								<p:inputText id="mae" type="text" placeholder="Mãe" style="text-transform: uppercase;width:100%"
+									onkeypress="if(event.keyCode==13){document.getElementById('frmPacientes:btnBusca').click();return false;}"
+									value="#{listarPacientesBean.filtro.mae}"/>
+							</div>
+
+							<div class="ui-lg-2 ui-sm-12">
+							<p:outputPanel styleClass="field-checkbox field col-6 md:col-12">
+								<p:selectBooleanCheckbox value="#{listarPacientesBean.filtro.pesquisaEmTodosOsHospitais}" id="select"/>
+								<p:outputLabel value="Pesquisar em todos os hospitais" />									
+								<p:tooltip for="select">Pesquisar em todos os hospitais</p:tooltip>							
+							</p:outputPanel>
+							</div>
+							
+							<div class="ui-lg-2 ui-sm-12">
+							<p:outputPanel styleClass="field-checkbox field col-12 md:col-12" >
+								<p:selectBooleanCheckbox value="#{listarPacientesBean.filtro.pacientesJudicializados}" id="jud"/>
+								<p:outputLabel value="Pesquisar Somente Judicializados"/>									
+								<p:tooltip for="jud">Marque para pesquisar somente pacientes judicializados</p:tooltip>							
+							</p:outputPanel>
+							</div>
+
+							<div class="ui-lg-4 ui-sm-12 ">							
+							
+							<p:commandButton value="Pesquisar" styleClass="mr-2 mb-2" id="btnBusca"
+								process="nome pront mae select jud @this" update="@form"
+								action="#{listarPacientesBean.pesquisar}" icon="pi pi-search" />
+
+							<p:commandButton value="Limpar" styleClass="ui-button-danger"
+								process="@this" update="@form"
+								action="#{listarPacientesBean.inicializar}" icon="pi pi-refresh" />
+						    </div>
+							
+						</div>
+
+					</p:panel>
+				</div>
+			</div>
+
+			<div class="grid table-demo">
+				<div class="col-12">
+					<div class="card">
+
+						<p:dataTable widgetVar="pacienteDT" var="paciente" lazy="true"
+							value="#{listarPacientesBean.model}" reflow="true"
+							rowKey="#{paciente.id}" paginator="true" rows="10"
+							paginatorPosition="bottom" selectionMode="single"
+							rowsPerPageTemplate="10,20,30,40,50,60,80,90,100"
+							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							currentPageReportTemplate="Exibindo de {startRecord} a {endRecord} no total de {totalRecords} registros - Página: {currentPage}/{totalPages}">
+
+							<f:facet name="header">
+								<div class="customers-table-header">
+									<span style="font-weight: bold">Pacientes Cadastrados</span>
+								</div>
+							</f:facet>
+
+							<p:column headerText="Status"
+								style="width: 8rem; text-align: center;"
+								sortBy="#{paciente.ativo}">
+								<span class="customer-badge status-#{paciente.statusCss}">#{paciente.ativo
+									? 'Ativo' : 'Inativo'}</span>
+							</p:column>
+							
+							<p:column headerText="Status de Reavaliação"
+								style="width: 8rem; text-align: center;"
+								sortBy="#{paciente.statusReavaliacao.descricao}">
+								<span class="#{paciente.statusReavaliacao.estiloCss}">#{paciente.statusReavaliacao.descricao}</span>
+							</p:column>
+
+							<p:column headerText="Código" sortBy="#{paciente.id}"
+								style="width: 8rem; text-align: center;">
+
+								<p:outputLabel style="color:black" value="#{paciente.id}" />
+
+							</p:column>
+
+							<p:column headerText="Nome" sortBy="#{paciente.nomeCompleto}" width="150">
+								<p:outputLabel style="color:black" value="#{paciente.nomeCompleto}" />
+								
+								<p:outputPanel rendered="#{paciente.inseridoPorCargaDados}">
+									<span class="customer-badge status-negotiation">Inserido por Carga de Dados</span>
+								</p:outputPanel>
+
+								<p:outputPanel rendered="#{paciente.pacienteJudicializado}">
+									<span class="customer-badge status-reverted">JUDICIALIZADO</span>
+									<i class="fa-solid fa-gavel" id="jud" />
+								</p:outputPanel>
+
+							</p:column>
+
+							<p:column headerText="Prontuario" sortBy="#{paciente.prontuario}">
+								<h:outputText value="#{paciente.prontuario}" />
+							</p:column>
+
+							<p:column headerText="CPF" sortBy="#{paciente.cpf}">
+								<h:outputText value="#{paciente.cpf}" />
+							</p:column>
+
+							<p:column headerText="Mãe" sortBy="#{paciente.nomeMae}">
+								<h:outputText value="#{paciente.nomeMae}" />
+							</p:column>
+
+							<p:column headerText="Próxima Retirada">
+								<p:outputLabel value="#{paciente.dataProximaRetirada}">
+									<f:convertDateTime type="localDate" pattern="dd/MM/yyyy" />
+								</p:outputLabel>
+							</p:column>
+
+							<p:column headerText="Hospital" sortBy="#{paciente.hospital.nome}">
+								<h:outputText value="#{paciente.hospital.nome}" />
+							</p:column>
+
+							<p:column headerText="Opções"
+								style="width: 8rem; text-align: center;">
+
+								<p:menuButton value="Ações"  buttonStyle="background-color:#{paciente.mesmaUnidadeUsuario?'':'#959595!important'}">
+
+									<p:menuitem rendered="#{seguranca.podeVisualizarPaciente}"
+										value="Visualizar" action="#{listarPacientesBean.visualizar}"
+										icon="pi pi-eye" process="@this">
+
+										<f:setPropertyActionListener value="#{paciente}"
+											target="#{listarPacientesBean.pacienteSelecionado}" />
+
+									</p:menuitem>
+
+									<p:menuitem value="Alterar" icon="pi pi-file-edit"
+										rendered="#{seguranca.podeAlterarPaciente and paciente.mesmaUnidadeUsuario}" process="@this"
+										action="#{listarPacientesBean.alterar}">
+
+										<f:setPropertyActionListener value="#{paciente}"
+											target="#{listarPacientesBean.pacienteSelecionado}" />
+
+									</p:menuitem>
+									
+									<p:menuitem value="Transferir" icon="fa fa-exchange"
+										rendered="#{seguranca.podeTransferirPaciente and paciente.mesmaUnidadeUsuario}" process="@this"
+										action="#{listarPacientesBean.transferirPaciente}">
+										<f:setPropertyActionListener value="#{paciente}"
+											target="#{listarPacientesBean.pacienteSelecionado}" />
+									</p:menuitem>
+									
+									<p:menuitem value="Materiais Entregues" icon="pi pi-file-pdf" 									    
+									    rendered="#{seguranca.podeVisualizarAlgumEstoque and paciente.mesmaUnidadeUsuario}"
+										action="#{listarPacientesBean.relatorioMateriaisEntregues}"
+										process="@this">
+										<f:setPropertyActionListener value="#{paciente}"
+											target="#{listarPacientesBean.pacienteSelecionado}"/>
+									</p:menuitem>
+
+									<p:menuitem value="#{paciente.ativo ? 'Desativar' : 'Ativar'}"
+										icon="pi pi-thumbs-#{paciente.ativo ? 'down':'up'}-fill"
+										process="@this" update="@form"
+										rendered="#{seguranca.podeAlterarPaciente and paciente.mesmaUnidadeUsuario}"
+										action="#{listarPacientesBean.alterarStatus}">
+
+										<f:setPropertyActionListener value="#{paciente}"
+											target="#{listarPacientesBean.pacienteSelecionado}" />
+
+										<p:confirm header="Confirmação"
+											message="Deseja Alterar o Status do Paciente?"
+											icon="pi pi-exclamation-triangle" />
+
+									</p:menuitem>
+
+								</p:menuButton>
+
+							</p:column>
+
+						</p:dataTable>
+					</div>
+				</div>
+			</div>
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>

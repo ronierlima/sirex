@@ -1,0 +1,34 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<div class="ui-fluid">
+
+		<p:tooltip position="top" showEffect="clip" hideEffect="fold"
+			style="max-width:300px;" />
+
+		<p:confirmDialog global="true" showEffect="fade" width="400">
+
+			<div align="center">
+
+				<p:commandButton value="Sim" type="button"
+					styleClass="ui-confirmdialog-yes" icon="pi pi-check"
+					style="background-color:green" />
+				<p:commandButton value="Não" type="button"
+					style="background-color:red"
+					styleClass="ui-confirmdialog-no ui-button-secondary"
+					icon="pi pi-times" />
+
+			</div>
+		</p:confirmDialog>
+
+	</div>
+	<style type="text/css">
+.ui-tooltip {
+	max-width: 400px;
+	white-space: pre-wrap;
+}
+</style>
+</ui:composition>

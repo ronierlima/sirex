@@ -1,0 +1,107 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/layout/template.xhtml">
+
+	<ui:define name="title">Estoque da Farmácia</ui:define>
+
+	<ui:define name="breadcrumb">
+		<f:metadata>
+			<f:viewParam name="paginaAnterior" value="/paginas/farmacia/solicitacoesTransferencia.xhtml" />
+			<f:viewParam name="homeOutcome" value="/paginas/principal.xhtml" />
+			<f:viewParam name="value" value="Farmácia,Itens Estoque da Farmácia" />
+			<f:viewParam name="outcome"
+				value="/paginas/farmacia/listarItensEstoqueFarmacia.xhtml" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="content">
+		<h:form id="formListar" prependId="false">
+			<div class="grid panel-demo">
+				<div class="col-12">
+
+					<p:panel id="custom">
+
+						<f:facet name="header">
+							<i class="fa fa-fw fa-house-medical"></i>
+							<h:outputText
+								value=" Estoque Farmácia - #{seguranca.usuarioLogado.usuario.hospital.nome}" />
+						</f:facet>
+
+						<h5>Parâmetros de Pesquisa</h5>
+						<div class="formgroup-inline">
+
+							<div class="field ui-lg-2 ui-sm-12 ui-g-nopad">
+								<p:outputLabel value="Categoria" />	
+								<p:selectOneMenu converter="omnifaces.SelectItemsConverter"
+									style="width:100%;" filter="true" filterMatchMode="contains"
+									id="categoria"
+									value="#{listarItensEstoqueFarmaciaBean.filtro.categoria}">									
+									<f:selectItem itemLabel="Selecione a Categoria"
+										itemValue="#{null}" />
+									<f:selectItems
+										value="#{listarItensEstoqueFarmaciaBean.categoriasAtivas}"
+										var="categoria" itemValue="#{categoria}"
+										itemLabel="#{categoria.descricao}" />
+								</p:selectOneMenu>
+							</div>
+							
+							<div class="field ui-lg-2 ui-sm-12 ui-g-nopad">
+								<p:outputLabel value="Marca"/>								
+								<p:selectOneMenu converter="omnifaces.SelectItemsConverter" style="width:100%;"
+									filter="true" filterMatchMode="contains" id="marca" 
+									value="#{listarItensEstoqueFarmaciaBean.filtro.marca}">																	
+									<f:selectItem itemLabel="Selecione a Marca" itemValue="#{null}"/>
+									<f:selectItems value="#{listarItensEstoqueFarmaciaBean.marcasAtivas}"
+										var="marca" itemValue="#{marca}" itemLabel="#{marca.descricao}"/>
+								</p:selectOneMenu>
+								<p:tooltip for="marca">Selecione a Categoria para Listar as Marcas</p:tooltip>
+							</div>
+
+							<div class="field ui-lg-6 ui-sm-12 ui-g-nopad">
+								<p:outputLabel value="Produto"/>
+								<p:selectOneMenu converter="omnifaces.SelectItemsConverter"
+									style="width:100%;" filter="true" filterMatchMode="contains"
+									id="item"
+									value="#{listarItensEstoqueFarmaciaBean.filtro.produto}">
+									<f:selectItem itemLabel="Selecione a Categoria do Produto"
+										noSelectionOption="true" />
+									<f:selectItems
+										value="#{listarItensEstoqueFarmaciaBean.produtosAtivos}"
+										var="produto" itemValue="#{produto}" itemDescription="#{produto.descricao}"
+										itemLabel="#{produto.descricaoReduzida}"/>
+								</p:selectOneMenu>
+								<p:tooltip for="item">Selecione a Marca para Listar os Produtos</p:tooltip>
+							</div>
+
+							<div class="field ui-lg-1 ui-sm-12 ui-g-nopad">
+							    <p:outputLabel value="Quantidade" />
+								<p:inputNumber id="quantidade" type="text" minValue="0"
+									placeholder="Quantidade" modifyValueOnWheel="false"
+									value="#{listarItensEstoqueFarmaciaBean.filtro.quantidade}"
+									inputStyle="width:100%" />
+							</div>
+
+							<p:commandButton value="Pesquisar" styleClass="mr-2 mb-2"
+								process="categoria marca item quantidade" update="@form"
+								action="#{listarItensEstoqueFarmaciaBean.pesquisar}"
+								icon="pi pi-search" />
+
+							<p:commandButton value="Limpar" styleClass="ui-button-danger"
+								process="@this" update="@form"
+								action="#{listarItensEstoqueFarmaciaBean.reinstanciarVariaveis}"
+								icon="pi pi-trash" />
+						</div>
+
+					</p:panel>
+				</div>
+			</div>
+
+			<ui:include src="./includes/tabelaItens.xhtml" />
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>

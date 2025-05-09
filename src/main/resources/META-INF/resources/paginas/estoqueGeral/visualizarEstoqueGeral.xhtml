@@ -1,0 +1,101 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/layout/template.xhtml">
+
+	<ui:define name="title">Movimentação de Estoque</ui:define>
+
+	<ui:define name="breadcrumb">
+		<f:metadata>
+			<f:viewParam name="homeOutcome" value="/paginas/principal.xhtml" />
+			<f:viewParam name="value" value="Estoque,Incluir Estoque" />
+			<f:viewParam name="outcome" value="/paginas/estoqueGeral/movimentoEstoqueGeral" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="content">
+		<h:form prependId="false">
+
+			<div class="grid">
+				<div class="col-12 md:col-12">
+					<div class="card ui-fluid">
+						<h5>Cadastro de Estoque</h5>
+						<div class="formgrid grid">
+						
+						<div class="field col-12 md:col-2">
+								<p:outputLabel value="Categoria" />
+								<p:inputText value="#{visualizarEstoqueGeralBean.entradaEstoque.produto.categoria.descricao}" 
+								 readonly="true"/>
+						</div>
+						
+						<div class="field col-12 md:col-6">
+								<p:outputLabel value="Produto" />
+								<p:inputText value="#{visualizarEstoqueGeralBean.entradaEstoque.produto.descricaoReduzida}" 
+								 readonly="true"/>
+						</div>
+							
+							<div class="field col-12 md:col-4">
+								<p:outputLabel value="Marca" />
+								<p:inputText value="#{visualizarEstoqueGeralBean.entradaEstoque.produto.marca.descricao}" 
+								 readonly="true"/>
+							</div>
+							
+							<div class="field col col-12 md:col-2">
+								<p:outputLabel value="Código" />
+								<p:inputText value="#{visualizarEstoqueGeralBean.entradaEstoque.codigoExterno}" 
+								 readonly="true"/>
+							</div>
+
+							<div class="field col col-12 md:col-3">
+								<p:outputLabel value="Lote" />
+								<p:inputText value="#{visualizarEstoqueGeralBean.entradaEstoque.loteProduto.descricao}" 
+								 readonly="true"/>
+							</div>
+														
+							<div class="field col col-12 md:col-2">
+								<p:outputLabel value="Data de Validade do Lote" />
+								<p:inputText value="#{visualizarEstoqueGeralBean.entradaEstoque.loteProduto.dataValidade}" readonly="true">
+									<f:convertDateTime timeZone="GMT-03:00" dateStyle="long" pattern="dd/MM/yyyy" />								
+								</p:inputText>
+							</div>
+
+							<div class="field col col-12 md:col-2">
+								<p:outputLabel value="Quantidade" />
+								<p:inputText value="#{visualizarEstoqueGeralBean.entradaEstoque.quantidade}" readonly="true"/>
+							</div>
+							
+							<div class="field col col-12 md:col-3">
+								<p:outputLabel value="Valor Unitário" />
+								<p:inputNumber readonly="true" symbol="R$ " decimalSeparator="," thousandSeparator="." value="#{visualizarEstoqueGeralBean.entradaEstoque.valorUnitario}"/>
+							</div>
+
+							<div class="field col col-12 md:col-12">
+								<p:outputLabel value="Observações Gerais" />
+								<p:inputTextarea readonly="true" value="#{visualizarEstoqueGeralBean.entradaEstoque.observacoes}"/>								
+							</div>
+
+							<p:outputPanel class="field col col-12 md:col-12" rendered="#{!visualizarEstoqueGeralBean.entradaEstoque.ativo}">
+								<p:outputLabel value="Motivo da Baixa" />
+								<p:inputTextarea readonly="true" value="#{visualizarEstoqueGeralBean.entradaEstoque.motivoInativacao}"/>								
+							</p:outputPanel>
+
+						</div>
+					</div>
+
+					<div align="center">
+						<div class="col-12 md:col-5">
+							<p:button outcome="/paginas/estoqueGeral/listarEstoqueGeral"
+								value="Voltar" icon="pi pi-arrow-left"
+								styleClass="ui-button-info" />
+						</div>
+					</div>					
+
+				</div>
+			</div>
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>

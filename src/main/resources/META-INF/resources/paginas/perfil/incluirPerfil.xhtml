@@ -1,0 +1,104 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui"
+	template="/WEB-INF/layout/template.xhtml">
+
+	<ui:define name="title">Gerenciar Perfil</ui:define>
+
+	<ui:define name="breadcrumb">
+		<f:metadata>
+			<f:viewParam name="paginaAnterior" value="/paginas/perfil/listarPerfis.xhtml" />
+			<f:viewParam name="homeOutcome" value="/paginas/principal" />
+			<f:viewParam name="value" value="Perfis,Novo" />
+			<f:viewParam name="outcome"
+				value="/paginas/perfil/incluirPerfil.xhtml" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="content">
+
+		<div class="grid panel-demo">
+
+
+			<div class="col-12 md:col-12">
+				<div class="card">
+					<h:form id="frmPrincipal">
+
+						<div class="ui-fluid">
+
+							<p:panelGrid columns="4"
+								columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-g-12 ui-md-2 ui-grc-2,ui-g-12 ui-md-4"
+								layout="grid"
+								styleClass="ui-panelgrid-blank form-group form-elements"
+								style="border:0px none; background-color:transparent;">
+
+								<p:outputLabel for="input" value="Nome" />
+								<p:inputText id="input" required="true"
+									value="#{incluirPerfilBean.perfil.nome}"
+									placeholder="Descrição do Perfil" />
+
+								<p:commandButton update="@form" id="btnCadastrar" value="Salvar"
+									action="#{incluirPerfilBean.salvar}" icon="pi pi-save" />
+
+							</p:panelGrid>
+
+						</div>
+
+						<p:accordionPanel multiple="false" var="permissao"
+							id="painelPermissoes" activeIndex="-1" orientation="left"
+							value="#{incluirPerfilBean.permissoes}">
+							
+							<p:tab>
+
+								<f:facet name="title">
+								
+									<p:selectBooleanCheckbox id="btnCheck"
+										value="#{permissao.marcado}">
+										<p:ajax event="change"
+											listener="#{incluirPerfilBean.selecionarTodas(permissao)}"
+											update="pageDirection" />
+									</p:selectBooleanCheckbox>
+									
+									<p:outputLabel value=" " />
+									
+									<div class="inline-flex align-items-center">
+										<div class="flex flex-column">
+											<h5 class="mb-0">#{permissao.pai.label}</h5>
+											<p>#{permissao.filhas.size()} Funcionalidades Disponiveis</p>
+										</div>
+									</div>
+									
+								</f:facet>
+
+
+								<div class="col-12 md:col-12">
+
+									<p:selectManyCheckbox id="pageDirection" layout="pageDirection"
+										value="#{incluirPerfilBean.selecionadas}" columns="1">
+										
+										<f:attribute name="idPai" value="#{permissao.pai.id}" />
+										
+										<p:ajax listener="#{incluirPerfilBean.aoSelecionarItem}"
+											update=":frmPrincipal:painelPermissoes:btnCheck" />
+											
+										<f:selectItems value="#{permissao.filhas}" var="f"
+											itemLabel="#{f.label}" itemValue="#{f}" />
+									</p:selectManyCheckbox>
+
+								</div>
+
+							</p:tab>
+
+						</p:accordionPanel>
+
+					</h:form>
+				</div>
+
+
+			</div>
+		</div>
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,71 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	template="/dialogos/LayoutDlgPadrao.xhtml">
+
+	<ui:define name="title">Histórico de Reversibilidade</ui:define>
+
+	<ui:define name="content">
+		<h:form id="form">
+
+			<div class="grid table-demo">
+				<div class="col-12">
+					<div class="card">
+
+						<p:dataTable widgetVar="historicoDT" var="historico"
+							value="#{historicoReversibilidadeMBean.historicoReversibilidadeEstomia}"
+							reflow="true" rows="5" paginator="true"
+							paginatorAlwaysVisible="false" scrollable="true"
+							sortBy="#{historico.usuario.data}" scrollHeight="500"
+							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							currentPageReportTemplate="Exibindo de {startRecord} a {endRecord} no total de {totalRecords} registros - Página: {currentPage}/{totalPages}"
+							styleClass="ui-datatable-striped ui-datatable-sm ui-datatable-gridlines">
+
+							<p:column headerText="Data-Hora" width="140"
+								sortBy="#{historico.usuario.data}"
+								style="text-align:center">
+								<h:outputText value="#{historico.usuario.data}">
+									<f:convertDateTime pattern="dd/MM/yyyy - HH:mm:ss" />
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Usuário" width="140"
+								style="text-align:center">
+								<h:outputText style="vertical-align: middle; margin-left: .5rem"
+									value="#{historico.usuario.usuario}" />
+							</p:column>
+
+							<p:column headerText="Status de Reversibilidade"
+								style="text-align:center" width="100">
+								<h:outputText
+									value="#{historico.entidade.statusReversibilidade.descricao}" />
+							</p:column>
+
+							<p:column headerText="Justificativa para Inaptidão (Se Inapto)"
+								style="text-align:center" width="130">
+								<h:outputText
+									value="#{historico.entidade.justificativaInaptidao}" />
+							</p:column>
+
+							<p:column headerText="Status da Estomia"
+								style="text-align:center" width="100">
+								<h:outputText
+									value="#{historico.entidade.ativo?'Ativo':'Inativo'}" />
+							</p:column>
+
+							<p:column headerText="Justificativa para Inativação (Se Inativo)"
+								style="text-align:center" width="130">
+								<h:outputText value="#{historico.entidade.motivoInativacao}" />
+							</p:column>
+
+						</p:dataTable>
+
+					</div>
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

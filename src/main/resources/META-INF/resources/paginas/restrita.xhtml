@@ -1,0 +1,585 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/layout/template.xhtml">
+
+    <ui:define name="title">Dashboard Sales</ui:define>
+
+    <ui:define name="head">
+        <script type="text/javascript">
+        //<![CDATA[
+            function ordersChartExtender() {
+                var textColor = getComputedStyle(document.body).getPropertyValue('--text-color') || 'rgba(0, 0, 0, 0.87)';
+                var gridLinesColor = getComputedStyle(document.body).getPropertyValue('--divider-color') || 'rgba(160, 167, 181, .3)';
+                var fontFamily = getComputedStyle(document.body).getPropertyValue('--font-family');
+                
+                this.cfg.config.options = {
+                    plugins: {
+                        legend: {
+                            display: true,
+                            labels: {
+                                fontFamily,
+                                color: textColor
+                            }
+                        }
+                    },
+                    responsive: true,
+                    scales: {
+                        y: {
+                            ticks: {
+                                fontFamily,
+                                color: textColor
+                            },
+                            grid: {
+                                color: gridLinesColor
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                fontFamily,
+                                color: textColor
+                            },
+                            grid: {
+                                color: gridLinesColor
+                            }
+                        }
+                    }
+                };
+            }
+            
+            function overviewChartExtender(config) {
+                config.options.responsive = true;
+                config.options.scales = {
+                    y: {
+                        display: false
+                    },
+                    x: {
+                        display: false
+                    }
+                }
+            }
+            
+            function overviewChartExtender1() {
+                var config = this.cfg.config;
+                overviewChartExtender(config);
+                
+                var colors = getOverviewColors();
+                config.data.datasets[0].borderColor = colors.tealBorderColor;
+                config.data.datasets[0].backgroundColor = colors.tealBgColor;
+            }
+            
+            function overviewChartExtender2() {
+                var config = this.cfg.config;
+                overviewChartExtender(config);
+                
+                var colors = getOverviewColors();
+                config.data.datasets[0].borderColor = colors.tealBorderColor;
+                config.data.datasets[0].backgroundColor = colors.tealBgColor;
+            }
+            
+            function overviewChartExtender3() {
+                var config = this.cfg.config;
+                overviewChartExtender(config);
+                
+                var colors = getOverviewColors();
+                config.data.datasets[0].borderColor = colors.pinkBorderColor;
+                config.data.datasets[0].backgroundColor = colors.pinkBgColor;
+            }
+            
+            function overviewChartExtender4() {
+                var config = this.cfg.config;
+                overviewChartExtender(config);
+                
+                var colors = getOverviewColors();
+                config.data.datasets[0].borderColor = colors.tealBorderColor;
+                config.data.datasets[0].backgroundColor = colors.tealBgColor;
+            }
+
+            function getOverviewColors() {
+                var isLight = getComputedStyle(document.body).getPropertyValue('--layout-mode') !== 'dark';
+                return {
+                    pinkBorderColor: isLight ? '#E91E63' : '#EC407A',
+                    pinkBgColor: isLight ? '#F48FB1' : '#F8BBD0',
+                    tealBorderColor: isLight ? '#009688' : '#26A69A',
+                    tealBgColor: isLight ? '#80CBC4' : '#B2DFDB'
+                };
+            }
+
+            function chatContentScroll() {
+                var content = $('.chat-content')[0];
+
+                if (content) {
+                    content.scroll({
+                        top: content.scrollHeight
+                    });
+                }
+            }
+
+            function onChatInputKeyPress(event) {
+                if (event.keyCode == 13) {
+                    chatRC();
+                    
+                    return false; 
+                }
+            }
+
+            function onChatEmoji() {
+                PF('emojisOverlayPanelWidget').hide();
+
+                var input = $('.chat-input')[0];
+                input.focus();
+                input.setSelectionRange(input.value.length, input.value.length);
+            }
+        //]]>
+        </script>
+    </ui:define>
+
+    <ui:define name="breadcrumb">
+        <f:metadata>
+            <f:viewParam name="homeOutcome" value="/paginas/principal" />
+            <f:viewParam name="value" value="Dashboard Sales" />
+            <f:viewParam name="outcome" value="/paginas/principal" />
+        </f:metadata>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="dashboardForm">
+            <p:remoteCommand name="forceUpdate" update="@form" />
+            
+            <div class="grid dashboard">
+                <div class="col-12 md:col-6 lg:col-3">
+                    <div class="card overview-box flex flex-column pt-2">
+                        <div class="flex align-items-center muted-text">
+                            <i class="pi pi-shopping-cart"></i>
+                            <h6 class="m-0 #{app.rtl ? 'pr-2' : 'pl-2'}">Orders</h6>
+                            <div class="#{app.rtl ? 'mr-auto' : 'ml-auto'}">
+                                <p:commandButton type="button" icon="pi pi-ellipsis-h" styleClass="rounded-button ui-button-flat ui-button-plain"/>
+                                <p:menu overlay="true" trigger="@previous" my="left top" at="left bottom">
+                                    <p:menuitem value="Update" icon="pi pi-fw pi-refresh"/>
+                                    <p:menuitem value="Edit" icon="pi pi-fw pi-pencil"/>
+                                </p:menu>
+                            </div>
+                        </div>
+                        <div class="flex justify-content-between mt-3 flex-wrap">
+                            <div class="flex flex-column" style="width: 80px">
+                                <span class="mb-1 fs-xlarge">640</span>
+                                <span class="overview-status p-1 teal-bgcolor fs-small">1420 Completed</span>
+                            </div>
+                            <div class="flex align-items-end">
+                                <p:lineChart model="#{dashboardView.overviewChartModel1}" style="width: 160px; height: 60px;"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="col-12 md:col-6 lg:col-3">
+                    <div class="card overview-box flex flex-column pt-2">
+                        <div class="flex align-items-center muted-text">
+                            <i class="pi pi-dollar"></i>
+                            <h6 class="m-0 #{app.rtl ? 'pr-2' : 'pl-2'}">Revenue</h6>
+                            <div class="#{app.rtl ? 'mr-auto' : 'ml-auto'}">
+                                <p:commandButton type="button" icon="pi pi-ellipsis-h" styleClass="rounded-button ui-button-flat ui-button-plain"/>
+                                <p:menu overlay="true" trigger="@previous" my="left top" at="left bottom">
+                                    <p:menuitem value="Update" icon="pi pi-fw pi-refresh"/>
+                                    <p:menuitem value="Edit" icon="pi pi-fw pi-pencil"/>
+                                </p:menu>
+                            </div>
+                        </div>
+                        <div class="flex justify-content-between mt-3 flex-wrap">
+                            <div class="flex flex-column" style="width: 80px">
+                                <span class="mb-1 fs-xlarge">$57K</span>
+                                <span class="overview-status p-1 teal-bgcolor fs-small">$9,640 Income</span>
+                            </div>
+                            <div class="flex align-items-end">
+                                <p:lineChart model="#{dashboardView.overviewChartModel2}" style="width: 160px; height: 60px;"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="col-12 md:col-6 lg:col-3">
+                    <div class="card overview-box flex flex-column pt-2">
+                        <div class="flex align-items-center muted-text">
+                            <i class="pi pi-users"></i>
+                            <h6 class="m-0 #{app.rtl ? 'pr-2' : 'pl-2'}">Customers</h6>
+                            <div class="#{app.rtl ? 'mr-auto' : 'ml-auto'}">
+                                <p:commandButton type="button" icon="pi pi-ellipsis-h" styleClass="rounded-button ui-button-flat ui-button-plain"/>
+                                <p:menu overlay="true" trigger="@previous" my="left top" at="left bottom">
+                                    <p:menuitem value="Update" icon="pi pi-fw pi-refresh"/>
+                                    <p:menuitem value="Edit" icon="pi pi-fw pi-pencil"/>
+                                </p:menu>
+                            </div>
+                        </div>
+                        <div class="flex justify-content-between mt-3 flex-wrap">
+                            <div class="flex flex-column" style="width: 80px">
+                                <span class="mb-1 fs-xlarge">8572</span>
+                                <span class="overview-status p-1 pink-bgcolor fs-small">25402 Registered</span>
+                            </div>
+                            <div class="flex align-items-end">
+                                <p:lineChart model="#{dashboardView.overviewChartModel3}" style="width: 160px; height: 60px;"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="col-12 md:col-6 lg:col-3">
+                    <div class="card overview-box flex flex-column pt-2">
+                        <div class="flex align-items-center muted-text">
+                            <i class="pi pi-comments"></i>
+                            <h6 class="m-0 #{app.rtl ? 'pr-2' : 'pl-2'}">Comments</h6>
+                            <div class="#{app.rtl ? 'mr-auto' : 'ml-auto'}">
+                                <p:commandButton type="button" icon="pi pi-ellipsis-h" styleClass="rounded-button ui-button-flat ui-button-plain"/>
+                                <p:menu overlay="true" trigger="@previous" my="left top" at="left bottom">
+                                    <p:menuitem value="Update" icon="pi pi-fw pi-refresh"/>
+                                    <p:menuitem value="Edit" icon="pi pi-fw pi-pencil"/>
+                                </p:menu>
+                            </div>
+                        </div>
+                        <div class="flex justify-content-between mt-3 flex-wrap">
+                            <div class="flex flex-column" style="width: 80px">
+                                <span class="mb-1 fs-xlarge">805</span>
+                                <span class="overview-status p-1 teal-bgcolor fs-small">85 Responded</span>
+                            </div>
+                            <div class="flex align-items-end">
+                                <p:lineChart model="#{dashboardView.overviewChartModel4}" style="width: 160px; height: 60px;"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="col-12 lg:col-6">
+                    <div class="card height-100">
+                        <div class="card-header">
+                            <h5>Contact</h5>
+                            <div>
+                                <p:commandButton type="button" icon="pi pi-ellipsis-h" styleClass="rounded-button ui-button-flat ui-button-plain"/>
+                                <p:menu overlay="true" trigger="@previous" my="left top" at="left bottom">
+                                    <p:menuitem value="Update" icon="pi pi-fw pi-refresh"/>
+                                    <p:menuitem value="Edit" icon="pi pi-fw pi-pencil"/>
+                                    <p:menuitem value="Delete" icon="pi pi-fw pi-trash"/>
+                                </p:menu>
+                            </div>
+                        </div>
+            
+                        <ul class="widget-list">
+                            <li class="flex align-items-center py-3">
+                                <div class="person-item flex align-items-center">
+                                    <p:graphicImage name="images/avatar/xuxuefeng.png" library="demo" />
+                                    <div class="#{app.rtl ? 'mr-2' : 'ml-2'}">
+                                        <div>Xuxue Feng</div>
+                                        <small class="muted-text">feng@ultima.org</small>
+                                    </div>
+                                </div>
+                                <span class="person-tag indigo-bgcolor p-1 fs-small #{app.rtl ? 'mr-auto' : 'ml-auto'}">Accounting</span>
+                                <span class="person-tag orange-bgcolor p-1 fs-small #{app.rtl ? 'mr-2' : 'ml-2'}">Sales</span>
+                            </li>
+            
+                            <li class="flex align-items-center py-3">
+                                <div class="person-item flex align-items-center">
+                                    <p:graphicImage name="images/avatar/elwinsharvill.png" library="demo" />
+                                    <div class="#{app.rtl ? 'mr-2' : 'ml-2'}">
+                                        <div>Elwin Sharvill</div>
+                                        <small class="muted-text">sharvill@ultima.org</small>
+                                    </div>
+                                </div>
+                                <span class="person-tag teal-bgcolor p-1 fs-small #{app.rtl ? 'mr-auto' : 'ml-auto'}">Finance</span>
+                                <span class="person-tag orange-bgcolor p-1 fs-small #{app.rtl ? 'mr-2' : 'ml-2'}">Sales</span>
+                            </li>
+            
+                            <li class="flex align-items-center py-3">
+                                <div class="person-item flex align-items-center">
+                                    <p:graphicImage name="images/avatar/avatar-1.png" library="demo" />
+                                    <div class="#{app.rtl ? 'mr-2' : 'ml-2'}">
+                                        <div>Anna Fali</div>
+                                        <small class="muted-text">fali@ultima.org</small>
+                                    </div>
+                                </div>
+                                <span class="person-tag pink-bgcolor p-1 fs-small #{app.rtl ? 'mr-auto' : 'ml-auto'}">Management</span>
+                            </li>
+            
+                            <li class="flex align-items-center py-3">
+                                <div class="person-item flex align-items-center">
+                                    <p:graphicImage name="images/avatar/avatar-2.png" library="demo" />
+                                    <div class="#{app.rtl ? 'mr-2' : 'ml-2'}">
+                                        <div>Jon Stone</div>
+                                        <small class="muted-text">stone@ultima.org</small>
+                                    </div>
+                                </div>
+                                <span class="person-tag pink-bgcolor p-1 fs-small #{app.rtl ? 'mr-auto' : 'ml-auto'}">Management</span>
+                                <span class="person-tag teal-bgcolor p-1 fs-small #{app.rtl ? 'mr-2' : 'ml-2'}">Finance</span>
+                            </li>
+            
+                            <li class="flex align-items-center py-3">
+                                <div class="person-item flex align-items-center">
+                                    <p:graphicImage name="images/avatar/avatar-3.png" library="demo" />
+                                    <div class="#{app.rtl ? 'mr-2' : 'ml-2'}">
+                                        <div>Stephen Shaw</div>
+                                        <small class="muted-text">shaw@ultima.org</small>
+                                    </div>
+                                </div>
+                                <span class="person-tag teal-bgcolor p-1 fs-small #{app.rtl ? 'mr-auto' : 'ml-auto'}">Finance</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            
+                <div class="col-12 lg:col-6">
+                    <div class="card height-100">
+                        <div class="card-header">
+                            <h5>Order Graph</h5>
+                            <div>
+                                <p:commandButton type="button" icon="pi pi-ellipsis-h" styleClass="rounded-button ui-button-flat ui-button-plain"/>
+                                <p:menu overlay="true" trigger="@previous" my="left top" at="left bottom">
+                                    <p:menuitem value="Update" icon="pi pi-fw pi-refresh"/>
+                                    <p:menuitem value="Edit" icon="pi pi-fw pi-pencil"/>
+                                </p:menu>
+                            </div>
+                        </div>
+                        <p:lineChart model="#{dashboardView.ordersChartModel}" style="height: 300px;"/>
+                    </div>
+                </div>
+            
+                <div class="col-12 lg:col-6">
+                    <div class="card height-100 widget-timeline">
+                        <div class="card-header">
+                            <h5>Timeline</h5>
+                            <div>
+                                <p:commandButton type="button" icon="pi pi-ellipsis-h" styleClass="rounded-button ui-button-flat ui-button-plain"/>
+                                <p:menu overlay="true" trigger="@previous" my="left top" at="left bottom">
+                                    <p:menuitem value="Update" icon="pi pi-fw pi-refresh"/>
+                                    <p:menuitem value="Edit" icon="pi pi-fw pi-pencil"/>
+                                </p:menu>
+                            </div>
+                        </div>
+
+                        <p:chronoline value="#{dashboardView.chronolineEvents}" var="event">
+                            <p:card styleClass="mb-3">
+                                <f:facet name="title">
+                                    #{event.status}
+                                </f:facet>
+                                <f:facet name="subtitle">
+                                    #{event.date}
+                                </f:facet>
+                                
+                                <p>#{event.description}</p>
+                            </p:card>
+
+                            <f:facet name="marker">
+                                <span class="custom-marker shadow-2 p-2" style="background-color: #{event.color}"><i class="marker-icon #{event.icon}"/></span>
+                            </f:facet>
+                        </p:chronoline>
+                    </div>
+                </div>
+            
+                <div class="col-12 md:col-12 lg:col-6">
+                    <div class="card height-100">
+                        <p:dataTable var="product" value="#{dashboardView.products}" reflow="true" styleClass="p-datatable-products" paginator="true" rows="8" paginatorPosition="bottom">
+                            <p:column headerText="Image" styleClass="md:w-5rem">
+                                <p:graphicImage name="images/product/#{product.image}" library="demo" width="50px" styleClass="shadow-4" />
+                            </p:column>
+                            <p:column headerText="Name" sortBy="#{product.name}">
+                                <h:outputText value="#{product.name}" />
+                            </p:column>
+                            <p:column headerText="Category" sortBy="#{product.category}">
+                                <h:outputText value="#{product.category}" />
+                            </p:column>
+                            <p:column headerText="Price" sortBy="#{product.price}">
+                                <h:outputText value="#{product.price}">
+                                    <f:convertNumber currencySymbol="$" type="currency" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="View" styleClass="md:w-4rem">
+                                <p:commandButton type="button" icon="pi pi-search" styleClass="rounded-button ui-button-flat mb-1 #{app.rtl ? 'ml-2' : 'mr-2'}" />
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </div>
+            
+                <div class="col-12 lg:col-6">
+                    <div class="card height-100">
+                        <p:remoteCommand name="chatRC" actionListener="#{dashboardView.addMessage}" update=":dashboardForm:chatContent" oncomplete="chatContentScroll()" />
+
+                        <div class="card-header">
+                            <h5>Chat</h5>
+                            <div>
+                                <p:commandButton type="button" icon="pi pi-ellipsis-h" styleClass="rounded-button ui-button-flat ui-button-plain"/>
+                                <p:menu overlay="true" trigger="@previous" my="left top" at="left bottom">
+                                    <p:menuitem value="View Media" icon="pi pi-fw pi-images"/>
+                                    <p:menuitem value="Starred Messages" icon="pi pi-fw pi-star"/>
+                                    <p:menuitem value="Search" icon="pi pi-fw pi-search"/>
+                                </p:menu>
+                            </div>
+                        </div>
+                        <div class="widget-chat">
+                            <h:panelGroup id="chatContent">
+                                <ul class="chat-content">
+                                    <ui:repeat value="#{dashboardView.chatMessages}" var="chartMessage" varStatus="status">
+                                        <li class="flex align-items-start #{not empty chartMessage.from ? 'from' : 'own justify-content-end'} #{status.last ? 'mb-1' : 'mb-3'}">
+                                            <p:graphicImage name="#{chartMessage.url}" library="demo" styleClass="#{app.rtl ? 'ml-2' : 'mr-2'}" rendered="#{not empty chartMessage.url}" />
+                                            <div class="messages flex flex-column #{not empty chartMessage.from ? 'align-items-start' : 'align-items-end'}">
+                                                <ui:repeat value="#{chartMessage.messages}" var="message" varStatus="mStatus">
+                                                    <span class="message #{not empty chartMessage.from ? 'cyan-bgcolor' : 'pink-bgcolor'} #{mStatus.first ? '' : 'mt-1'}">
+                                                        #{message}
+                                                    </span>
+                                                </ui:repeat>
+                                            </div>
+                                        </li>
+                                    </ui:repeat>
+                                </ul>
+                                <div class="ui-inputgroup write-message mt-3">
+                                    <span class="ui-inputgroup-addon">
+                                        <p:commandButton icon="pi pi-plus-circle" class="ui-button-flat ui-button-plain" />
+                                    </span>
+                                    <p:inputText id="chatMessageId" value="#{dashboardView.chatMessage}" placeholder="Write your message (Hint: 'PrimeFaces')" onkeypress="onChatInputKeyPress(event)" styleClass="chat-input w-full" />
+                                    <span class="ui-inputgroup-addon">
+                                        <p:commandButton icon="pi pi-video" class="ui-button-flat ui-button-plain" />
+                                    </span>
+                                    <span class="ui-inputgroup-addon">
+                                        <p:commandButton icon="pi pi-clock" class="ui-button-flat ui-button-plain" />
+                                        <p:overlayPanel widgetVar="emojisOverlayPanelWidget" for="@previous" style="width:35%" my="right top" at="right bottom">
+                                            <div class="flex justify-content-center align-content-center flex-wrap">
+                                                <ui:repeat value="#{dashboardView.chatEmojis}" var="emoji">
+                                                    <p:commandButton value="#{emoji}" actionListener="#{dashboardView.addEmoji(emoji)}" update=":dashboardForm:chatMessageId" styleClass="emoji-button min-w-0 ui-button-flat ui-button-plain" oncomplete="onChatEmoji()" />
+                                                </ui:repeat>
+                                            </div>
+                                        </p:overlayPanel>
+                                    </span>
+                                </div>
+                            </h:panelGroup>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="col-12 lg:col-3">
+                    <div class="card height-100">
+                        <div class="card-header">
+                            <h5>Activity</h5>
+                            <div>
+                                <p:commandButton type="button" icon="pi pi-ellipsis-h" styleClass="rounded-button ui-button-flat ui-button-plain"/>
+                                <p:menu overlay="true" trigger="@previous" my="left top" at="left bottom">
+                                    <p:menuitem value="Update" icon="pi pi-fw pi-refresh"/>
+                                    <p:menuitem value="Edit" icon="pi pi-fw pi-pencil"/>
+                                </p:menu>
+                            </div>
+                        </div>
+            
+                        <ul class="widget-activity">
+                            <li>
+                                <div class="activity-item flex flex-column">
+                                    <div class="activity-title mb-1">Income</div>
+                                    <div class="activity-subtext mb-2">30 November, 16.20</div>
+                                    <p:progressBar value="50" />
+                                </div>
+                            </li>
+                            <li>
+                                <div class="activity-item flex flex-column">
+                                    <div class="activity-title mb-1">Tax</div>
+                                    <div class="activity-subtext mb-2">1 December, 15.27</div>
+                                    <p:progressBar value="15" />
+                                </div>
+                            </li>
+                            <li>
+                                <div class="activity-item flex flex-column">
+                                    <div class="activity-title mb-1">Invoices</div>
+                                    <div class="activity-subtext mb-2">1 December, 15.28</div>
+                                    <p:progressBar value="78" />
+                                </div>
+                            </li>
+                            <li>
+                                <div class="activity-item flex flex-column">
+                                    <div class="activity-title mb-1">Expanses</div>
+                                    <div class="activity-subtext mb-2">3 December, 09.15</div>
+                                    <p:progressBar value="66" />
+                                </div>
+                            </li>
+                            <li>
+                                <div class="activity-item flex flex-column">
+                                    <div class="activity-title mb-1">Bonus</div>
+                                    <div class="activity-subtext mb-2">1 December, 23.55</div>
+                                    <p:progressBar value="85" />
+                                </div>
+                            </li>
+                            <li>
+                                <div class="activity-item flex flex-column">
+                                    <div class="activity-title mb-1">Revenue</div>
+                                    <div class="activity-subtext mb-2">30 November, 16.20</div>
+                                    <p:progressBar value="54" />
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            
+                <div class="col-12 lg:col-3">
+                    <div class="card height-100">
+                        <div class="card-header">
+                            <h5>Best Sellers</h5>
+                            <div>
+                                <p:commandButton type="button" icon="pi pi-ellipsis-h" styleClass="rounded-button ui-button-flat ui-button-plain"/>
+                                <p:menu overlay="true" trigger="@previous" my="left top" at="left bottom">
+                                    <p:menuitem value="Update" icon="pi pi-fw pi-refresh"/>
+                                    <p:menuitem value="Edit" icon="pi pi-fw pi-pencil"/>
+                                    <p:menuitem value="Delete" icon="pi pi-fw pi-trash"/>
+                                </p:menu>
+                            </div>
+                        </div>
+                        <ul class="widget-bestsellers">
+                            <li>
+                                <div class="bestseller-item flex align-items-center p-3 mb-2">
+                                    <p:graphicImage name="images/product/blue-band.jpg" library="demo" styleClass="#{app.rtl ? 'ml-3' : 'mr-3'}" />
+                                    <span>Blue Band</span>
+                                    <span class="item-button"><a href="#"><i class="pi pi-chevron-right"></i></a></span>
+                                </div>
+            
+                                <div class="bestseller-item flex align-items-center p-3 mb-2">
+                                    <p:graphicImage name="images/product/bracelet.jpg" library="demo" styleClass="#{app.rtl ? 'ml-3' : 'mr-3'}" />
+                                    <span>Bracelet</span>
+                                    <span class="item-button"><a href="#"><i class="pi pi-chevron-right"></i></a></span>
+                                </div>
+            
+                                <div class="bestseller-item flex align-items-center p-3 mb-2">
+                                    <p:graphicImage name="images/product/black-watch.jpg" library="demo" styleClass="#{app.rtl ? 'ml-3' : 'mr-3'}" />
+                                    <span>Black Watch</span>
+                                    <span class="item-button"><a href="#"><i class="pi pi-chevron-right"></i></a></span>
+                                </div>
+            
+                                <div class="bestseller-item flex align-items-center p-3 mb-2">
+                                    <p:graphicImage name="images/product/bamboo-watch.jpg" library="demo" styleClass="#{app.rtl ? 'ml-3' : 'mr-3'}" />
+                                    <span>Bamboo Watch</span>
+                                    <span class="item-button"><a href="#"><i class="pi pi-chevron-right"></i></a></span>
+                                </div>
+            
+                                <div class="bestseller-item flex align-items-center p-3 mb-2">
+                                    <p:graphicImage name="images/product/blue-t-shirt.jpg" library="demo" styleClass="#{app.rtl ? 'ml-3' : 'mr-3'}" />
+                                    <span>Blue T-Shirt</span>
+                                    <span class="item-button"><a href="#"><i class="pi pi-chevron-right"></i></a></span>
+                                </div>
+            
+                                <div class="bestseller-item flex align-items-center p-3 mb-2">
+                                    <p:graphicImage name="images/product/game-controller.jpg" library="demo" styleClass="#{app.rtl ? 'ml-3' : 'mr-3'}" />
+                                    <span>Game Controller</span>
+                                    <span class="item-button"><a href="#"><i class="pi pi-chevron-right"></i></a></span>
+                                </div>
+            
+                                <div class="bestseller-item flex align-items-center p-3 mb-2">
+                                    <p:graphicImage name="images/product/gold-phone-case.jpg" library="demo" styleClass="#{app.rtl ? 'ml-3' : 'mr-3'}" />
+                                    <span>Phone Case</span>
+                                    <span class="item-button"><a href="#"><i class="pi pi-chevron-right"></i></a></span>
+                                </div>
+            
+                                <div class="bestseller-item flex align-items-center p-3 mb-2">
+                                    <p:graphicImage name="images/product/purple-t-shirt.jpg" library="demo" styleClass="#{app.rtl ? 'ml-3' : 'mr-3'}" />
+                                    <span>Purple T-Shirt</span>
+                                    <span class="item-button"><a href="#"><i class="pi pi-chevron-right"></i></a></span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </h:form>    
+    </ui:define>
+
+</ui:composition>

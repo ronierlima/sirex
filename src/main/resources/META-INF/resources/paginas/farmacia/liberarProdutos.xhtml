@@ -1,0 +1,171 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/layout/template.xhtml">
+
+
+	<ui:define name="title">Liberar Produtos</ui:define>
+
+	<ui:define name="breadcrumb">
+		<f:metadata>
+			<f:viewParam name="paginaAnterior" value="/paginas/farmacia/solicitacoesTransferencia.xhtml" />
+			<f:viewParam name="homeOutcome" value="/paginas/principal.xhtml" />
+			<f:viewParam name="value" value="Farmácia,Liberar Produtos" />
+			<f:viewParam name="outcome"
+				value="/paginas/farmacia/liberarProdutos.xhtml" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="content">
+		<h:form id="form">
+
+			<div class="grid table-demo">
+				<div class="col-12">
+					<div class="card">
+
+
+
+						<p:dataTable widgetVar="customersDT2" var="atendimento"
+							lazy="true" value="#{liberarProdutosBean.model}"
+							selectionMode="single" reflow="true" rows="100" paginator="true"
+							paginatorAlwaysVisible="false"
+							selection="#{liberarProdutosBean.atendimentoSelecionado}"
+							rowKey="#{atendimento.id}" scrollable="true" scrollHeight="500"
+							styleClass="ui-datatable-striped ui-datatable-sm ui-datatable-gridlines">
+
+							<f:facet name="header">
+								<div class="customers-table-header">
+									<span style="font-weight: bold">AGUARDANDO LIBERAÇÃO</span>
+									<div class="col-6">
+
+
+										<div class="ui-fluid formgrid grid">
+											<div class="field col-12 md:col-4">
+												<p:outputLabel value="Nome | Prontuário | Código" />
+												<p:inputText value="#{liberarProdutosBean.filtro.nome}" />
+											</div>
+
+											<div class="field col-12 md:col-8">
+												<p:outputLabel value="Status" />
+												<div class="ui-inputgroup">											
+												
+												<p:selectCheckboxMenu multiple="true" label="Selecione um Status"
+														converter="omnifaces.SelectItemsConverter"
+														emptyLabel="Selecione um Status" updateLabel="true"
+														style="min-width: 15rem" panelStyle="width: 30rem"
+														scrollHeight="250" id="status"
+														value="#{liberarProdutosBean.filtro.statusSelecionados}">
+														<f:selectItems value="#{liberarProdutosBean.status}"
+															var="status" itemLabel="#{status.descricao}"
+															itemValue="#{status}" />
+													</p:selectCheckboxMenu>
+													
+													<p:commandButton value="Pesquisar" icon="pi pi-search"
+														action="#{liberarProdutosBean.pesquisar}" update="@form"
+														styleClass="ui-button-help" />
+
+												</div>
+											</div>
+
+										</div>
+									</div>
+								</div>
+							</f:facet>
+
+							<p:column headerText="Código" sortBy="#{atendimento.paciente.id}"
+								style="text-align:center" width="80"
+								filterBy="#{atendimento.paciente.id}">
+								<h:outputText value="#{atendimento.paciente.id}" />
+							</p:column>
+
+							<p:column headerText="Prontuário" width="100"
+								sortBy="#{atendimento.paciente.prontuario}"
+								filterBy="#{atendimento.paciente.prontuario}">
+								<h:outputText style="vertical-align: middle; margin-left: .5rem"
+									value="#{atendimento.paciente.prontuario}" />
+							</p:column>
+
+							<p:column headerText="Nome"
+								sortBy="#{atendimento.paciente.nomeCompleto}"
+								filterBy="#{atendimento.paciente.nomeCompleto}">
+								<h:outputText style="vertical-align: middle; margin-left: .5rem"
+									value="#{atendimento.paciente.nomeCompleto}" />
+							</p:column>
+
+							<p:column headerText="Data de Nascimento" width="140"
+								filterBy="#{atendimento.paciente.dataNascimento}">
+								<h:outputText value="#{atendimento.paciente.dataNascimento}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Hora Atendimento" width="140"
+								sortBy="#{atendimento.paciente.dataInclusao}"
+								filterBy="#{atendimento.dataInclusao}">
+								<h:outputText value="#{atendimento.dataInclusao}">
+									<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Status" sortBy="#{atendimento.status}"
+								width="200" filterBy="#{atendimento.status}"
+								style="text-align:center">
+
+								<span class="customer-badge #{atendimento.status.estiloCss}">#{atendimento.status.descricao}</span>
+								<ui:fragment rendered="#{atendimento.emergencial}">
+									<br />
+									<br />
+									<span class="customer-badge status-unqualified">Emergencial</span>
+								</ui:fragment>
+							</p:column>
+
+							<p:column headerText="Opções" width="120"
+								style="text-align:center">
+
+								<p:menuButton value="Evoluir" menuStyleClass="superWide">
+
+									<p:menuitem value="Visualizar Atendimento" icon="pi pi-eye"
+										action="#{liberarProdutosBean.visualizar}"
+										rendered="#{seguranca.podeVisualizarAtendimento}">
+
+										<f:setPropertyActionListener value="#{atendimento}"
+											target="#{liberarProdutosBean.atendimentoSelecionado}" />
+
+									</p:menuitem>
+
+									<p:menuitem value="Liberar Produto" icon="fa fa-handshake"
+										action="#{liberarProdutosBean.iniciarEntrega}"
+										rendered="#{seguranca.podeLiberarProdutos}">
+
+										<f:setPropertyActionListener value="#{atendimento}"
+											target="#{liberarProdutosBean.atendimentoSelecionado}" />
+
+									</p:menuitem>
+
+
+
+								</p:menuButton>
+
+							</p:column>
+
+
+						</p:dataTable>
+
+
+					</div>
+				</div>
+			</div>
+		</h:form>
+
+		<style>
+.superWide {
+	width: 200px;
+	min-width: 200px;
+	max-width: 200px;
+}
+</style>
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,50 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+    <div class="layout-inline-menu">
+        <a class="layout-inline-menu-action flex flex-row align-items-center #{app.isHorizontalMenu() ? 'p-3 py-3' : 'p-3'}" style="min-width: #{app.isHorizontalMenu() ? '165px' : '0'}"
+            data-tooltip="#{seguranca.usuarioLogado.usuario.nome}"
+            data-p-styleclass="{ selector: '@next', enterClass: 'hidden', enterActiveClass: 'slidedown', leaveToClass: 'hidden', leaveActiveClass: 'slideup', hideOnOutsideClick: #{app.isSlimMenu() or app.isHorizontalMenu()} }">
+            <p:graphicImage value="#{utilSessionBean.imagemUsuario}" cache="false" style="width: 32px; height: 32px;" />
+            <span class="flex flex-column #{app.rtl ? 'mr-2' : 'ml-2'}">
+                <span class="font-bold">#{seguranca.usuarioLogado.usuario.nome}</span>
+                <small><span class="font-bold" style="font-size: 10px;">#{seguranca.usuario.hospital.nome}</span></small>
+            </span>
+            <i class="layout-inline-menu-icon pi pi-angle-down #{app.rtl ? 'mr-auto' : 'ml-auto'}"></i>
+        </a>
+    
+        <ul class="layout-inline-menu-action-panel hidden">
+
+			<p:selectOneMenu id="hospitalUsuario" rendered="#{utilSessionBean.renderizaSeletorHospitais}" style="width:100%;" converter="omnifaces.SelectItemsConverter" value="#{seguranca.usuarioLogado.usuario.hospital}">
+				<p:ajax listener="#{utilSessionBean.onHospitalChange}"/>
+				<f:selectItems rendered="#{not empty utilSessionBean.hospitaisVinculadosUsuario}" value="#{utilSessionBean.hospitaisVinculadosUsuario}"
+					var="hospital" itemValue="#{hospital}"
+					itemLabel="#{hospital.sigla}" />
+			</p:selectOneMenu>
+
+			<li class="layout-inline-menu-action-item">
+                <a class="flex flex-row align-items-center" tabindex="0" data-tooltip="Alterar Senha" href="#" onclick="PF('rdfpassword').show(); return false">
+                    <i class="pi pi-key"></i>
+                    <span>Alterar Senha</span>
+                </a>
+            </li>
+
+			<li class="layout-inline-menu-action-item">
+			<a class="flex flex-row align-items-center" tabindex="0" data-tooltip="Abrir Manual do Usuário" href="https://ses-pe.gitbook.io/saspo-pe"
+				target="_blank"> <i class="fa-solid fa-book"/> <span>Manual do Usuário</span>
+			</a></li>
+
+
+			<li class="layout-inline-menu-action-item">
+                <a href="/logout" class="flex flex-row align-items-center" tabindex="0" data-tooltip="Sair">
+                    <i class="pi pi-power-off pi-fw"></i>
+                    <span>Sair do Sistema</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</ui:composition>

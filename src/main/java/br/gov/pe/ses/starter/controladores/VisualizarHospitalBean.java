@@ -1,0 +1,41 @@
+package br.gov.pe.ses.starter.controladores;
+
+import java.io.Serializable;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import br.gov.pe.ses.starter.controladores.componentes.UtilSessionBean;
+import br.gov.pe.ses.starter.entidades.publico.Hospital;
+import br.gov.pe.ses.starter.service.interfaces.HospitalService;
+import br.gov.pe.ses.starter.util.jsf.FacesUtil;
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.view.ViewScoped;
+import lombok.Data;
+
+@Component
+@ViewScoped
+@Data
+public class VisualizarHospitalBean implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
+	private Hospital hospital;
+
+	@Autowired
+	private HospitalService hospitalService;
+	
+	@Autowired
+	private UtilSessionBean utilSessionBean;
+
+	@PostConstruct
+	public void inicializar() {
+		try {
+			hospital = (Hospital) utilSessionBean.getParametro("hospitalSelecionado");
+			hospital = hospitalService.porIdComDependencias(hospital.getId());
+		} catch (Exception e) {
+			FacesUtil.redirect("/paginas/hospital/listarHospitais.xhtml?faces-redirect=true");
+		}
+	}
+
+}

@@ -1,0 +1,31 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:p="http://primefaces.org/ui">
+
+
+	<p:outputPanel rendered="#{geralBean.tipoAmbiente!=null}"
+		styleClass="ui-g-12" style="border-radius: 20px!important; background-color: black!important; height: 30px!important;">
+
+		<p:outputLabel
+			style="color: yellow!important; margin-top:  -7px!important;"
+			styleClass="ui-g-1 Fs20 FontBold ">
+			<i class="fa fa-exclamation fa-pulse fa-1x fa-fw"></i>
+		</p:outputLabel>
+
+		<p:outputLabel
+			style="color: yellow!important; margin-top:  -7px!important;"
+			styleClass="ui-g-10 Fs20 FontBold " value="#{geralBean.tipoAmbiente}">
+		</p:outputLabel>
+
+		<p:outputLabel
+			style="color: yellow!important;margin-top:  -7px!important;margin-left: -15px!important;"
+			styleClass="ui-g-1 Fs20 FontBold ">
+			<i class="fa fa-exclamation fa-pulse fa-1x fa-fw"></i>
+		</p:outputLabel>
+
+	</p:outputPanel>
+
+</ui:composition>

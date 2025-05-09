@@ -1,0 +1,165 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/layout/template.xhtml">
+
+	<ui:define name="title">SASPO Chat</ui:define>
+
+	<ui:define name="head">
+
+		<style type="text/css">
+.messages-container {
+	/*display: flex;*/
+	flex-direction: column;
+	justify-content: flex-end;
+}
+</style>
+
+
+		<script type="text/javascript">
+        //<![CDATA[
+
+            function chatContentScroll() {
+                var content = $('.chat-content')[0];
+
+                if (content) {
+                    content.scroll({
+                        top: content.scrollHeight
+                    });
+                }
+                
+            }
+
+            function toggleSendButton() {
+                var input = document.getElementById('dashboardForm:chatMessageId');
+                var btn = document.getElementById('dashboardForm:btnSend');
+                               
+                if (input.value.trim() === "") {
+                    btn.disabled = true; 
+                } else {
+                    btn.disabled = false; 
+                }
+            }
+                        
+        //]]>
+        </script>
+    </ui:define>
+
+	<ui:define name="breadcrumb">
+		<f:metadata>
+			<f:viewParam name="homeOutcome" value="/paginas/principal" />
+			<f:viewParam name="value" value="Principal" />
+			<f:viewParam name="outcome" value="/paginas/principal" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="content">		
+
+		<h:form id="dashboardForm">
+		
+		<p:focus for="dashboardForm:chatMessageId" />
+		
+		<div class="grid dashboard">				
+
+				<div class="col-12 lg:col-12">
+                    <div class="card height-100">
+                        
+                        <p:remoteCommand name="rcChatScreen" action="#{chatBean.listarConversacoesCommand()}" update="dashboardForm:pnlChat,dashboardForm:usuario" process="@this" oncomplete="chatContentScroll()" global="false"/>
+                        <p:remoteCommand name="sendMessageRC" actionListener="#{chatBean.enviarMensagem}" update=":dashboardForm:chatContent,dashboardForm:usuario" oncomplete="chatContentScroll()" global="false"/>
+
+                        <div class="card-header">
+                            <h5>SASPO Chat</h5>                            
+                        </div>
+                        
+                        <div class="ui-g" style="border: 1px solid black;">
+                         
+                         <div class="ui-lg-3 ui-sm-12" style="border-right: 1px solid black;"> 
+                         
+                         <p:dataTable id="usuario" var="usuario" value="#{chatBean.usuariosDoHospital}" scrollable="true" scrollHeight="480" 
+                         styleClass="usersList" emptyMessage="Nenhum Usuário Encontrado" rowKey="#{usuario.id}" selectionMode="single" 
+                         selection="#{chatBean.usuarioSelecionado}">
+                                    
+                                    <p:ajax event="rowSelect" listener="#{chatBean.onRowSelect}" update=":dashboardForm:chatContent,dashboardForm:usuario" oncomplete="chatContentScroll(),chatBadge()"/>                                    
+                                                               
+									<p:column width="100%" headerText="USUÁRIOS" filterBy="#{usuario.nome}" filterMatchMode="contains" filterPlaceholder="Informe um Usuário" filterStyle="text-transform: uppercase;">
+										<div class="inline-flex align-items-center"
+											style="vertical-align: middle">
+											<p:graphicImage name="/images/saspo.png"
+												width="32" style="margin-right:5px"/>
+											<h:outputText style="font-size:12px" value="#{usuario.nome}" />
+
+											<p:badge style="margin-left:5px;"
+												rendered="#{usuario.totalMensagensNaoLidasPorConversacao!=null}"
+												value="#{usuario.totalMensagensNaoLidasPorConversacao}"
+												id="badgefarmacia" severity="danger" />
+
+										</div>
+									</p:column>
+
+								</p:dataTable>         
+                         
+                        </div>                     
+                        
+                        <div class="widget-chat ui-lg-9">
+                           
+                           <h:panelGroup id="chatContent">  
+                            
+                           <p:outputPanel styleClass="card-header" rendered="#{!chatBean.usuarioSelecionado.novo}">
+                            		<h6>Conversa com #{chatBean.usuarioSelecionado.nome}</h6>                               
+                        	</p:outputPanel>
+                                <ul class="chat-content messages-container" style="height: 480px;">
+                                
+                                <p:outputPanel style="display: flex; justify-content: center; align-items: center; height: 100%; text-align: center;" rendered="#{chatBean.usuarioSelecionado.novo}">
+                                
+                                <p:outputLabel style="font-size:20px;font-weight:bold" value="Selecione um Usuário para Iniciar uma Conversa"/>                                
+                                
+                                </p:outputPanel>
+                                
+                                	<p:outputPanel id="pnlChat" rendered="#{!chatBean.usuarioSelecionado.novo}">
+                                
+                                    <ui:repeat value="#{chatBean.usuarioSelecionado.conversacao.mensagens}" var="chartMessage" varStatus="status">
+                                        <li class=" flex align-items-start #{!chartMessage.usuarioEmissor ? 'from':'own justify-content-end'} #{status.last ? 'mb-1' : 'mb-3'}">
+                                            <p:graphicImage name="/images/saspo.png" styleClass="#{app.rtl ? 'ml-2' : 'mr-2'}" rendered="#{!chartMessage.usuarioEmissor}" />
+                                            <div class="messages flex flex-column #{chartMessage.usuarioEmissor ? 'align-items-start' : 'align-items-end'}">
+                                                <span class="message #{chartMessage.usuarioEmissor ? 'pink-bgcolor' : 'cyan-bgcolor'} #{mStatus.first ? '' : 'mt-1'}">
+                                                    #{chartMessage.mensagem}
+                                                </span>
+                                                <div style="text-align: right!important;">
+                                                <p:outputLabel value="#{chartMessage.dataHoraEnvio}" style="font-size: 10px;">
+                                                	<f:convertDateTime pattern="dd/MM/yyyy - HH:mm" />
+                                                </p:outputLabel>
+                                                </div>
+                                            </div>
+                                            
+                                        </li>
+                                    </ui:repeat>
+                                    
+                                    </p:outputPanel>
+                                    
+                                </ul>
+                                
+                                <p:outputPanel styleClass="ui-inputgroup write-message mt-3" rendered="#{!chatBean.usuarioSelecionado.novo}">                                    
+                                    <p:inputText maxlength="5000" onkeyup="toggleSendButton()" id="chatMessageId" onkeypress="if(event.keyCode==13){document.getElementById('dashboardForm:btnSend').click();return false;}" style="border-radius: 5px;" value="#{chatBean.mensagemDigitada}" placeholder="Digite uma mensagem" styleClass="chat-input w-full" />
+                                    <span class="ui-inputgroup-addon">
+                                        <p:commandButton icon="pi pi-send" id="btnSend" class="ui-button-flat ui-button-plain" onclick="sendMessageRC()">
+                                            <p:focus for="dashboardForm:chatMessageId" />
+                                        </p:commandButton>
+                                    </span>                                    
+                                </p:outputPanel>
+                            </h:panelGroup>
+                        </div>
+                        
+                        </div>                        
+                        
+                    </div>
+                </div>
+				
+			</div>
+			
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

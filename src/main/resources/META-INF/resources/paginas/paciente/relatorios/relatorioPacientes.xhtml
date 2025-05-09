@@ -1,0 +1,407 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	template="/WEB-INF/layout/template.xhtml">
+
+
+	<ui:define name="title">Relatório de Pacientes</ui:define>
+
+	<ui:define name="breadcrumb">
+		<f:metadata>
+			<f:viewParam name="homeOutcome" value="/paginas/principal.xhtml" />			
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="content">
+		<h:form id="form">
+
+			<div class="grid">
+				<div class="col-12 md:col-12">
+					<div class="card ui-fluid">
+						<h5>Relatório de Pacientes</h5>
+						<div class="formgrid grid">
+						
+							<div class="field col-12 md:col-3">
+								<p:outputLabel value="Nome:"/>
+								<p:inputText id="nome" type="text" placeholder="NOME" maxlength="50"
+									value="#{relatorioPacientesBean.filtro.nome}" style="text-transform: uppercase;"
+									styleClass="mr-2 mb-2" />
+								<p:tooltip for="nome">Informe o Nome do Paciente</p:tooltip>
+							</div>
+							
+							<div class="field col-12 md:col-2">
+								<p:outputLabel value="Prontuário:"/>
+								<p:inputText id="pront" type="text" placeholder="Prontuário" maxlength="30"
+									value="#{relatorioPacientesBean.filtro.prontuario}" style="text-transform: uppercase;"
+									styleClass="mr-2 mb-2" />
+								<p:tooltip for="pront">Informe o Prontuário do Paciente</p:tooltip>
+							</div>
+							
+							<div class="field col-12 md:col-2">
+								<p:outputLabel value="CPF:"/>
+								<p:inputMask id="cpf" value="#{relatorioPacientesBean.filtro.cpf}"								
+								mask="999.999.999-99" slotChar="" styleClass="mr-2 mb-2"/>								
+								<p:tooltip for="cpf">Informe o CPF do Paciente</p:tooltip>
+							</div>
+							
+							<div class="field col-12 md:col-2">
+								<p:outputLabel value="RG:"/>
+								<p:inputText id="rg" type="text" placeholder="RG" maxlength="30"
+									value="#{relatorioPacientesBean.filtro.rg}" style="text-transform: uppercase;"
+									styleClass="mr-2 mb-2" />
+								<p:tooltip for="rg">Informe o RG do Paciente</p:tooltip>
+							</div>
+							
+							<div class="field col-12 md:col-3">
+								<p:outputLabel value="Município:" />
+								<p:inputText id="municipio" type="text" placeholder="Município" maxlength="30"
+									value="#{relatorioPacientesBean.filtro.municipio}" style="text-transform: uppercase;"
+									styleClass="mr-2 mb-2" />
+							</div>
+							
+							<div class="field col-12 md:col-2">
+								<p:outputLabel value="Status:" />
+								<p:selectOneMenu id="status" value="#{relatorioPacientesBean.filtro.ativo}">
+								    <f:selectItem itemLabel="Todos" itemValue="#{null}"/>																										
+									<f:selectItem itemLabel="Ativos" itemValue="#{true}" />
+									<f:selectItem itemLabel="Inativos" itemValue="#{false}" />									
+								</p:selectOneMenu>
+							</div>
+							
+							<div class="field col-12 md:col-2">
+								<p:outputLabel for="cadrange" value="Data de Cadastro:" />
+								<p:datePicker id="cadrange" selectionMode="range" value="#{relatorioPacientesBean.filtro.rangeDataCadastro}" hideOnRangeSelection="true" maxdate="#{relatorioPacientesBean.maximaDataCadastro}" yearRange="c-100:c+100"/>								
+							</div>
+							
+							<div class="field col-12 md:col-2">
+								<p:outputLabel value="Data da Próxima Retirada" />
+								<p:datePicker selectionMode="range" value="#{relatorioPacientesBean.filtro.rangeDataProximaRetirada}" hideOnRangeSelection="true" yearRange="c-100:c+100"/>
+							</div>
+							
+							<div class="field col-12 md:col-2">
+								<p:outputLabel value="Data da Próxima Reavaliação" />
+								<p:datePicker selectionMode="range" value="#{relatorioPacientesBean.filtro.rangeDataProximaReavaliacao}" hideOnRangeSelection="true" yearRange="c-100:c+100"/>								
+							</div>
+							
+							<div class="field col-12 md:col-4">
+								<p:outputLabel value="Hospital de Origem:"/>
+								<p:inputText id="hospital" type="text" placeholder="Hospital de Origem" maxlength="30"
+									value="#{relatorioPacientesBean.filtro.hospitalOrigem}" style="text-transform: uppercase;"
+									styleClass="mr-2 mb-2" />
+								<p:tooltip for="hospital">Informe o Hospital de Origem</p:tooltip>
+							</div>
+							
+							<div class="field col-12 md:col-2">
+								<p:outputLabel value="Tipo de Estoma:"/>
+								<p:selectCheckboxMenu multiple="true" updateLabel="true" emptyLabel="Selecione" id="tpestoma" value="#{relatorioPacientesBean.filtro.tiposEstomia}"
+									autoWidth="false" converter="omnifaces.SelectItemsConverter">									
+									<f:selectItems value="#{relatorioPacientesBean.tiposDeEstomias}"
+										var="tipoEstomia" itemLabel="#{tipoEstomia.descricao}"
+										itemValue="#{tipoEstomia}" />
+								</p:selectCheckboxMenu>
+								<p:tooltip for="tpestoma">Selecione o Tipo de Estoma</p:tooltip>
+							</div>							
+							
+							<div class="field col-12 md:col-2">
+								<p:outputLabel value="Classificação de Reversibilidade:"/>
+								<p:selectCheckboxMenu converter="omnifaces.SelectItemsConverter" multiple="true" updateLabel="true"
+									emptyLabel="Selecione" style="min-width: 15rem" panelStyle="width: 30rem" scrollHeight="250" id="reversibilidade" 
+									value="#{relatorioPacientesBean.filtro.tiposReversibilidade}" filter="true" filterMatchMode="contains">									
+									<f:selectItems value="#{relatorioPacientesBean.tiposDeReversibilidades}" var="classificacao"
+									itemLabel="#{classificacao.descricao}" itemValue="#{classificacao}" />
+								</p:selectCheckboxMenu>
+								<p:tooltip for="reversibilidade">Selecione a Classificação de Reversibilidade</p:tooltip>
+							</div>
+							
+							<div class="field col-12 md:col-3">
+								<p:outputLabel value="Marca do Produto:"/>
+								<p:selectCheckboxMenu converter="omnifaces.SelectItemsConverter" multiple="true" updateLabel="true" 
+									emptyLabel="Selecione" style="min-width: 15rem" panelStyle="width: 30rem" scrollHeight="250" id="marcabolsa" 
+									value="#{relatorioPacientesBean.filtro.marcasSelecionadas}" filter="true" filterMatchMode="contains">
+									<p:ajax event="toggleSelect" listener="#{relatorioPacientesBean.onToggleMarcaSelect}" update="produto"/>	
+									<p:ajax event="change" listener="#{relatorioPacientesBean.onMarcaChange}" update="produto"/>									
+									<f:selectItems value="#{relatorioPacientesBean.marcas}"
+										var="marca" itemValue="#{marca}" itemLabel="#{marca.descricao}" />
+								</p:selectCheckboxMenu>
+								<p:tooltip for="marcabolsa">Selecione a Bolsa</p:tooltip>
+							</div>				
+							
+							<div class="field col-12 md:col-5">
+								<p:outputLabel value="Produto:"/>
+								<p:selectCheckboxMenu converter="omnifaces.SelectItemsConverter" multiple="true" 
+									emptyLabel="Selecione" style="min-width: 15rem"  updateLabel="true" panelStyle="width: 30rem" scrollHeight="250" id="produto" 
+									value="#{relatorioPacientesBean.filtro.produtosSelecionados}" filter="true" filterMatchMode="contains">									
+									<f:selectItems value="#{relatorioPacientesBean.produtosAtivos}"
+										var="produto" itemValue="#{produto}" itemDescription="#{produto.descricao}"
+										itemLabel="#{produto.marca.descricao} - #{produto.descricaoReduzida}" />
+								</p:selectCheckboxMenu>
+								<p:tooltip for="produto">Selecione o Produto</p:tooltip>
+							</div>
+
+							<div class="ui-lg-2 ui-sm-12">
+
+								<br />
+								<p:commandButton value="Pesquisar" styleClass="ui-g-nopad"
+									action="#{relatorioPacientesBean.pesquisar}"
+									update="@form" icon="pi pi-search" />
+
+							</div>
+
+							<div class="ui-lg-2 ui-sm-12 ">
+
+								<br/>
+								<p:commandButton value="Limpar" styleClass="ui-button-danger ui-g-nopad"
+									process="@this" update="@form"
+									action="#{relatorioPacientesBean.inicializar}"
+									icon="pi pi-trash" />
+
+							</div>
+
+						</div>
+				</div>
+			</div>
+			</div>
+
+			<div class="grid table-demo">
+				<div class="col-12">
+					<div class="card">
+						
+						<p:dataTable widgetVar="customersDT2" var="itemEstomia"
+							id="tabelaDados" lazy="true"
+							value="#{relatorioPacientesBean.model}" selectionMode="single"
+							reflow="true" rows="10" paginator="true" 
+							paginatorAlwaysVisible="true" paginatorPosition="bottom"
+							rowsPerPageTemplate="10,20,30,40,50,60,80,90,100"
+							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+							currentPageReportTemplate="Exibindo de {startRecord} a {endRecord} no total de {totalRecords} registros - Página: {currentPage}/{totalPages}"
+							rowKey="#{itemEstomia.id}" scrollable="true" scrollHeight="500"
+							styleClass="ui-datatable-striped ui-datatable-sm ui-datatable-gridlines">
+
+							<f:facet name="header">
+								<div class="customers-table-header">
+									<span style="font-weight: bold">Registros Encontrados</span>
+
+									<div>
+									
+									<p:commandButton id="toggler" type="button" styleClass="mr-2 mb-2" value="Colunas para Exibição" icon="pi pi-align-justify"/>
+                   					<p:columnToggler datasource="tabelaDados" trigger="toggler"/>
+
+									<p:commandButton immediate="true" icon="fa fa-file-excel-o"
+										id="btnxls" value="Excel"
+										disabled="#{relatorioPacientesBean.model.rowCount eq 0}"
+										styleClass="ui-button-success mr-1 mb-1">
+
+										<p:dataExporter type="xls" target="tabelaDados" bufferSize="1"
+											fileName="registros_encontrados" visibleOnly="true"
+											postProcessor="#{utilExportacaoBean.postProcessXLS}"
+											encoding="utf-8" />
+
+									</p:commandButton>
+									
+									</div>
+
+								</div>
+							</f:facet>
+							
+							<p:column headerText="Nome"  width="150" style="text-align:center" 
+							 sortBy="#{itemEstomia.estomia.paciente.nomeCompleto}">
+								<h:outputText style="vertical-align: middle;"
+									value="#{itemEstomia.estomia.paciente.nomeCompleto}" />
+							</p:column>
+							
+							<p:column headerText="Prontuário" style="text-align:center" width="100"
+								sortBy="#{itemEstomia.estomia.paciente.prontuario}">
+								<h:outputText style="vertical-align: middle;"
+									value="#{itemEstomia.estomia.paciente.prontuario}" />
+							</p:column>
+
+							<p:column headerText="CPF" style="text-align:center" width="100"
+								sortBy="#{itemEstomia.estomia.paciente.cpf}">
+								<h:outputText style="vertical-align: middle;"
+									value="#{itemEstomia.estomia.paciente.cpf}" />
+							</p:column>
+							
+							<p:column headerText="RG" style="text-align:center" width="100"
+								sortBy="#{itemEstomia.estomia.paciente.rg}">
+								<h:outputText style="vertical-align: middle;"
+									value="#{itemEstomia.estomia.paciente.rg}" />
+							</p:column>
+							
+							<p:column headerText="Cartão do SUS" style="text-align:center" width="150"
+								sortBy="#{itemEstomia.estomia.paciente.cartaoSus}">
+								<h:outputText style="vertical-align: middle;"
+									value="#{itemEstomia.estomia.paciente.cartaoSus}" />
+							</p:column>
+							
+							<p:column headerText="Data de Nascimento" style="text-align:center" width="100">
+								<h:outputText value="#{itemEstomia.estomia.paciente.dataNascimento}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</p:column>
+							
+							<p:column headerText="Gênero" style="text-align:center" width="100"
+								sortBy="#{itemEstomia.estomia.paciente.genero.nome}">
+								<h:outputText style="vertical-align: middle;"
+									value="#{itemEstomia.estomia.paciente.genero.nome}" />
+							</p:column>
+							
+							<p:column headerText="Nome da Mãe" style="text-align:center" width="150"
+								sortBy="#{itemEstomia.estomia.paciente.nomeMae}">
+								<h:outputText style="vertical-align: middle;"
+									value="#{itemEstomia.estomia.paciente.nomeMae}" />
+							</p:column>
+							
+							<p:column headerText="Município" style="text-align:center" width="100"
+								sortBy="#{itemEstomia.estomia.paciente.endereco.municipio}">
+								<h:outputText style="vertical-align: middle;"
+									value="#{itemEstomia.estomia.paciente.endereco.municipio}" />
+							</p:column>
+							
+							<p:column headerText="Bairro" style="text-align:center" width="150"
+								sortBy="#{itemEstomia.estomia.paciente.endereco.bairro}">
+								<h:outputText style="vertical-align: middle;"
+									value="#{itemEstomia.estomia.paciente.endereco.bairro}" />
+							</p:column>
+							
+							<p:column headerText="Status" style="text-align:center" width="100"
+								sortBy="#{itemEstomia.estomia.paciente.ativo}">
+								<h:outputText style="vertical-align: middle;" value="#{itemEstomia.estomia.paciente.ativo?'Ativo':'Inativo'}"/>
+							</p:column>
+							
+							<p:column headerText="Data-Hora Cadastro" style="text-align:center" width="100">
+								<h:outputText value="#{itemEstomia.estomia.paciente.dataInclusao}">
+									<f:convertDateTime pattern="dd/MM/yyyy - HH:mm" />
+								</h:outputText>
+							</p:column>
+							
+							<p:column headerText="Última Alteração do Status" style="text-align:center" width="100">
+								<h:outputText value="#{itemEstomia.estomia.paciente.dataUltimaAlteracaoStatus}">
+									<f:convertDateTime pattern="dd/MM/yyyy - HH:mm" />
+								</h:outputText>
+							</p:column>
+							
+							<p:column headerText="Última Retirada" style="text-align:center" width="100">
+								<h:outputText value="#{itemEstomia.dataUltimaRetiradaPaciente}">
+									<f:convertDateTime type="localDate" pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</p:column>
+							
+							<p:column headerText="Última Reavaliação" style="text-align:center" width="100">
+								<h:outputText value="#{itemEstomia.dataUltimaReavaliacaoPaciente}">
+									<f:convertDateTime type="localDate" pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</p:column>							
+							
+							<p:column headerText="Próxima Retirada" style="text-align:center" width="100">
+								<p:outputLabel value="#{itemEstomia.estomia.paciente.dataProximaRetirada}">
+									<f:convertDateTime type="localDate" pattern="dd/MM/yyyy" />
+								</p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Próxima Reavaliação" style="text-align:center" width="100">
+								<p:outputLabel value="#{itemEstomia.estomia.paciente.dataProximaReavaliacao}">
+									<f:convertDateTime type="localDate" pattern="dd/MM/yyyy" />
+								</p:outputLabel>
+							</p:column>	
+							
+							<p:column headerText="Status do Estoma" style="text-align:center" width="100"
+								sortBy="#{itemEstomia.estomia.ativo}">
+								<h:outputText style="vertical-align: middle;"
+									value="#{itemEstomia.estomia.ativo?'Ativo':'Inativo'}" />
+							</p:column>
+							
+							<p:column headerText="Hospital de Origem" style="text-align:center" width="150"
+								sortBy="#{itemEstomia.estomia.nomeHospitalOrigem}">
+								<h:outputText style="vertical-align: middle;"
+									value="#{itemEstomia.estomia.nomeHospitalOrigem}" />
+							</p:column>
+							
+							<p:column headerText="Nome do Cirurgião" style="text-align:center" width="150"
+								sortBy="#{itemEstomia.estomia.nomeCirurgiao}">
+								<h:outputText style="vertical-align: middle;"
+									value="#{itemEstomia.estomia.nomeCirurgiao}" />
+							</p:column>
+							
+							<p:column headerText="Data da Cirurgia" style="text-align:center" width="100">
+								<p:outputLabel value="#{itemEstomia.estomia.dataCirurgia}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</p:outputLabel>
+							</p:column>
+							
+							<p:column headerText="Diagnóstico" style="text-align:center" width="150"
+								sortBy="#{itemEstomia.estomia.diagnostico}">
+								<h:outputText style="vertical-align: middle;"
+									value="#{itemEstomia.estomia.diagnostico}" />
+							</p:column>	
+							
+							<p:column headerText="Cirurgia Realizada" style="text-align:center" width="150"
+								sortBy="#{itemEstomia.estomia.cirurgiaRealizada}">
+								<h:outputText style="vertical-align: middle;"
+									value="#{itemEstomia.estomia.cirurgiaRealizada}" />
+							</p:column>
+							
+							<p:column headerText="Tipo de Estoma" style="text-align:center" width="150"
+								sortBy="#{itemEstomia.estomia.tipoEstomia.descricao}">
+								<h:outputText style="vertical-align: middle;"
+									value="#{itemEstomia.estomia.tipoEstomia.descricao}" />
+							</p:column>	
+							
+							<p:column headerText="Classificação de Reversibilidade" style="text-align:center" width="150"
+								sortBy="#{itemEstomia.estomia.tipoReversibilidade.descricao}">
+								<h:outputText style="vertical-align: middle;"
+									value="#{itemEstomia.estomia.tipoReversibilidade.descricao}" />
+							</p:column>	
+							
+							<p:column headerText="Status de Reversibilidade" style="text-align:center" width="150"
+								sortBy="#{itemEstomia.estomia.statusReversibilidade.descricao}">
+								<h:outputText style="vertical-align: middle;"
+									value="#{itemEstomia.estomia.statusReversibilidade.descricao}" />
+							</p:column>	
+							
+							<p:column headerText="Data da Reversão" style="text-align:center" width="100"
+							sortBy="#{itemEstomia.estomia.dataReversao}">
+								<p:outputLabel value="#{itemEstomia.estomia.dataReversao}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</p:outputLabel>
+							</p:column>	
+								
+							<p:column headerText="Item" style="text-align:center" width="150"
+								sortBy="#{itemEstomia.produto.descricaoReduzida}">
+								<h:outputText style="vertical-align: middle;"
+									value="#{itemEstomia.produto.descricaoReduzida}" />
+							</p:column>
+							
+							<p:column headerText="Marca" style="text-align:center" width="100"
+								sortBy="#{itemEstomia.produto.marca.descricao}">
+								<h:outputText style="vertical-align: middle;"
+									value="#{itemEstomia.produto.marca.descricao}" />
+							</p:column>	
+							
+							<p:column headerText="Quantidade" style="text-align:center" width="100"
+								sortBy="#{itemEstomia.quantidade}">
+								<h:outputText style="vertical-align: middle;"
+									value="#{itemEstomia.quantidade}" />
+							</p:column>										
+
+						</p:dataTable>						
+
+					</div>
+				</div>
+			</div>
+
+
+		</h:form>
+
+		<style>
+.superWide {
+	width: 200px;
+	min-width: 200px;
+	max-width: 200px;
+}
+</style>
+	</ui:define>
+
+</ui:composition>

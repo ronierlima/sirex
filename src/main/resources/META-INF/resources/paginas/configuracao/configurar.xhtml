@@ -1,0 +1,91 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/layout/template.xhtml">
+
+	<ui:define name="title">Configurar Hospital</ui:define>
+
+	<ui:define name="breadcrumb">
+		<f:metadata>
+			<f:viewParam name="paginaAnterior"
+				value="/paginas/paciente/listarPacientes.xhtml" />
+			<f:viewParam name="homeOutcome" value="/paginas/principal.xhtml" />
+			<f:viewParam name="value" value="Pacientes,Incluir" />
+			<f:viewParam name="outcome"
+				value="/paginas/paciente/incluirPaciente.xhtml" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="content">
+		<h:form>
+			<div class="grid">
+
+				<div class="col-12">
+					<div class="card">
+						<h5>Configurar -
+							#{seguranca.usuarioLogado.usuario.hospital.nome}</h5>
+
+						<div class="ui-fluid formgrid grid">
+
+							<div class="field col-12 md:col-3">
+								<p:outputLabel for="@next"
+									value="Margem de Tolerância para Retirada de Bolsas" />
+								<p:inputNumber minValue="1" maxValue="365" decimalPlaces="0"
+									thousandSeparator="" required="true"
+									requiredMessage="Margem de Tolerância para Retirada de Bolsas é obrigatório!"
+									placeholder="Informe a margem de tolerância em Dias."
+									value="#{configurarHospitalBean.configuracao.qtdDiasMargemTolerancia}"
+									pt:data-tooltip="Informe uma margem de tolerância EM DIAS para Retirada de Bolsas." />
+							</div>
+
+
+							<div class="field col-12 md:col-3">
+								<p:outputLabel value="Bloqueio de Retirada por Reavaliação"
+									for="@next" />
+								<p:inputNumber minValue="1" maxValue="12" decimalPlaces="0"
+									value="#{configurarHospitalBean.configuracao.qtdMesesReavalicao}"
+									placeholder="Informe um período em Meses." required="true"
+									requiredMessage="Bloqueio de Retirada por Reavaliação é obrigatório!"
+									pt:data-tooltip="Informe um período EM MESES para reavaliação dos pacientes" />
+							</div>
+
+							<div class="field col-12 md:col-3">
+								<p:outputLabel value="Alerta de Reavaliação (em dias)"
+									for="@next" />
+								<p:inputNumber minValue="0" decimalPlaces="0"
+									value="#{configurarHospitalBean.configuracao.qtdDiasAlertaReavaliacao}"
+									placeholder="Informe a antecedência em dias." required="true"
+									requiredMessage="A antecedência em dias para o alerta de proximidade de reavaliação é obrigatório!"
+									pt:data-tooltip="Informe quantos dias antes da reavaliação deseja ser notificado" />
+							</div>
+
+							<div class="field col-12 md:col-3">
+
+								<p:outputLabel value="Obriga Anexo ao Finalizar Entrega"
+									for="@next" />
+								<p:selectBooleanButton id="btnObriga" onLabel="Ativo"
+									offLabel="Inativo" onIcon="pi pi-check" offIcon="pi pi-times"
+									value="#{configurarHospitalBean.configuracao.obrigaAnexo}" />
+
+								<p:tooltip for="btnObriga"
+									value="Se ativo, o sistema irá obrigar anexar comprovante ao FINALIZAR ENTREGA."
+									position="bottom" />
+							</div>
+
+
+
+							<div class="field col-12 md:col-2">
+								<p:commandButton icon="fa fa-cogs" update="@form"
+									action="#{configurarHospitalBean.salvar}" value="Configurar" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

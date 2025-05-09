@@ -1,0 +1,42 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pu="http://primefaces.org/ultima">
+
+    <h:form id="layoutMenuForm">
+    	
+    	<p:remoteCommand name="rcChat" process="@this" oncomplete="rcChatScreen(),chatBadge()" global="false"/>
+    	<p:remoteCommand name="chatBadge" action="#{menuUtilBean.totalizarConversacoesNaoLidasUsuario()}" update="layoutMenuForm" process="@this" global="false"/>
+          
+        <div class="layout-menu-wrapper">
+            <div class="layout-menu-container">
+
+                <pu:menu widgetVar="layoutMenuWidget">
+                	<p:submenu label="STARTER JSF - #{geralBean.versao}"/>                
+                    <p:submenu id="m_favorites" label="Principal" icon="pi pi-fw pi-home">
+                        <p:menuitem id="m_dashboardsales" value="Home" icon="fa fa-fw fa-chart-pie" url="/paginas/principal.xhtml" /> 
+                                              
+                    </p:submenu>
+                    <p:submenu id="m_uikit" label="Cadastros" icon="pi pi-fw pi-star">
+                        <p:menuitem id="m_formlayout" value="Usuários" icon="fa fa-fw fa-users" url="/paginas/usuario/listarUsuarios.xhtml" rendered="#{seguranca.exibeMenuUsuarios}" />
+                        <p:menuitem id="m_input" value="Perfis" icon="fa fa-fw fa-user-edit" url="/paginas/perfil/listarPerfis.xhtml" rendered="#{seguranca.exibeMenuPerfis}"/> 
+                        <p:menuitem id="m_floatlabel" value="Hospitais" icon="fa fa-fw fa-hospital" url="/paginas/hospital/listarHospitais.xhtml" rendered="#{seguranca.exibeMenuHospitais}"/>
+                    </p:submenu> 
+                   
+                   
+                    
+                    
+                    <p:submenu id="im_sair" label="Opções" >                    	
+                    	<p:menuitem id="im_sair_2"  onclick="window.location.href = '#{request.contextPath}/logout'" value="Sair" icon="fa fa-fw fa fa-sign-out" url="#" />
+                    </p:submenu>
+                </pu:menu>
+                                                            
+                <ui:include src="inlinemenu.xhtml" />
+                
+            </div>
+        </div>
+    </h:form>
+</ui:composition>

@@ -1,0 +1,127 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	template="/dialogos/LayoutDlgPadrao.xhtml">
+
+	<ui:define name="title">Historico de Atendimentos</ui:define>
+
+	<ui:define name="content">
+		<h:form id="form">
+
+			<div class="grid table-demo">
+				<div class="col-12">
+					<div class="card">
+
+						<p:dataTable widgetVar="customersDT2" var="atendimento"
+							lazy="true" value="#{historicoPacienteMBean.model}"
+							selectionMode="single" reflow="true" rows="5" paginator="true"
+							paginatorAlwaysVisible="false" scrollable="true"
+							scrollHeight="500"							
+							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							currentPageReportTemplate="Exibindo de {startRecord} a {endRecord} no total de {totalRecords} registros - Página: {currentPage}/{totalPages}"
+							styleClass="ui-datatable-striped ui-datatable-sm ui-datatable-gridlines">
+
+							<p:ajax event="rowToggle"
+								listener="#{historicoPacienteMBean.onRowToggle}" />
+
+							<p:column style="width:2rem">
+								<p:rowToggler />
+							</p:column>
+
+							<p:column headerText="Código" sortBy="#{atendimento.paciente.id}"
+								style="text-align:center" width="80"
+								filterBy="#{atendimento.paciente.id}">
+								<h:outputText value="#{atendimento.paciente.id}" />
+							</p:column>
+
+							<p:column headerText="Prontuário" width="100"
+								sortBy="#{atendimento.paciente.prontuario}"
+								filterBy="#{atendimento.paciente.prontuario}">
+								<h:outputText style="vertical-align: middle; margin-left: .5rem"
+									value="#{atendimento.paciente.prontuario}" />
+							</p:column>
+
+							<p:column headerText="Nome"
+								sortBy="#{atendimento.paciente.nomeCompleto}"
+								filterBy="#{atendimento.paciente.nomeCompleto}">
+								<h:outputText style="vertical-align: middle; margin-left: .5rem"
+									value="#{atendimento.paciente.nomeCompleto}" />
+							</p:column>
+
+							<p:column headerText="Data-Hora Atendimento" width="140"
+								sortBy="#{atendimento.dataInclusao}"
+								filterBy="#{atendimento.dataInclusao}">
+								<h:outputText value="#{atendimento.dataInclusao}">
+									<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Status" sortBy="#{atendimento.status}"
+								width="200" filterBy="#{atendimento.status}"
+								style="text-align:center">
+
+								<span class="customer-badge #{atendimento.status.estiloCss}">#{atendimento.status.descricao}</span>
+								<ui:fragment rendered="#{atendimento.emergencial}">
+									<br />
+									<br />
+									<span class="customer-badge status-unqualified">Emergencial</span>
+								</ui:fragment>
+							</p:column>
+							
+							<p:column headerText="Tipo" sortBy="#{atendimento.tipo}"
+								width="120" filterBy="#{atendimento.tipo}"
+								style="text-align:center">
+								<span class="customer-badge #{atendimento.tipo.estiloCss}">#{atendimento.tipo.descricao}</span>								
+							</p:column>
+							
+							<p:column headerText="Responsável Entrega" sortBy="#{atendimento.solicitacaoEstoque.usuarioInclusao.nome}"
+								width="120" style="text-align:center">
+								<h:outputText value="#{atendimento.solicitacaoEstoque.usuarioInclusao.nome}" />							
+							</p:column>
+
+							<p:rowExpansion>
+
+
+
+								<p:dataTable var="itemSolicitacao"
+									style="border-style: solid;border-color: black"
+									value="#{atendimento.solicitacaoEstoque.itensDaSolicitacao}"
+									reflow="true" rowKey="#{itemSolicitacao.id}">
+
+									<f:facet name="header">
+										<div align="center">
+											<p:outputLabel value="Itens Retirados" />
+										</div>
+									</f:facet>
+
+									<p:column width="150">
+										<h:outputText
+											value="#{itemSolicitacao.produto.categoria.descricao}" />
+									</p:column>
+
+									<p:column>
+										<h:outputText value="#{itemSolicitacao.produto.descricao}" />
+									</p:column>
+
+									<p:column width="100">
+										<h:outputText value="#{itemSolicitacao.quantidadeEstoque}" />
+									</p:column>
+								</p:dataTable>
+
+
+							</p:rowExpansion>
+
+
+
+						</p:dataTable>
+
+
+					</div>
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

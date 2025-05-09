@@ -1,0 +1,402 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	template="/WEB-INF/layout/template.xhtml">
+
+	<ui:define name="title">Liberação de Produtos</ui:define>
+
+	<ui:define name="breadcrumb">
+		<f:metadata>
+			<f:viewParam name="homeOutcome" value="/paginas/principal" />
+			<f:viewParam name="value" value="Farmácia,Liberar Produtos" />
+			<f:viewParam name="outcome" value="/paginas/atendimento/listarAtendimentos.xhtml" />
+		</f:metadata>
+	</ui:define>
+
+
+	<ui:define name="content">
+		<h:form id="download">
+			<p:commandButton id="btnDownloadNota" value="Download Nota"
+				ajax="false" process="@this" style="display:none"
+				onclick="PrimeFaces.monitorDownload(start, stop);"
+				icon="pi fa-download" styleClass="mr-2">
+				<p:fileDownload value="#{entregarProdutosBean.documento}" />
+			</p:commandButton>
+		</h:form>
+
+		<h:form id="frm">
+
+			<p:staticMessage
+				rendered="#{entregarProdutosBean.atendimentoSelecionado.paciente.reavaliacaoProximaOuEmAtraso}"
+				severity="WARN" detail="#{entregarProdutosBean.mensagemReavaliacao}"
+				style="margin-bottom:10px" summary="Atenção:" />
+
+			<div class="grid">
+
+				<div class="col-12">
+
+					<div class="card">
+						<p:fieldset legend="Informações do Paciente" toggleable="true"
+							toggleSpeed="500">
+
+
+							<div class="grid">
+								<div class="col-12">
+									<div class="ui-fluid">
+										<div class="formgrid grid">
+
+											<div class="field col">
+												<p:outputLabel value="Nome" />
+
+												<div class="ui-inputgroup">
+													<p:inputText readonly="true"
+														value="#{entregarProdutosBean.atendimentoSelecionado.paciente.nomeCompleto}" />
+
+													<p:commandButton value="Histórico" process="@this"
+														pt:data-tooltip="Clique p/ Visualizar o Histórico de Retiradas."
+														actionListener="#{entregarProdutosBean.abrirDlgHistorico}"
+														icon="fa fa-history" />
+
+												</div>
+											</div>
+
+											<div class="field col">
+												<p:outputLabel value="CPF" />
+												<p:inputText readonly="true"
+													value="#{entregarProdutosBean.atendimentoSelecionado.paciente.cpf}" />
+											</div>
+
+											<div class="field col">
+												<p:outputLabel value="Nº do Prontuário" />
+												<p:inputText readonly="true"
+													value="#{entregarProdutosBean.atendimentoSelecionado.paciente.prontuario}" />
+											</div>
+
+											<div class="field col">
+												<p:outputLabel value="Data da Próxima Entrega" />
+
+												<p:inputText readonly="true" id="dtUltimaEntrega"
+													value="#{entregarProdutosBean.atendimentoSelecionado.paciente.dataProximaRetirada}">
+													<f:convertDateTime type="localDate" pattern="dd/MM/yyyy" />
+												</p:inputText>
+
+											</div>
+
+										</div>
+									</div>
+
+								</div>
+							</div>
+
+
+						</p:fieldset>
+
+
+						<p:fieldset legend="Informações da Retirada" toggleable="true"
+							toggleSpeed="500">
+							<p:outputPanel id="pnlResp" styleClass="ui-fluid formgrid grid">
+
+								<div class="field col-12 md:col-2">
+									<p:outputLabel for="tp" value="Tipo de Responsavél" />
+
+
+									<p:selectOneMenu id="tp" autoWidth="false"
+										value="#{entregarProdutosBean.tipoSelecionado}"
+										converter="omnifaces.SelectItemsConverter">
+
+										<p:ajax update="frm:pnlResp" process="@this"
+											listener="#{entregarProdutosBean.listarResponsaveis}" />
+
+										<f:selectItem itemLabel="Selecione" itemValue="#{null}"
+											noSelectionOption="true" />
+
+										<f:selectItems
+											value="#{entregarProdutosBean.tiposResponsaveis}" var="tp"
+											itemLabel="#{tp.nome}" itemValue="#{tp}" />
+
+									</p:selectOneMenu>
+
+
+								</div>
+
+								<div class="field col-12 md:col-4">
+
+									<p:outputLabel for="resp" value="Quem Está Retirando" />
+
+									<div class="ui-inputgroup">
+
+										<p:selectOneMenu id="resp" required="true" autoWidth="false"
+											requiredMessage="Informe o Responsavél pela Retirada."
+											value="#{entregarProdutosBean.responsavelSelecionado}"
+											converter="omnifaces.SelectItemsConverter">
+
+											<p:ajax update="frm:pnlResp" process="@this" />
+
+											<f:selectItem itemLabel="Selecione" itemValue="#{null}"
+												noSelectionOption="true" />
+
+											<f:selectItems value="#{entregarProdutosBean.responsaveis}"
+												var="tp" itemLabel="#{tp.nome}" itemValue="#{tp}" />
+
+										</p:selectOneMenu>
+
+										<p:commandButton value="Cadastrar" process="@this"
+											disabled="#{entregarProdutosBean.isDesabilitaBtnCadastro()}"
+											rendered="#{seguranca.podeIncluirResponsavelRetirada}"
+											actionListener="#{entregarProdutosBean.abrirDlgResponsavel}"
+											pt:data-tooltip="Adiciona um Novo Responsavél Pela Retirada."
+											icon="pi pi-user-plus">
+
+											<p:ajax event="dialogReturn" update="@form"
+												listener="#{entregarProdutosBean.aoFecharDialogo}" />
+
+										</p:commandButton>
+
+									</div>
+								</div>
+
+								<div class="field col-12 md:col-2">
+									<p:outputLabel value="Nome" />
+									<p:inputText readonly="true"
+										value="#{entregarProdutosBean.responsavelSelecionado.nome}" />
+								</div>
+
+								<div class="field col-12 md:col-2">
+									<p:outputLabel value="CPF/CNPJ" />
+									<p:inputText readonly="true"
+										value="#{entregarProdutosBean.responsavelSelecionado.cpf}" />
+								</div>
+
+								<div class="field col-12 md:col-2">
+									<p:outputLabel value="Observação" />
+									<p:inputText
+										value="#{entregarProdutosBean.atendimentoSelecionado.observacao}" />
+								</div>
+
+								<div class="field col-12 md:col-6">
+									<p:fileUpload label="Anexar Documento" uploadLabel="Enviar"
+										cancelLabel="Cancelar" update="frm:pnlResp"
+										rendered="#{entregarProdutosBean.tipoSelecionado.obrigaComprovante}"
+										required="#{entregarProdutosBean.tipoSelecionado.obrigaComprovante}"
+										listener="#{entregarProdutosBean.handleFileUpload}"
+										mode="advanced" dragDropSupport="false" multiple="false"
+										sizeLimit="1000000" allowTypes="/(\.|\/)(pdf)$/"
+										style="width:100%" />
+								</div>
+								<div class="col-12 md:col-6">
+
+									<ui:repeat var="doc"
+										value="#{entregarProdutosBean.atendimentoSelecionado.documentos}">
+
+										<p:commandButton
+											value="Baixar #{doc.doc} - #{doc.tipoDocumento.descricao}"
+											icon="fa fa-download" style="margin-top:2px;"
+											actionListener="#{utilRelatorioMBean.prepararDownload(doc)}"
+											styleClass="green-btn" process="@this" update="@this">
+
+											<p:fileDownload value="#{utilRelatorioMBean.documento}" />
+
+										</p:commandButton>
+
+									</ui:repeat>
+
+
+								</div>
+							</p:outputPanel>
+						</p:fieldset>
+
+
+						<ui:repeat varStatus="status"
+							value="#{entregarProdutosBean.atendimentoSelecionado.paciente.estomias}"
+							var="estomia">
+							
+							<p:fieldset style="border: 2px solid;" toggleable="false">
+
+								<f:facet name="legend">
+									<p:outputLabel value="#{estomia.tipoEstomia.descricao}" />									
+									
+									<p:commandButton value="Estoque da Farmácia" process="@this"
+										rendered="#{status.index == 0}" style="margin-left:2px"
+										actionListener="#{entregarProdutosBean.abrirDlgEstoque}"
+										pt:data-tooltip="Clique p/ Visualizar o Estoque da Farmácia."
+										icon="fa fa-fw fa-house-medical" />
+
+								</f:facet>								
+
+								<p:fieldset legend="Produtos por Estoma">								
+
+									<ui:repeat value="#{estomia.adjuvantes}" var="item">
+										<div class="col-12">
+										
+										<p:outputPanel rendered="#{!item.recorrenciaUnica}">
+										<p:outputLabel value="#{item.cicloRetiradaFormatado}"/>
+										<br/>
+										<p:outputLabel value="Próxima retirada: #{item.proximoCicloRetiradaFormatado}"/>
+										<br/>
+										<br/>										
+										</p:outputPanel>
+										
+										<p:outputPanel rendered="#{item.itemTeste}">
+										<div align="center" style="margin-bottom: 10px;font-weight: bold;font-size: 15px">
+										<p:outputLabel value="BOLSA DE TESTE"/>
+										</div>
+										</p:outputPanel>
+
+											<div class="ui-fluid formgrid grid">										
+
+												<div
+													class="field col-12 #{item.bolsa ? 'md:col-1' : 'md:col-2'}">
+													<p:outputLabel value="Produto" />
+													<p:inputText value="#{item.produto.categoria.descricao}"
+														readonly="true" />
+												</div>
+
+												<p:outputPanel rendered="#{item.bolsa}"
+													styleClass="field col-12 md:col-1">
+
+													<p:outputLabel value="Marca" />
+													<p:inputText value="#{item.produto.marca.descricao}"
+														readonly="true" />
+												</p:outputPanel>
+
+												<div class="field col-12 md:col-4">
+													<p:outputLabel value="Nome do Produto" />
+													<p:inputText value="#{item.produto.descricao}"
+														pt:data-tooltip="#{item.produto.descricao}"
+														readonly="true" />
+												</div>
+
+												<div class="field col-12 md:col-1">
+													<p:outputLabel value="Recorrência" />
+													<p:inputText value="#{item.recorrencia.descricao}"
+														readonly="true" />
+												</div>
+												
+												<div class="field col-12 md:col-2">
+													<p:outputLabel value="Quantidade Restante no Ciclo" style="color: red;"/>
+													<p:inputText value="#{item.quantidadeRestanteItem}" readonly="true"/>
+												</div>
+
+												<div class="field col-12 md:col-1">
+													<p:outputLabel value="Qtd Solicitada" />
+													<p:inputText value="#{item.quantidade}" readonly="true" />
+												</div>
+
+												<div class="field col-12 md:col-1">
+
+													<p:outputLabel for="@next" value="Qtd a Entregar" />
+
+													<p:inputNumber maxValue="#{item.quantidade}" id="qtdEntregue" minValue="0"
+														decimalPlaces="0" value="#{item.quantidadeEntregue}"
+														required="true" modifyValueOnWheel="false"
+														requiredMessage="Informe a Quantidade Entregue">
+														<p:ajax listener="#{entregarProdutosBean.contabilizarEstoquePorItem(item)}" event="change" process="@this"
+															update="pnlJustificativa qtdSaldo @this" />
+													</p:inputNumber>
+
+												</div>
+												
+												<div class="field col-12 md:col-1">
+
+                                                    <br/>
+													<p:commandButton onclick="return false;" id="qtdSaldo" pt:data-tooltip="Quantidade do item disponível no estoque da farmácia."
+													 ajax="false" value="#{item.produto.saldoItemEstoqueFarmacia}" icon="fa-solid fa-capsules" styleClass="rounded-button ui-button-outlined mr-2 mb-2 #{item.produto.cssSaldoProduto}" />													
+
+												</div>
+
+												<p:outputLabel id="pnlJustificativa"
+													styleClass="field col-12 md:col-3">
+
+													<p:outputLabel for="@next" value="Justificativa" />
+													<p:inputText id="justificativa"
+														value="#{item.justificativa}"
+														requiredMessage="Informe a Justificativa da Entrega"
+														required="#{item.exigeJustificativa}"
+														placeholder="Observações..." />
+
+												</p:outputLabel>
+
+											</div>
+
+
+										</div>
+										
+										<p:separator/>
+										
+									</ui:repeat>
+
+								</p:fieldset>
+
+							</p:fieldset>
+
+						</ui:repeat>
+
+						<div align="left">
+
+							<p:commandButton value="Finalizar Liberação" icon="pi pi-check"
+								action="#{entregarProdutosBean.finalizarEntrega}" update="@form"								
+								disabled="#{entregarProdutosBean.isDesabilitarBtnFinalizar()}"
+								styleClass="ui-button-success" 
+								style="margin-top: 10px;" />
+
+							<p:button outcome="/paginas/atendimento/listarAtendimentos.xhtml"
+								value="Cancelar Liberação" icon="pi pi-delete-left"
+								style="margin-top: 10px;margin-left:2px"
+								styleClass="ui-button-danger" />
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</h:form>
+		<h:form id="frmFinalizacao">
+			<div class="grid crud-demo">
+				<p:dialog header="Comprovante" showEffect="fade" width="35%"
+					modal="true" closable="false" closeOnEscape="false" widgetVar="finalizarAtendimentoDlg" responsive="true">
+
+					<p:outputPanel id="manage-product-content" class="ui-fluid">
+
+						<div class="field">
+							<p:commandButton id="btnDownloadNota" value="Gerar Comprovante"
+								process="@this"
+								actionListener="#{utilRelatorioMBean.gerarComprovante(entregarProdutosBean.atendimentoSelecionado)}"
+								icon="pi pi-download" styleClass="mr-2">
+								<p:fileDownload value="#{utilRelatorioMBean.documento}" />
+							</p:commandButton>
+						</div>
+
+						<p:outputPanel styleClass="field" rendered="#{seguranca.obrigaAnexo}">
+							<p:fileUpload label="Anexar Comprovante Assinado"
+								uploadLabel="Enviar" cancelLabel="Cancelar"
+								update="manage-product-content"
+								listener="#{entregarProdutosBean.anexarComprovante}"
+								mode="advanced" dragDropSupport="false" multiple="false"
+								sizeLimit="1000000" allowTypes="/(\.|\/)(pdf)$/"
+								style="width:100%" />
+						</p:outputPanel>
+
+						<p:outputPanel styleClass="field" rendered="#{seguranca.obrigaAnexo}">
+							<p:outputLabel value="Observação" for="@next" />
+							<p:inputTextarea
+								value="#{entregarProdutosBean.atendimentoSelecionado.observacao}"
+								required="#{seguranca.obrigaAnexo and entregarProdutosBean.atendimentoSelecionado.comprovanteEntregaAnexado}"
+								placeholder="#{seguranca.obrigaAnexo ? 'Obrigatória na ausencia do anexo assinado.' : 'Opcional'} "/>
+						</p:outputPanel>
+
+					</p:outputPanel>
+
+					<f:facet name="footer">
+						<p:commandButton value="Finalizar" icon="pi pi-check" process="@form"
+							action="#{entregarProdutosBean.gravarDadosDeAnexo}"/>
+					</f:facet>
+					
+				</p:dialog>
+
+			</div>
+		</h:form>
+
+	</ui:define>
+</ui:composition>

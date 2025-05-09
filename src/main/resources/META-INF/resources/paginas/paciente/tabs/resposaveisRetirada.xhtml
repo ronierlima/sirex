@@ -1,0 +1,209 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+	<div class="col-12">
+
+
+		<p:outputPanel class="card" id="painelResp">
+
+			<div class="ui-fluid formgrid grid">
+
+				<div class="field col-12 md:col-2">
+					<p:outputLabel value="Nome do Responsavel" for="@next" />
+					<p:inputText id="nomeResp" style="text-transform:uppercase"
+						value="#{incluirPacienteBean.responsavel.nome}">
+						<p:ajax event="change" update="painelResp" process="painelResp"/>
+					</p:inputText>
+				</div>
+
+				<div class="field col-12 md:col-2">
+					<p:outputLabel value="CPF" for="@next" />
+					<p:inputMask mask="999.999.999-99" slotChar="" id="cpfResp"
+						value="#{incluirPacienteBean.responsavel.documentoReceitaFederal}"
+						required="#{incluirPacienteBean.responsavel.cadastroObrigatorio}"
+						requiredMessage="CPF do Responsavel é obrigatório" />
+				</div>
+
+				<div class="field col-12 md:col-2">
+					<p:outputLabel value="Contato" for="@next" />
+					<p:inputMask mask="(99)99999-9999" slotChar="" id="contatoResp"
+						value="#{incluirPacienteBean.responsavel.contato}"
+						required="#{incluirPacienteBean.responsavel.cadastroObrigatorio}"
+						requiredMessage="Contato do Responsavel é obrigatório" />
+				</div>
+
+				<div class="field col-12 md:col-2">
+				
+					<p:outputLabel value="Grau de Parentesco" for="@next" />
+					<p:selectOneMenu
+						value="#{incluirPacienteBean.responsavel.parentesco}"
+						required="#{incluirPacienteBean.responsavel.cadastroObrigatorio}"
+						requiredMessage="Grau de Parentesco é obrigatório">
+						<f:selectItem itemLabel="Selecione" itemValue="#{null}"
+							noSelectionOption="true" />
+						<f:selectItems value="#{incluirPacienteBean.parentescos}" var="gp"
+							itemLabel="#{gp.descricao}" itemValue="#{gp}" />
+					</p:selectOneMenu>
+				</div>
+
+				<div class="field col-12 md:col-2">
+				
+					<p:outputLabel value="Motivo" for="@next" />
+					<p:inputText value="#{incluirPacienteBean.responsavel.motivo}"
+						required="#{incluirPacienteBean.responsavel.cadastroObrigatorio}"
+						requiredMessage="Motivo é obrigatório" maxlength="255" />
+				</div>
+
+				<div class="col-12 md:col-2">
+
+					<p:commandButton action="#{incluirPacienteBean.addResponsavel}"
+						process="@this painelResp" update="painelResp tblResponsaveis"
+						value="Adicionar" style="margin-top: 2rem" icon="pi pi-user" />
+				</div>
+
+			</div>
+		</p:outputPanel>
+		<div class="grid table-demo">
+
+
+			<div class="col-12">
+				<div class="card">
+
+					<p:dataTable widgetVar="responsavelDT" var="responsavel" editable="true"
+						id="tblResponsaveis" emptyMessage="Nenhum responsavel cadastrado"
+						value="#{incluirPacienteBean.paciente.responsaveisAtivos}"
+						reflow="true" paginator="true" rows="5" paginatorPosition="bottom"
+						rowSelectMode="add">
+						
+						<p:ajax event="rowEdit" listener="#{incluirPacienteBean.onRowEdit}"/>	
+            			<p:ajax event="rowEditCancel" listener="#{incluirPacienteBean.onRowCancel}"/>
+
+						<f:facet name="header">
+							<div class="customers-table-header">
+								<span style="font-weight: bold">Responsaveis Cadastrados</span>
+							</div>
+						</f:facet>
+						
+						<p:column headerText="STATUS" style="width: 8rem; text-align: center;">	
+								<span class="customer-badge status-#{responsavel.statusCss}">#{responsavel.ativo ? 'Ativo' : 'Inativo'}</span>															
+						</p:column>
+						
+						<p:column headerText="NOME">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{responsavel.nome}" style="text-transform:uppercase"/>
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText value="#{responsavel.nome}"
+										required="true" style="text-transform:uppercase"
+										requiredMessage="O Nome é Obrigatório!" maxlength="100" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+						
+						
+						<p:column headerText="CPF">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{responsavel.cpf}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputMask mask="999.999.999-99" slotChar="" id="cpfResp"
+										value="#{responsavel.documentoReceitaFederal}"
+										required="#{responsavel.cadastroObrigatorio}"
+										requiredMessage="CPF do Responsavel é obrigatório" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>						
+						
+						<p:column headerText="CONTATO">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{responsavel.contato}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputMask mask="(99)99999-9999" slotChar="" id="contatoResp"
+										value="#{responsavel.contato}"
+										required="#{responsavel.cadastroObrigatorio}"
+										requiredMessage="Contato do Responsavel é obrigatório" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+						
+						<p:column headerText="PARENTESCO">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{responsavel.parentesco.descricao}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:selectOneMenu value="#{responsavel.parentesco}"
+										required="#{responsavel.cadastroObrigatorio}"
+										requiredMessage="Grau de Parentesco é obrigatório">
+										<f:selectItem itemLabel="Selecione" itemValue="#{null}"
+											noSelectionOption="true" />
+										<f:selectItems value="#{incluirPacienteBean.parentescos}"
+											var="gp" itemLabel="#{gp.descricao}" itemValue="#{gp}" />
+									</p:selectOneMenu>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+						
+						<p:column headerText="MOTIVO">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{responsavel.motivo}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText value="#{responsavel.motivo}"
+										required="#{incluirPacienteBean.responsavel.cadastroObrigatorio}"
+										requiredMessage="Motivo é obrigatório" maxlength="255" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+						
+						<p:column styleClass="col-1 md:col-1" headerText="Editar" style="text-align: center;">
+								<p:rowEditor editTitle="Editar Dados" cancelTitle="Cancelar Edição" saveTitle="Salvar Dados" />								
+						</p:column>
+
+						<p:column headerText="Opções"
+							style="width: 8rem; text-align: center;">
+
+							<p:menuButton value="Ações">
+
+								<p:menuitem value="Inativar"
+									rendered="#{responsavel.id != null}" update="tblResponsaveis"
+									action="#{incluirPacienteBean.inativarResponsavel}"
+									icon="pi pi pi-thumbs-down" process="@this">
+
+									<f:setPropertyActionListener value="#{responsavel}"
+										target="#{incluirPacienteBean.responsavel}" />
+
+								</p:menuitem>
+
+								<p:menuitem value="Remover" icon="pi pi-trash"
+									update="tblResponsaveis" rendered="#{responsavel.id == null}"
+									process="@this"
+									action="#{incluirPacienteBean.removerResponsavel}">
+
+									<f:setPropertyActionListener value="#{responsavel}"
+										target="#{incluirPacienteBean.responsavel}" />
+
+								</p:menuitem>
+								
+							</p:menuButton>
+
+						</p:column>
+					</p:dataTable>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+
+
+</ui:composition>

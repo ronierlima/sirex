@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.19.1.final using JasperReports Library version 6.19.1-867c00bf88cd4d784d404379d6c05e1b419e8a4c  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="header_template" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="10" bottomMargin="0" uuid="659e0a1d-1cc5-4ae3-a460-38a68cbefa98">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="dev p_sca"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.report.description" value=""/>
+	<parameter name="LOGO_PATH" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<parameter name="HOSPITAL" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select 1]]>
+	</queryString>
+	<detail>
+		<band height="85">
+			<image scaleImage="RetainShape">
+				<reportElement x="577" y="7" width="110" height="49" uuid="58bb0e8c-a814-499b-b2cc-7505824a2020">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<imageExpression><![CDATA[$P{LOGO_PATH} + "gov.png"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="125" y="13" width="120" height="66" uuid="12016e06-54c8-468a-8649-0c25cedd4242">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<imageExpression><![CDATA[$P{LOGO_PATH} + "saspo.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="191" y="21" width="434" height="13" uuid="0fc8553f-7453-4c86-9d63-44d7b62a2808">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SECRETARIA DE SAÚDE DO ESTADO DE PERNAMBUCO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="191" y="6" width="434" height="13" uuid="81343a8b-b40b-4cfe-a27c-0d5b549c6014">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[GOVERNO DO ESTADO DO PERNAMBUCO]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="191" y="35" width="434" height="13" uuid="e013120c-a89c-486d-9e7a-11c9704c036b">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{HOSPITAL}.toUpperCase()]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

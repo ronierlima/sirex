@@ -1,0 +1,68 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+	<div class="col-12">
+
+
+
+		<div class="grid table-demo">
+
+
+			<div class="col-12">
+				<div class="card">
+
+					<p:dataTable widgetVar="responsavelDT" var="responsavel"
+						id="tblResponsaveis" emptyMessage="Nenhum responsavel cadastrado"
+						value="#{visualizarPacienteBean.paciente.responsaveis}"
+						reflow="true" paginator="true" rows="5" paginatorPosition="bottom"
+						rowSelectMode="add">
+
+						<f:facet name="header">
+							<div class="customers-table-header">
+								<span style="font-weight: bold">Responsaveis Cadastrados</span>
+							</div>
+						</f:facet>
+
+
+						<p:column headerText="NOME" sortBy="#{responsavel.nome}"
+							filterBy="#{responsavel.nome}">
+							<h:outputText value="#{responsavel.nome}" />
+						</p:column>
+
+						<p:column headerText="CPF" sortBy="#{responsavel.cpf}"
+							filterBy="#{responsavel.cpf}">
+							<h:outputText value="#{responsavel.cpf}" />
+						</p:column>
+
+						<p:column headerText="CONTATO" sortBy="#{responsavel.contato}"
+							filterBy="#{responsavel.contato}">
+							<h:outputText value="#{responsavel.contato}" />
+						</p:column>
+
+						<p:column headerText="PARENTESCO"
+							sortBy="#{responsavel.parentesco.descricao}"
+							filterBy="#{responsavel.parentesco.descricao}">
+							<h:outputText value="#{responsavel.parentesco.descricao}" />
+						</p:column>
+
+						<p:column headerText="STATUS" sortBy="#{responsavel.ativo}"
+							filterBy="#{responsavel.ativo}">
+							<span class="customer-badge status-#{responsavel.statusCss}">#{responsavel.ativo
+								? 'Ativo' : 'Inativo'}</span>
+						</p:column>
+
+
+					</p:dataTable>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+
+
+</ui:composition>

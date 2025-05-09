@@ -1,0 +1,185 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	template="/WEB-INF/layout/template.xhtml">
+
+
+	<ui:define name="title">Estoque da Farmácia</ui:define>
+
+	<ui:define name="breadcrumb">
+		<f:metadata>
+			<f:viewParam name="homeOutcome" value="/paginas/principal.xhtml" />			
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="content">
+		<h:form id="form">
+		
+			<div class="grid table-demo">
+				<div class="col-12">
+				
+				<p:panel id="custom">
+
+						<h5>Parâmetros de Pesquisa</h5>
+						<div class="formgroup-inline">
+
+							<div class="field ui-lg-2 ui-sm-12 ui-g-nopad">
+								<p:outputLabel value="Categoria" />	
+								<p:selectOneMenu converter="omnifaces.SelectItemsConverter"
+									style="width:100%;" filter="true" filterMatchMode="contains"
+									id="categoria"
+									value="#{listarItensEstoqueFarmaciaBean.filtro.categoria}">									
+									<f:selectItem itemLabel="Selecione a Categoria"
+										itemValue="#{null}" />
+									<f:selectItems
+										value="#{listarItensEstoqueFarmaciaBean.categoriasAtivas}"
+										var="categoria" itemValue="#{categoria}"
+										itemLabel="#{categoria.descricao}" />
+								</p:selectOneMenu>
+							</div>
+							
+							<div class="field ui-lg-2 ui-sm-12 ui-g-nopad">
+								<p:outputLabel value="Marca"/>								
+								<p:selectOneMenu converter="omnifaces.SelectItemsConverter" style="width:100%;"
+									filter="true" filterMatchMode="contains" id="marca" 
+									value="#{listarItensEstoqueFarmaciaBean.filtro.marca}">																		
+									<f:selectItem itemLabel="Selecione a Marca" itemValue="#{null}"/>
+									<f:selectItems value="#{listarItensEstoqueFarmaciaBean.marcasAtivas}"
+										var="marca" itemValue="#{marca}" itemLabel="#{marca.descricao}"/>
+								</p:selectOneMenu>
+								<p:tooltip for="marca">Selecione a Categoria para Listar as Marcas</p:tooltip>
+							</div>
+
+							<div class="field ui-lg-5 ui-sm-12 ui-g-nopad">
+								<p:outputLabel value="Produto"/>
+								<p:selectOneMenu converter="omnifaces.SelectItemsConverter"
+									style="width:100%;" filter="true" filterMatchMode="contains"
+									id="item"
+									value="#{listarItensEstoqueFarmaciaBean.filtro.produto}">
+									<f:selectItem itemLabel="Selecione a Categoria do Produto"
+										noSelectionOption="true" />
+									<f:selectItems
+										value="#{listarItensEstoqueFarmaciaBean.produtosAtivos}"
+										var="produto" itemValue="#{produto}" itemDescription="#{produto.descricao}"
+										itemLabel="#{produto.descricaoReduzida}"/>
+								</p:selectOneMenu>
+								<p:tooltip for="item">Selecione a Marca para Listar os Produtos</p:tooltip>
+							</div>							
+							
+							<div>
+
+								<br/>
+
+								<p:commandButton value="Pesquisar" styleClass="mr-2 mb-2"
+								process="categoria marca item" update="@form"
+								action="#{listarItensEstoqueFarmaciaBean.pesquisar}"
+								icon="pi pi-search" />
+
+							</div>
+
+							<div>
+
+								<br/>
+
+								<p:commandButton value="Limpar" styleClass="ui-button-danger"
+								process="@this" update="@form"
+								action="#{listarItensEstoqueFarmaciaBean.reinstanciarVariaveis}"
+								icon="pi pi-trash" />
+
+							</div>								
+								
+						</div>
+
+					</p:panel>				
+				
+					<div class="card">
+
+						<p:dataTable widgetVar="dtProducts" var="item"
+							id="dataTable" lazy="true"
+							value="#{listarItensEstoqueFarmaciaBean.model}" selectionMode="single"
+							reflow="true" rows="10" paginator="true"
+							paginatorAlwaysVisible="false"
+							rowsPerPageTemplate="10,25,50,100"
+							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+							currentPageReportTemplate="Exibindo de {startRecord} a {endRecord} no total de {totalRecords} registros - Página: {currentPage}/{totalPages}"
+							styleClass="ui-datatable-striped ui-datatable-sm ui-datatable-gridlines">
+
+							<f:facet name="header">
+								<div class="customers-table-header">
+								
+								<span style="font-weight: bold">Itens no Estoque da Farmácia</span>
+								
+								<div align="right">
+								
+									<p:commandButton immediate="true" icon="fa fa-file-excel-o"
+										id="btnxls" value="Exportar Excel"
+										disabled="#{listarItensEstoqueFarmaciaBean.model.rowCount eq 0}"
+										styleClass="ui-button-success mr-2 mb-2">
+
+										<p:dataExporter type="xls" target="dataTable"
+											fileName="registros_estoque_farmacia" bufferSize="1"
+											postProcessor="#{utilExportacaoBean.postProcessXLS}"
+											encoding="utf-8" />
+
+									</p:commandButton>
+									
+									<p:commandButton value="PDF" actionListener="#{listarItensEstoqueFarmaciaBean.gerarRelatorioPDF}" styleClass="mr-2 mb-2 ui-button-danger" icon="fa fa-file-pdf-o">
+										<p:fileDownload value="#{utilRelatorioMBean.documento}" />
+									</p:commandButton>
+									
+									</div>
+
+								</div>
+							</f:facet>
+
+							<p:column headerText="Tipo do Item"
+								sortBy="#{item.produto.categoria}" style="text-align: center;"
+								styleClass="col-12 md:col-1">
+								<p:outputLabel style="color:black"
+									value="#{item.produto.categoria.descricao}" />
+							</p:column>
+
+							<p:column headerText="Item" sortBy="#{item.produto.descricao}"
+								filterBy="#{item.produto.descricao}" style="text-align: center;"
+								styleClass="col-12 md:col-6">
+								<h:outputText value="#{item.produto.descricao}" />
+							</p:column>
+
+							<p:column headerText="Marca"
+								sortBy="#{item.produto.marca.descricao}"
+								style="text-align: center;" styleClass="col-12 md:col-1">
+								<h:outputText value="#{item.produto.marca.descricao}" />
+							</p:column>
+
+							<p:column headerText="Quantidade" sortBy="#{item.saldoEstoque}"
+								style="text-align: center;" styleClass="col-12 md:col-1">
+								<h:outputText value="#{item.saldoEstoque}" />
+							</p:column>
+							
+							<p:column headerText="Atualização" visible="false" exportable="true"
+								style="text-align: center;" styleClass="col-12 md:col-1">
+								<h:outputText value="#{listarItensEstoqueFarmaciaBean.dataHoraPorExtenso}" />
+							</p:column>
+
+						</p:dataTable>
+
+					</div>
+				</div>
+			</div>
+
+
+		</h:form>
+
+		<style>
+.superWide {
+	width: 200px;
+	min-width: 200px;
+	max-width: 200px;
+}
+</style>
+	</ui:define>
+	
+</ui:composition>

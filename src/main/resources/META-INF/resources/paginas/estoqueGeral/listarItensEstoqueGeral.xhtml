@@ -1,0 +1,138 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	template="/WEB-INF/layout/template.xhtml">
+
+	<ui:define name="title">Itens no Estoque Geral</ui:define>
+
+	<ui:define name="breadcrumb">
+		<f:metadata>
+			<f:viewParam name="paginaAnterior" value="/paginas/estoqueGeral/listarEstoqueGeral.xhtml" />
+			<f:viewParam name="homeOutcome" value="/paginas/principal.xhtml" />
+			<f:viewParam name="value" value="Estoque Geral,Itens Estoque Geral"/>
+			<f:viewParam name="outcome"
+				value="/paginas/estoqueGeral/listarItensEstoqueGeral.xhtml" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="content">
+		<h:form>
+			<div class="grid panel-demo">
+				<div class="col-12">
+
+					<p:panel id="custom">
+
+						<f:facet name="header">
+							<i class="pi pi pi-truck"></i>
+							<h:outputText value=" Estoque Geral - #{seguranca.usuarioLogado.usuario.hospital.nome}" />	
+						</f:facet>
+												
+						<h5>Parâmetros de Pesquisa</h5>
+						<div class="formgroup-inline">
+							
+							<div class="field ui-lg-2 ui-sm-12 ui-g-nopad">
+								<p:outputLabel value="Categoria" />								
+								<p:selectOneMenu converter="omnifaces.SelectItemsConverter" style="width:100%;"
+									filter="true" filterMatchMode="contains" id="categoria"
+									value="#{listarItensEstoqueGeralBean.filtro.categoria}">																		
+									<f:selectItem itemLabel="Selecione a Categoria" itemValue="#{null}" />
+									<f:selectItems value="#{listarItensEstoqueGeralBean.categoriasAtivas}"
+										var="categoria" itemValue="#{categoria}"
+										itemLabel="#{categoria.descricao}" />
+								</p:selectOneMenu>
+							</div>
+							
+							<div class="field ui-lg-2 ui-sm-12 ui-g-nopad">
+								<p:outputLabel value="Marca"/>								
+								<p:selectOneMenu converter="omnifaces.SelectItemsConverter" style="width:100%;"
+									filter="true" filterMatchMode="contains" id="marca" 
+									value="#{listarItensEstoqueGeralBean.filtro.marca}">														
+									<f:selectItem itemLabel="Selecione a Marca" itemValue="#{null}" />
+									<f:selectItems value="#{listarItensEstoqueGeralBean.marcasAtivas}"
+										var="marca" itemValue="#{marca}"
+										itemLabel="#{marca.descricao}"/>
+								</p:selectOneMenu>
+								<p:tooltip for="marca">Selecione a Categoria para Listar as Marcas</p:tooltip>
+							</div>
+							
+							<div class="field ui-lg-6 ui-sm-12 ui-g-nopad">	
+								<p:outputLabel value="Produto"/>							
+								<p:selectOneMenu converter="omnifaces.SelectItemsConverter" style="width:100%;" 
+									filter="true" filterMatchMode="contains" id="item" 
+									value="#{listarItensEstoqueGeralBean.filtro.produto}">
+									<f:selectItem itemLabel="Selecione a Categoria do Produto" noSelectionOption="true"/>
+									<f:selectItems value="#{listarItensEstoqueGeralBean.produtosAtivos}"
+										var="produto" itemValue="#{produto}" itemDescription="#{produto.descricao}"
+										itemLabel="#{produto.descricaoReduzida}" />
+								</p:selectOneMenu>
+								<p:tooltip for="item">Selecione a Marca para Listar os Produtos</p:tooltip>
+							</div>
+							
+							<div class="field ui-lg-1 ui-sm-12 ui-g-nopad">
+								<p:outputLabel value="Quantidade" />
+								<p:inputNumber modifyValueOnWheel="false" id="quantidade" type="text" minValue="0" placeholder="Quantidade"									
+									value="#{listarItensEstoqueGeralBean.filtro.quantidade}" inputStyle="width:100%"/>
+							</div>
+							
+							<div class="ui-lg-4 ui-sm-12 ">							
+							<br/>
+							<p:commandButton value="Pesquisar" styleClass="mr-2 mb-2"
+								process="categoria marca item quantidade" update="@form"
+								action="#{listarItensEstoqueGeralBean.pesquisar}" icon="pi pi-search" />
+
+							<p:commandButton value="Limpar" styleClass="ui-button-danger"
+								process="@this" update="@form"
+								action="#{listarItensEstoqueGeralBean.reinstanciarVariaveis}" icon="pi pi-trash" />
+							</div>
+						</div>
+
+					</p:panel>
+				</div>
+			</div>
+
+			<div class="grid table-demo">
+				<div class="col-12">
+					<div class="card">
+
+						<p:dataTable widgetVar="itemDT" var="item" lazy="true"
+							value="#{listarItensEstoqueGeralBean.model}" reflow="true"
+							rowKey="#{entrada.id}" paginator="true" rows="10"
+							paginatorPosition="bottom" selectionMode="single"
+							rowsPerPageTemplate="10,20,30,40,50,60,80,90,100"
+							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							currentPageReportTemplate="Exibindo de {startRecord} a {endRecord} no total de {totalRecords} registros - Página: {currentPage}/{totalPages}">
+
+							<f:facet name="header">
+								<div align="center">
+									<span style="font-weight: bold">ITENS NO ESTOQUE GERAL</span>
+								</div>
+							</f:facet>
+														
+							<p:column headerText="Tipo do Item" sortBy="#{item.produto.categoria}" style="text-align: center;" styleClass="col-12 md:col-1">
+								<p:outputLabel style="color:black" value="#{item.produto.categoria.descricao}" />
+							</p:column>
+
+							<p:column headerText="Item" sortBy="#{item.produto.descricao}" style="text-align: center;" styleClass="col-12 md:col-2">
+								<h:outputText value="#{item.produto.descricao}" />
+							</p:column>
+							
+							<p:column headerText="Marca" sortBy="#{item.produto.marca.descricao}" style="text-align: center;" styleClass="col-12 md:col-2">
+								<h:outputText value="#{item.produto.marca.descricao}"/>
+							</p:column>
+							
+							<p:column headerText="Quantidade" sortBy="#{item.saldoEstoque}" style="text-align: center;" styleClass="col-12 md:col-1">
+								<h:outputText value="#{item.saldoEstoque}"/>
+							</p:column>						
+
+						</p:dataTable>
+					</div>
+				</div>
+			</div>
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>

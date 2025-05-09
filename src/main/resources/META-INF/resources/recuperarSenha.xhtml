@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<f:facet name="first">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="viewport"
+			content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+
+		<link href="#{resource['/images/favicon.png']}" rel="icon"
+			type="image/png" sizes="32x32" />
+		<link href="#{resource['/images/favicon.png']}" rel="icon"
+			type="image/png" sizes="16x16" />
+
+	</f:facet>
+	<title>SASPO-PE</title>
+	<h:outputScript name="ripple/ripple.js" library="layout"
+		rendered="#{app.ripple}" />
+		
+</h:head>
+
+<h:body styleClass="pages-body login-page flex flex-column">
+
+	<div class="align-self-center mt-auto mb-auto">
+		<div class="pages-panel card flex flex-column">
+			<div class="pages-header px-3 py-1">
+				<p:graphicImage id="app-logo" name="images/logo-light.svg" library="layout" />
+			</div>
+
+			<h4>
+				Sistema de Atenção à Saúde da Pessoa<br />Ostomizada de Pernambuco
+			</h4>
+
+			<h:form id="recsenha" prependId="false">
+				
+			<p:growl id="msg" showDetail="false" life="5000">
+				<p:autoUpdate />
+			</p:growl>
+			
+			<h6>Recuperação de Senha</h6>
+
+				<div class="input-panel flex flex-column px-3">
+
+					<div class="ui-inputgroup">
+                        <span class="ui-inputgroup-addon">
+                            <i class="pi pi-envelope"></i>
+                        </span>
+                        <span class="ui-float-label flex align-items-stretch w-full">
+                            <p:inputText id="email" value="#{recuperarSenhaBean.usuario.email}" required="true"
+							maxlength="40" style="text-transform:lowercase" autocomplete="false" requiredMessage="Informe o email cadastrado!"/>
+                            <p:outputLabel for="@previous" value="Informe o email cadastrado" />
+                        </span>
+                    </div>			
+				</div>
+				
+				<p:commandButton icon="pi pi-send" value="Enviar" process="@this email"  action="#{recuperarSenhaBean.enviar}"
+					styleClass="login-button mb-3 px-4" style="width:65%;margin-top:15px"/>					
+					
+				<p:button outcome="login.xhtml" value="Retornar ao Login" icon="pi pi-arrow-left" styleClass="login-button px-4" style="width:65%;background-color:green"/>
+
+			</h:form>
+		</div>
+	</div>
+
+	<!-- **CSS** -->
+	<!-- LAYOUT DEPENDENCIES -->
+	<h:outputStylesheet name="styles/#{app.layout}.css" library="layout" />
+
+	<!-- OPTIONAL DEPENDENCIES -->
+	<!-- PrimeFlex is a lightweight responsive CSS utility library. This app contains two seperate packages; primeflex.min.css(v3.x) and primeflex-v2.min.css(v2.x) -->
+	<h:outputStylesheet name="primeflex/primeflex.min.css" library="layout" />
+	<!-- When enabled, ripple animation is activated. -->
+	<h:outputStylesheet name="ripple/ripple.css" library="layout"
+		rendered="#{app.ripple}" />
+
+	<h:outputStylesheet name="styles/demo.css" library="demo" />
+	<style>
+body .ui-button.ui-button-text-icon-left .ui-icon {
+	position: absolute;
+	top: 50%;
+	left: 45% !important;
+	margin-top: -0.5rem;
+	left: 0.5rem;
+}
+</style>
+</h:body>
+
+</html>

@@ -1,0 +1,97 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/layout/template.xhtml">
+
+	<ui:define name="title">Visualização de Usuário</ui:define>
+
+	<ui:define name="breadcrumb">
+		<f:metadata> 
+		    <f:viewParam name="paginaAnterior" value="/paginas/usuario/listarUsuarios.xhtml" />
+			<f:viewParam name="homeOutcome" value="/paginas/principal.xhtml" />
+			<f:viewParam name="value" value="Usuario,Visualizar Usuario" />
+			<f:viewParam name="outcome" value="/paginas/usuario/visualizarUsuario" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="content">
+	
+		<h:form prependId="false">
+
+			<div class="grid">
+				<div class="col-12 md:col-12">
+					<div class="card ui-fluid">
+						<h5>Incluir Usuário</h5>
+						<div class="formgrid grid">
+
+							<div class="field col col-12 md:col-3">
+								<p:outputLabel value="Nome" />
+								<p:inputText value="#{visualizarUsuarioBean.usuario.nome}"
+									readonly="true"	style="text-transform:uppercase"/>
+							</div>
+							<div class="field col col-12 md:col-2">
+								<p:outputLabel value="CPF" />
+								<p:inputMask value="#{visualizarUsuarioBean.usuario.cpf}"
+									readonly="true" />
+							</div>
+
+							<div class="field col col-12 md:col-2">
+								<p:outputLabel value="Email" />
+								<p:inputText value="#{visualizarUsuarioBean.usuario.email}"
+									readonly="true" style="text-transform:lowercase"/>
+							</div>
+
+							<div class="field col col-12 md:col-2">
+								<p:outputLabel value="Login" />
+								<p:inputText value="#{visualizarUsuarioBean.usuario.login}"
+									readonly="true"/>
+							</div>
+
+							<div class="field col-12 md:col-3">
+								
+								<p:outputLabel value="Hospital" />
+								<p:inputText value="#{visualizarUsuarioBean.usuario.hospital.nome}" readonly="true"/>							
+							</div>
+
+							<div class="col-12" align="center">
+
+								<div class="col-12 md:col-4" style="text-align:center!important">
+									<p:dataTable value="#{visualizarUsuarioBean.usuario.perfis}" var="perfil"
+									emptyMessage="Nenhum Perfil Cadastrado para o Usuário" rowKey="#{perfil.id}">
+										<f:facet name="header">
+											<div align="center">
+										LISTA DE PERFIS DO USUÁRIO
+											</div>
+										</f:facet>
+																			
+										<p:column headerText="Perfis Cadastrados" style="text-align:center!important">
+											<h:outputText value="#{perfil.nome}" />
+										</p:column>
+									</p:dataTable>
+									
+								</div>
+
+							</div>
+
+						</div>
+					</div>
+
+					<div align="center">
+						<div class="col-12 md:col-5">
+							<p:button outcome="/paginas/usuario/listarUsuarios"
+								value="Voltar" icon="pi pi-arrow-left"
+								styleClass="ui-button-info" />
+
+
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>

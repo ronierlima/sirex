@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <f:facet name="first">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+        <meta name="apple-mobile-web-app-capable" content="yes"/>
+        <meta name="theme-color" content="#{app.topbarTheme}"/>
+
+        <link href="#{resource['layout/images/favicon-32x32.png']}" rel="icon" type="image/png" sizes="32x32"/>
+        <link href="#{resource['layout/images/favicon-16x16.png']}" rel="icon" type="image/png" sizes="16x16"/>
+    </f:facet>
+    <title>PrimeFaces Ultima</title>
+
+    <!-- **JS** -->
+    <!-- OPTIONAL DEPENDENCIES -->
+    <!-- When enabled, ripple animation is activated. -->
+    <h:outputScript name="ripple/ripple.js" library="layout" rendered="#{app.ripple}" />
+
+    <!-- LAYOUT DEPENDENCIES -->
+    <!-- The menu widget dependencies are loaded by UltimaMenu. @see UltimaMenu.java -->
+    <h:outputScript name="js/layout.js" library="layout" />
+    
+    <h:outputStylesheet library="webjars" name="font-awesome/6.5.2/css/all.min-jsf.css" />
+	<h:outputStylesheet library="webjars" name="font-awesome/6.5.2/css/v4-shims.min-jsf.css" />
+    
+
+    <!-- APP DEPENDENCIES -->
+    <ui:insert name="head" />
+</h:head>
+
+<h:body styleClass="#{app.bodyClass}">
+
+    <div class="layout-wrapper #{app.layoutClass}">
+        <ui:include src="./sections/topbar.xhtml" />
+        <ui:include src="./sections/rightmenu.xhtml" />
+        <ui:include src="./sections/menu.xhtml" />
+
+        <div class="layout-main">
+            <ui:include src="./sections/breadcrumb.xhtml" />
+
+            <div class="layout-content">
+                <ui:insert name="content"/>
+            </div>
+
+            <ui:include src="./sections/footer.xhtml"/>
+        </div>
+
+        <ui:include src="./sections/config.xhtml" />
+        <ui:include src="./sections/loader.xhtml" />
+    </div>
+
+    <!-- **CSS** -->
+    <!-- LAYOUT DEPENDENCIES -->
+    <h:outputStylesheet name="styles/#{app.layout}.css" library="layout" />
+
+    <!-- OPTIONAL DEPENDENCIES -->
+    <!-- PrimeFlex is a lightweight responsive CSS utility library. This app contains two seperate packages; primeflex.min.css(v3.x) and primeflex-v2.min.css(v2.x) -->
+    <h:outputStylesheet name="primeflex/primeflex.min.css" library="layout"/>
+    <!-- When enabled, ripple animation is activated. -->
+    <h:outputStylesheet name="ripple/ripple.css" library="layout" rendered="#{app.ripple}" />
+
+    <!-- APP DEPENDENCIES -->
+    <h:outputStylesheet name="styles/demo.css" library="demo" />
+    
+    <style>
+    .ui-badge.ui-badge-no-gutter {
+    padding: 0;
+    border-radius: 50%;
+}
+
+.ui-badge {
+    display: inline-block;
+    border-radius: 10px;
+    text-align: center;
+    padding: 0 .5rem;
+}
+    </style>
+    
+    <h:form id="redefinir">	   
+	
+	<p:remoteCommand name="remoteMethod" action="#{redefinirSenhaBean.limparParametros()}" global="false" process="@this" update="redefinir:aviso redefinir:atualpass redefinir:newpass redefinir:confnewpass"/>
+
+	<p:dialog widgetVar="rdfpassword" onShow="remoteMethod()" id="dialogo" position="center" modal="true"
+		styleClass="Responsive WidAutoOnMobile" resizable="false">
+
+		<p:panel styleClass="Responsive WidAutoOnMobile" 
+			header="Redefinir Senha"
+			style="max-width: 320px;max-height: 450px!important;border: none;text-align:center"
+			layout="block">
+			
+						
+			<div class="ui-message-info" align="justify" style="margin-bottom: 10px;font-size:13px;border-radius: 5px">
+						<span>A senha deve conter pelo menos 8 caracteres e incluir letras, números e ser diferente da atual</span>
+			</div>
+
+			<p:growl id="msg" globalOnly="true" showDetail="false" life="2000" closable="true">
+					<p:autoUpdate />
+			</p:growl>	
+			
+			<div class="input-panel flex flex-column px-3">
+			
+			<p style="color: red; display: none; font-size: 15px !important;" id="capsLockMessage">Caps Lock Ativado!</p>
+				
+				<div class="ui-inputgroup mt-3 mb-3">
+						<span class="ui-inputgroup-addon"> 
+							<i class="pi pi-lock"></i>
+						</span>
+						<span class="ui-float-label flex align-items-stretch w-full">
+							<p:password styleClass="w-full" title="Informe a Senha" id="atualpass"
+								redisplay="true" onkeyup="checkCapsLock(event)" maxlength="30"
+								value="#{redefinirSenhaBean.senhaAtualRedefinir}"
+								required="true" autocomplete="false"
+								requiredMessage="A Senha Atual é Obrigatória"
+								promptLabel="Digite a Senha Atual" /> 
+								<p:outputLabel for="@previous" value="Senha Atual:" />
+						</span>
+					</div>
+			
+					<div class="ui-inputgroup mt-3 mb-3">
+						<span class="ui-inputgroup-addon"> 
+							<i class="pi pi-lock"></i>
+						</span>
+						<span class="ui-float-label flex align-items-stretch w-full">
+							<p:password styleClass="w-full" title="Informe a Senha" id="newpass"
+								redisplay="true" onkeyup="checkCapsLock(event)" maxlength="30"
+								value="#{redefinirSenhaBean.novaSenhaRedefinir}"
+								feedback="true" required="true" autocomplete="false"
+								requiredMessage="A Nova Senha é Obrigatória"
+								promptLabel="Digite a Nova Senha" weakLabel="Fraca"
+								goodLabel="Regular" strongLabel="Ótima" /> 
+								<p:outputLabel for="@previous" value="Nova Senha:" />
+						</span>
+					</div>
+				
+					<div class="ui-inputgroup mt-3 mb-3">
+						<span class="ui-inputgroup-addon"> 
+							<i class="pi pi-lock"></i>
+						</span>
+						<span class="ui-float-label flex align-items-stretch w-full">							
+							<p:password styleClass="w-full" title="Confirme a Senha" id="confnewpass" 
+								redisplay="true" maxlength="30" value="#{redefinirSenhaBean.confNovaSenhaRedefinir}" 
+								required="true" autocomplete="false"
+								requiredMessage="A Confirmação de Senha é Obrigatória"/> 
+								<p:outputLabel for="@previous" value="Confirmar Senha:" />
+						</span>
+					</div>				
+				
+				</div>			
+
+			<br/>
+
+			<p:commandButton value="Salvar" icon="fa fa-save" action="#{redefinirSenhaBean.alterarSenha}" process="@this,redefinir:atualpass,redefinir:newpass,redefinir:confnewpass" 
+				styleClass="GreenButton Fs15 White RaisedButton FloatNoneOnMobile" update="redefinir:atualpass,redefinir:newpass,redefinir:confnewpass"/>									
+
+		</p:panel>
+
+	</p:dialog>	
+		
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+	
+	</h:form>
+</h:body>
+
+</html>

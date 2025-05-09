@@ -1,0 +1,141 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	template="/WEB-INF/layout/template.xhtml">
+
+	<ui:define name="title">Listar Perfis</ui:define>
+
+	<ui:define name="breadcrumb">
+		<f:metadata>
+			<f:viewParam name="paginaAnterior" value="/paginas/perfil/listarPerfis.xhtml" />
+			<f:viewParam name="homeOutcome" value="/paginas/principal.xhtml" />
+			<f:viewParam name="value" value="Cadastros,Perfis" />
+			<f:viewParam name="outcome"
+				value="/paginas/perfil/listarPerfis.xhtml" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="content">
+		<h:form>
+			<div class="grid panel-demo">
+				<div class="col-12">
+
+					<p:panel id="custom">
+
+						<f:facet name="header">
+							<i class="pi pi-fw pi-user-edit"></i>
+							<h:outputText value="Perfis Cadastrados em #{seguranca.usuario.hospital.sigla}" />
+						</f:facet>
+
+						<f:facet name="actions">
+						
+							<p:commandButton value="Novo" icon="pi pi-plus"
+								action="#{listarPerfisBean.incluirPerfil}" process="@this"
+								rendered="#{seguranca.podeIncluirPerfil}"
+								styleClass="ui-button-success mr-2 mb-2" />	
+							
+						</f:facet>
+
+						<h5>Parâmetros de Pesquisa</h5>
+						<div class="formgroup-inline">
+
+							<div class="field">
+								<p:inputText id="nome" type="text" placeholder="Nome"
+									pt:data-tooltip="Digite o nome a ser pesquisado"
+									required="true" requiredMessage="Nome é obrigatório"
+									value="#{listarPerfisBean.filtro.nome}" styleClass="mr-2 mb-2" />
+							</div>
+
+							<p:commandButton value="Pesquisar" styleClass="mr-2 mb-2"
+								process="nome @this" update="@form"								
+								action="#{listarPerfisBean.pesquisar}" icon="pi pi-search" />
+
+							<p:commandButton value="Limpar" styleClass="ui-button-danger"
+								process="@this" update="@form"
+								action="#{listarPerfisBean.inicializar}" icon="pi pi-refresh" />
+						</div>
+
+					</p:panel>
+				</div>
+			</div>
+
+			<div class="grid table-demo">
+				<div class="col-12">
+					<div class="card">
+
+						<p:dataTable widgetVar="perfilDT" var="perfil" lazy="true"
+							value="#{listarPerfisBean.model}" reflow="true"
+							rowKey="#{hospital.id}" paginator="true" rows="10"
+							paginatorPosition="bottom" selectionMode="single"
+							rowsPerPageTemplate="10,20,30,40,50,60,80,90,100"
+							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							currentPageReportTemplate="Exibindo de {startRecord} a {endRecord} no total de {totalRecords} registros - Página: {currentPage}/{totalPages}">
+
+							<f:facet name="header">
+								<div class="customers-table-header">
+									<span style="font-weight: bold">Perfis Cadastrados</span>
+								</div>
+							</f:facet>
+
+							<p:column headerText="Status">
+								<span class="customer-badge status-#{perfil.statusCss}">#{perfil.ativo
+									? 'Ativo' : 'Inativo'}</span>
+							</p:column>
+
+							<p:column headerText="Nome" sortBy="#{perfil.nome}">
+								<p:outputLabel value="#{perfil.nome}" />
+							</p:column>
+
+							<p:column headerText="Opções"
+								style="width: 8rem; text-align: center;">
+
+								<p:menuButton value="Ações">
+
+									<p:menuitem rendered="#{seguranca.podeVisualizarPerfil}"
+										value="Visualizar" action="#{listarPerfisBean.visualizar}"
+										icon="pi pi-eye" process="@this">
+
+										<f:setPropertyActionListener value="#{perfil}"
+											target="#{listarPerfisBean.perfilSelecionado}" />
+
+									</p:menuitem>
+
+									<p:menuitem value="Alterar" icon="pi pi-file-edit"
+										rendered="#{seguranca.podeAlterarPerfil}" process="@this"
+										action="#{listarPerfisBean.alterar}">
+										<f:setPropertyActionListener value="#{perfil}"
+											target="#{listarPerfisBean.perfilSelecionado}" />
+									</p:menuitem>
+
+									<p:separator />
+
+									<p:menuitem value="#{perfil.ativo ? 'Desativar' : 'Ativar'}"
+										rendered="#{seguranca.podeAlterarPerfil}"
+										icon="pi pi-thumbs-down-fill" process="@this" update="@form"
+										action="#{listarPerfisBean.alterarStatus}">
+
+										<f:setPropertyActionListener value="#{perfil}"
+											target="#{listarPerfisBean.perfilSelecionado}" />
+
+										<p:confirm header="Confirmação"
+											message="Deseja Alterar o Status do Perfil?"
+											icon="pi pi-exclamation-triangle" />
+
+									</p:menuitem>
+
+								</p:menuButton>
+
+							</p:column>
+
+						</p:dataTable>
+					</div>
+				</div>
+			</div>
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>

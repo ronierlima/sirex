@@ -1,0 +1,115 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/layout/template.xhtml">
+
+	<ui:define name="title">Incluir Paciente</ui:define>
+	
+	<ui:define name="head">
+	
+	<style type="text/css">
+    
+    .ui-wizard-nav-next {
+    background-color: #3F51B5!important;	
+	</style>
+	
+	</ui:define>
+
+	<ui:define name="breadcrumb">
+		<f:metadata>
+			<f:viewParam name="paginaAnterior" value="/paginas/paciente/listarPacientes.xhtml" />
+			<f:viewParam name="homeOutcome" value="/paginas/principal.xhtml" />
+			<f:viewParam name="value" value="Pacientes,Incluir" />
+			<f:viewParam name="outcome"
+				value="/paginas/paciente/incluirPaciente.xhtml" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="content">
+		<div class="grid panel-demo">
+
+
+			<div class="col-12 md:col-12">
+
+
+				<div class="card">
+					<h:form id="frmPrincipal">
+
+						<p:wizard backLabel="Voltar" nextLabel="Avançar" id="wizard"
+							flowListener="#{incluirPacienteBean.onFlowProcess}">
+
+							<p:tab id="tabDados">
+
+								<f:facet name="title">
+									<div align="center">
+										<i class="pi pi-id-card"></i>
+										<h:outputText value=" INFORMAÇÕES PESSOAIS" />
+									</div>
+								</f:facet>
+
+								<ui:include src="tabs/informacoesPessoais.xhtml" />
+
+							</p:tab>
+
+							<p:tab id="tabResponsaveis">
+
+								<f:facet name="title">
+									<div align="center">
+										<i class="pi pi-users"></i>
+										<h:outputText value=" RESPONSÁVEIS PARA RETIRADA" />
+									</div>
+								</f:facet>
+
+								<ui:include src="tabs/resposaveisRetirada.xhtml" />
+								
+								<div align="right">
+
+									<p:commandButton value="Finalizar" icon="pi pi-save"
+										rendered="#{seguranca.naoPodeVisualizarDadosSaudeDoPaciente}"									    
+										action="#{incluirPacienteBean.finalizarCadastro}"
+										style="margin-top: 10px;" update="@form"
+										styleClass="ui-button-success mr-2 mb-2" />
+								
+								</div>
+
+							</p:tab>
+
+							<p:tab id="tabDadosDeSaude" rendered="#{seguranca.podeVisualizarDadosSaudeDoPaciente}">								
+
+								<f:facet name="title">
+									<div align="center">
+										<i class="pi pi-heart-fill"></i> DADOS DE SAÚDE
+									</div>
+								</f:facet>
+
+								<ui:include src="tabs/dadosDeSaude.xhtml" />
+
+								<div align="right">
+
+									<p:commandButton value="Finalizar" icon="pi pi-save"
+										action="#{incluirPacienteBean.finalizarCadastro}"
+										style="margin-top: 10px;" update="@form"
+										styleClass="ui-button-success mr-2 mb-2" />
+								</div>
+
+							</p:tab>
+
+						</p:wizard>
+					</h:form>
+
+
+				</div>
+			</div>
+
+		</div>
+
+		<style>
+.without-selectall .ui-selectcheckboxmenu-header .ui-chkbox {
+	display: none;
+}
+</style>
+	</ui:define>
+
+</ui:composition>

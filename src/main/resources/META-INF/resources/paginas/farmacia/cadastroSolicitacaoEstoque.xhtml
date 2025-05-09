@@ -1,0 +1,251 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/layout/template.xhtml">
+
+	<ui:define name="title">Cadastro de Solicitação</ui:define>
+
+	<ui:define name="">
+		<f:metadata>
+			<f:viewParam name="paginaAnterior"
+				value="/paginas/farmacia/solicitacoesTransferencia.xhtml" />
+			<f:viewParam name="homeOutcome" value="/paginas/principal" />
+			<f:viewParam name="value" value="Farmácia,Cadastrar Solicitação" />
+			<f:viewParam name="outcome"
+				value="/paginas/farmacia/cadastroSolicitacaoEstoque" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="content">
+
+		<h:form>
+			<div class="grid">
+				<div class="col-12 md:col-12">
+					<div class="card ui-fluid">
+
+						<h5>
+
+							<p:outputLabel value="Nova Solicitação"
+								rendered="#{solicitarEstoqueFarmaciaBean.solicitacao.id==null}"
+								style="font-size:19px" />
+							<p:outputLabel value="Editar Solicitação"
+								rendered="#{solicitarEstoqueFarmaciaBean.solicitacao.id!=null}"
+								style="font-size:19px" />
+
+						</h5>
+
+						<p:outputPanel styleClass="formgrid grid"
+							rendered="#{solicitarEstoqueFarmaciaBean.solicitacao.id!=null}">
+
+							<div class="field col-12 md:col-3">
+								<p:outputLabel value="Código da Solicitação:"
+									style="font-size:16px" />
+								<p:outputLabel
+									value=" #{solicitarEstoqueFarmaciaBean.solicitacao.codigoSolicitacao}"
+									style="font-weight: bold;font-size:16px;margin-left:5px" />
+							</div>
+
+							<div class="field col-12 md:col-2">
+								<p:outputLabel value="Solicitante: " style="font-size:16px" />
+								<p:outputLabel
+									value="#{solicitarEstoqueFarmaciaBean.solicitacao.usuarioInclusao.nome}"
+									style="font-weight: bold;font-size:16px;margin-left:5px" />
+							</div>
+
+							<div class="field col-12 md:col-2">
+								<p:outputLabel value="Status da Solicitação: "
+									style="font-size:16px" />
+								<p:outputLabel
+									value="#{solicitarEstoqueFarmaciaBean.solicitacao.statusSolicitacao}"
+									style="font-weight: bold;font-size:16px;margin-left:5px" />
+							</div>
+
+						</p:outputPanel>
+
+						<div class="formgroup-inline">
+
+							<div class="field ui-lg-2 ui-sm-12 ui-g-nopad">
+								<p:outputLabel for="tipo" value="Tipo" />
+								<p:selectOneMenu converter="omnifaces.SelectItemsConverter"
+									filter="true" filterMatchMode="contains" id="tipo"
+									value="#{solicitarEstoqueFarmaciaBean.categoriaSelecionada}"
+									required="true"
+									requiredMessage="A seleção do item é obrigatória!">
+									<p:ajax
+										listener="#{solicitarEstoqueFarmaciaBean.onCategoriaChange}"
+										update="marca,item" />
+									<f:selectItem itemLabel="Selecione" />
+									<f:selectItems
+										value="#{solicitarEstoqueFarmaciaBean.categoriasAtivas}"
+										var="categoria" itemValue="#{categoria}"
+										itemLabel="#{categoria.descricao}" />
+								</p:selectOneMenu>
+							</div>
+
+							<div class="field ui-lg-2 ui-sm-12 ui-g-nopad">
+								<p:outputLabel value="Marca" />
+								<p:selectOneMenu converter="omnifaces.SelectItemsConverter"
+									style="width:100%;" filter="true" filterMatchMode="contains"
+									id="marca"
+									value="#{solicitarEstoqueFarmaciaBean.marcaSelecionada}">
+									<p:ajax
+										listener="#{solicitarEstoqueFarmaciaBean.onMarcaChange}"
+										update="item" />
+									<f:selectItem itemLabel="Selecione a Marca" itemValue="#{null}" />
+									<f:selectItems
+										value="#{solicitarEstoqueFarmaciaBean.marcasAtivas}"
+										var="marca" itemValue="#{marca}"
+										itemLabel="#{marca.descricao}" />
+								</p:selectOneMenu>
+								<p:tooltip for="marca">Selecione a Categoria para Listar as Marcas</p:tooltip>
+							</div>
+
+							<div class="field ui-lg-5 ui-sm-12 ui-g-nopad">
+								<p:outputLabel for="item" value="Produto" />
+								<p:selectOneMenu converter="omnifaces.SelectItemsConverter"
+									filter="true" filterMatchMode="contains" id="item"
+									autoWidth="false"
+									value="#{solicitarEstoqueFarmaciaBean.produtoSelecionado}"
+									required="true"
+									requiredMessage="A seleção do produto é obrigatória!">
+									<f:selectItem itemLabel="Selecione o Produto" />
+									<f:selectItems
+										value="#{solicitarEstoqueFarmaciaBean.produtosAtivos}"
+										var="produto" itemValue="#{produto}"
+										itemDescription="#{produto.descricao}"
+										itemLabel="#{produto.descricaoReduzida}" />
+								</p:selectOneMenu>
+								<p:tooltip for="item">Selecione a Marca para Listar os Produtos</p:tooltip>
+							</div>
+
+							<div class="field ui-lg-1 ui-sm-12 ui-g-nopad">
+								<p:outputLabel for="quantidade" value="Quantidade" />
+								<p:inputNumber modifyValueOnWheel="false"
+									value="#{solicitarEstoqueFarmaciaBean.quantidadeSolicitada}"
+									maxlength="5" maxValue="99999" thousandSeparator=""
+									decimalPlaces="0" id="quantidade" required="true"
+									requiredMessage="A quantidade é obrigatória!" />
+							</div>
+
+							<div class="field ui-lg-1 ui-sm-12 ui-g-nopad">
+								<p:outputLabel value="Adicionar" />
+								<br />
+								<p:commandButton icon="pi pi-plus"
+									action="#{solicitarEstoqueFarmaciaBean.incluirProduto}"
+									update="@form" styleClass="mr-2 mb-2" />
+							</div>
+
+						</div>
+
+						<div class="grid table-demo">
+							<div class="col-12">
+								<div class="card">
+
+									<p:dataTable id="dtitens" widgetVar="itemDT" var="item"
+										style="text-align:center!important"
+										value="#{solicitarEstoqueFarmaciaBean.solicitacao.itensDaSolicitacao}"
+										editInitEvent="" reflow="true" rowKey="#{item.id}"
+										emptyMessage="Nenhum Produto Incluído" editable="true">
+
+										<p:ajax event="rowEdit"
+											listener="#{solicitarEstoqueFarmaciaBean.onRowEdit}" />
+
+										<f:facet name="header">
+											<div align="center" class="ui-lg-12 ui-sm-12">
+												<span style="font-weight: bold">PRODUTOS DA
+													SOLICITAÇÃO</span>
+											</div>
+										</f:facet>
+
+										<p:column headerText="Tipo" style="text-align: center;"
+											styleClass="ui-lg-1 ui-sm-12">
+											<h:outputText value="#{item.produto.categoria.descricao}" />
+										</p:column>
+
+										<p:column headerText="Marca" style="text-align: center;"
+											styleClass="ui-lg-1 ui-sm-12">
+											<h:outputText value="#{item.produto.marca.descricao}" />
+										</p:column>
+
+										<p:column headerText="Produto" style="text-align: center;"
+											styleClass="ui-lg-5 ui-sm-12">
+											<h:outputText value="#{item.produto.descricao}" />
+										</p:column>
+
+										<p:column headerText="Quantidade" style="text-align: center;"
+											styleClass="ui-lg-2 ui-sm-12">
+											<p:cellEditor>
+												<f:facet name="output">
+													<h:outputText value="#{item.quantidadeSolicitada}" />
+												</f:facet>
+												<f:facet name="input">
+													<p:inputNumber modifyValueOnWheel="false" minValue="1" maxValue="9999999"
+														maxlength="7" decimalPlaces="0" thousandSeparator=""
+														value="#{item.quantidadeSolicitada}" required="true"
+														requiredMessage="A quantidade é obrigatória!" />
+												</f:facet>
+											</p:cellEditor>
+										</p:column>
+
+										<p:column headerText="Ações" style="text-align:center"
+											styleClass="ui-lg-1 ui-sm-12">
+
+											<p:rowEditor style="float:left;text-align:center"
+												editTitle="Editar Quantidade" cancelTitle="Cancelar"
+												saveTitle="Alterar" />
+											<p:commandButton style="float:left;text-align:center"
+												title="Excluir Produto"
+												action="#{solicitarEstoqueFarmaciaBean.removerProduto(item)}"
+												process="@this" update="dtitens" icon="pi pi-trash" />
+
+
+										</p:column>
+
+									</p:dataTable>
+								</div>
+							</div>
+						</div>
+
+						<div class="grid" style="margin-top: 10px">
+
+							<div class="col-12 md:col-1">
+								<p:commandButton value="Salvar" icon="pi pi-save"
+									process="@this"
+									action="#{solicitarEstoqueFarmaciaBean.salvar}"
+									update="@form" styleClass="mr-2 mb-2">
+									<p:confirm header="Confirmação"
+										message="#{solicitarEstoqueFarmaciaBean.mensagemConfirmacao}"
+										icon="pi pi-exclamation-triangle" />
+								</p:commandButton>
+
+							</div>
+
+							<div class="col-12 md:col-2">
+								<p:commandButton value="Salvar e Continuar" icon="pi pi-save"
+									process="@this"
+									action="#{solicitarEstoqueFarmaciaBean.salvarEContinuar}"
+									update="@form" styleClass="mr-2 mb-2">
+									<p:confirm header="Confirmação"
+										message="#{solicitarEstoqueFarmaciaBean.mensagemConfirmacao}"
+										icon="pi pi-exclamation-triangle" />
+								</p:commandButton>
+
+							</div>
+
+							<div class="col-12 md:col-1">
+								<p:button outcome="/paginas/farmacia/solicitacoesTransferencia"
+									value="Voltar" icon="pi pi-arrow-left"
+									styleClass="ui-button-danger" />
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>

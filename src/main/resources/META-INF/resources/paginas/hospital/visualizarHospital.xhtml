@@ -1,0 +1,89 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/layout/template.xhtml">
+
+	<ui:define name="title">Visualizar Hospital</ui:define>
+
+	<ui:define name="">
+		<f:metadata>
+		    <f:viewParam name="paginaAnterior" value="/paginas/hospital/listarHospitais" />
+			<f:viewParam name="homeOutcome" value="/paginas/principal" />
+			<f:viewParam name="value" value="Hospital,Listar Hospitais" />
+			<f:viewParam name="outcome" value="/paginas/hospital/listarHospitais" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="content">
+		<h:form>
+
+			<div class="grid">
+				<div class="col-12 md:col-12">
+					<div class="card ui-fluid">
+						<h5>Visualizar Hospital</h5>
+
+						<div class="formgrid grid">
+
+							<div class="field col-12 md:col-4">
+								<p:outputLabel value="Nome" />
+								<p:inputText value="#{visualizarHospitalBean.hospital.nome}"
+									readonly="true" />
+							</div>
+
+							<div class="field col-12 md:col-4">
+								<p:outputLabel value="CNPJ" />
+								<p:inputMask value="#{visualizarHospitalBean.hospital.cnpj}"
+									readonly="true" />
+							</div>
+
+							<div class="field col-12 md:col-4">
+								<p:outputLabel value="Sigla" />
+								<p:inputText readonly="true"
+									value="#{visualizarHospitalBean.hospital.sigla}" />
+							</div>
+
+							<div class="field col-12 md:col-4">
+
+								<p:outputLabel value="Macro" />
+								<p:inputText readonly="true"
+									value="#{visualizarHospitalBean.hospital.municipio.gere.macroRegiao.nome}" />
+							</div>
+
+							<div class="field col-12 md:col-4">
+
+								<p:outputLabel value="Geres" for="@next" />
+								<p:inputText readonly="true"
+									value="#{visualizarHospitalBean.hospital.municipio.gere.nome}" />
+							</div>
+
+							<div class="field col-12 md:col-4">
+
+								<p:outputLabel value="Municipio" for="@next" />
+								<p:inputText readonly="true"
+									value="#{visualizarHospitalBean.hospital.municipio.nome}" />
+							</div>
+
+
+						</div>
+
+						<div class="grid">
+
+							<div class="col-2">
+								<p:button outcome="/paginas/hospital/listarHospitais"
+									value="Voltar" icon="pi pi-arrow-left"
+									styleClass="ui-button-danger" />
+							</div>
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>

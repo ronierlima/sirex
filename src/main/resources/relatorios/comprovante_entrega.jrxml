@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.19.1.final using JasperReports Library version 6.19.1-867c00bf88cd4d784d404379d6c05e1b419e8a4c  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorioOcorrenciaUnidade" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="659e0a1d-1cc5-4ae3-a460-38a68cbefa98">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="dev p_sca"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="LOGO_PATH" class="java.lang.String">
+		<defaultValueExpression><![CDATA["/home/clauvane/git/sispen_api/WebContent/resources/images/logo_portrait.jpeg"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="MATRICULA" class="java.lang.String"/>
+	<parameter name="IMPRESSO_POR" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<parameter name="HOSPITAL" class="java.lang.String"/>
+	<parameter name="PERIODO_RELATORIO" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select 1]]>
+	</queryString>
+	<field name="id" class="java.lang.Long"/>
+	<field name="hospital.nome" class="java.lang.String"/>
+	<field name="paciente.nomeCompleto" class="java.lang.String"/>
+	<field name="responsavelRetirada.tipoResponsavel.nome" class="java.lang.String"/>
+	<field name="responsavelRetirada.nome" class="java.lang.String"/>
+	<field name="paciente.prontuario" class="java.lang.String"/>
+	<field name="responsavelRetirada.motivo" class="java.lang.String"/>
+	<field name="status.descricao" class="java.lang.String"/>
+	<field name="observacao" class="java.lang.String"/>
+	<field name="tipo.descricao" class="java.lang.String"/>
+	<field name="emergencial" class="java.lang.Boolean"/>
+	<field name="paciente.genero.nome" class="java.lang.String"/>
+	<field name="paciente.estomias" class="java.util.List"/>
+	<field name="responsavelRetirada.cpf" class="java.lang.String"/>
+	<field name="dataInclusao" class="java.util.Date"/>
+	<pageHeader>
+		<band height="105">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<subreport overflowType="Stretch">
+				<reportElement x="-20" y="0" width="575" height="70" uuid="2b612999-ee4a-48a1-8baa-be6480a58c2f"/>
+				<subreportParameter name="LOGO_PATH">
+					<subreportParameterExpression><![CDATA[$P{LOGO_PATH}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="MATRICULA">
+					<subreportParameterExpression><![CDATA[$P{MATRICULA}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="IMPRESSO_POR">
+					<subreportParameterExpression><![CDATA[$P{IMPRESSO_POR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="HOSPITAL">
+					<subreportParameterExpression><![CDATA[$P{HOSPITAL}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.JREmptyDataSource()]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR}+"header_template_RETRATO.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement x="0" y="73" width="555" height="13" uuid="6b466d31-97d9-45eb-8d5b-5517ea0441b3">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[COMPROVANTE DE ENTREGA]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="89" width="555" height="13" uuid="0d2df37c-d0df-4fb3-8a8c-bd18bddd0f0f">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Protocolo Nº: " + $F{id}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="50">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="2" width="555" height="14" backcolor="#BABABA" uuid="0f7eef59-bfa2-4906-a0e7-547f4eb8e215">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[INFORMAÇÕES DO PACIENTE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="17" width="40" height="15" uuid="6cfe36fa-2327-425b-8436-b06653c8f6e6">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nome:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="40" y="17" width="340" height="15" uuid="391f6dde-1166-42c3-a6a5-13da5f7073b8"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{paciente.nomeCompleto}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="35" width="555" height="14" backcolor="#BABABA" uuid="ce776269-7520-4144-a4c0-660e0e4d6b04">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DADOS DA RETIRADA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="380" y="17" width="40" height="15" uuid="bfb32a78-c726-4afb-ab6b-d4b4fea36905">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pront.:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="420" y="17" width="134" height="15" uuid="ef7127e3-3f1e-4f94-8c2f-2ebb44da3c93"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{paciente.prontuario}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="35">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<printWhenExpression><![CDATA[$F{responsavelRetirada.tipoResponsavel.nome}.equalsIgnoreCase("PACIENTE") || $F{responsavelRetirada.tipoResponsavel.nome}.equalsIgnoreCase("TERCEIRO")]]></printWhenExpression>
+			<textField textAdjust="StretchHeight">
+				<reportElement x="0" y="0" width="555" height="35" uuid="495c7850-9543-4d3e-8516-cdf2d67186a1">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Justified">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Eu, "+$F{responsavelRetirada.nome}+ ($F{responsavelRetirada.cpf} != null ? " inscrito(a) no CPF " + $F{responsavelRetirada.cpf} : "")+" declaro que recebi, na presente data, no "+$F{hospital.nome}+", os materiais listados abaixo:"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="35">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<printWhenExpression><![CDATA[$F{responsavelRetirada.tipoResponsavel.nome}.equalsIgnoreCase("CNPJ")]]></printWhenExpression>
+			<textField textAdjust="StretchHeight">
+				<reportElement x="0" y="0" width="555" height="35" uuid="d3689134-7f9f-4c54-a5da-5d4adac4e8f9">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Justified">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Eu, "+$F{responsavelRetirada.nome}+" representando(a) o CNPJ "+$F{responsavelRetirada.cpf}+" declaro que recebi, na presente data, no "+$F{hospital.nome}+", os materiais listados abaixo:"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="181">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<subreport>
+				<reportElement stretchType="RelativeToTallestObject" x="-20" y="3" width="555" height="28" uuid="523883ed-b4db-4535-9c5a-986524ab98fd"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{paciente.estomias})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR}+"estomias.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="35" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<line>
+				<reportElement x="80" y="-90" width="400" height="1" uuid="d7293d8c-b054-4283-8c70-6b9f4e9904ad">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+			</line>
+			<textField>
+				<reportElement x="130" y="-87" width="300" height="15" uuid="dc95c4cd-3cdd-410b-b6c8-7e935cba9da4">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{responsavelRetirada.nome}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="-143" width="280" height="14" uuid="80696806-b072-4424-afe8-7db4f114fd91">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA["Recife, " + new SimpleDateFormat("dd 'de' MMMM 'de' yyyy", new Locale("pt", "BR")).format($F{dataInclusao})+"."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="130" y="-72" width="300" height="15" uuid="cb331b34-fc8f-4239-bf32-e0ee5440d0b8">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Assinatura do Responsável pela Retirada - Tipo: " +$F{responsavelRetirada.tipoResponsavel.nome}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="-19" y="2" width="574" height="30" uuid="8633dc98-1372-4fe5-a8ff-1c6bc30c221e">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<subreportParameter name="IMPRESSO_POR">
+					<subreportParameterExpression><![CDATA[$P{IMPRESSO_POR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="PERIODO_RELATORIO">
+					<subreportParameterExpression><![CDATA[$P{PERIODO_RELATORIO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.JREmptyDataSource()]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR}+"footer_template_RETRATO.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</pageFooter>
+</jasperReport>
