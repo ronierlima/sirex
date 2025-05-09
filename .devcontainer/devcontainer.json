@@ -1,0 +1,31 @@
+{
+  "name": "Spring Boot DevContainer",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspaces/template",
+  "settings": {
+    "terminal.integrated.defaultProfile.linux": "bash"
+  },
+  "customizations": {
+		"vscode": {
+			"extensions": [
+				"vscjava.vscode-java-debug",
+				"GitHub.copilot-chat",
+				"dbaeumer.vscode-eslint",
+				"vscjava.vscode-java-pack",
+				"vscjava.vscode-gradle",
+				"VisualStudioExptTeam.vscodeintellicode",
+				"VisualStudioExptTeam.intellicode-api-usage-examples",
+				"redhat.java",
+				"ms-vsliveshare.vsliveshare",
+				"vscjava.vscode-maven",
+				"vscjava.vscode-java-dependency",
+				"vscjava.vscode-java-test"
+			]
+		}
+	},
+  "remoteUser": "root",
+  "shutdownAction": "stopCompose",
+  "forwardPorts": [5005, 80],
+  "runArgs": ["-p", "80:80", "-p", "5005:5005"]
+} 

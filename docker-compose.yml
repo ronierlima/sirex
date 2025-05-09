@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: template_app
+    ports:
+      - "80:80"
+    depends_on:
+      - db
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+    networks:
+      - template-net
+    volumes:
+      - .:/workspaces/template
+    command: sleep infinity
+  db:
+    image: postgres:15
+    container_name: template_db
+    restart: always
+    environment:
+      POSTGRES_DB: template
+      POSTGRES_USER: template
+      POSTGRES_PASSWORD: template
+    ports:
+      - "5432:5432"
+    networks:
+      - template-net
+    volumes:
+      - pgdata_template:/var/lib/postgresql/data
+
+networks:
+  template-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 181.71.0.0/16
+
+volumes:
+  pgdata_template: 
+        driver: local
