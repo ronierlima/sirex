@@ -10,7 +10,8 @@
 
 	<ui:define name="breadcrumb">
 		<f:metadata>
-			<f:viewParam name="paginaAnterior" value="/paginas/usuario/listarUsuarios.xhtml" />
+			<f:viewParam name="paginaAnterior"
+				value="/paginas/usuario/listarUsuarios.xhtml" />
 			<f:viewParam name="homeOutcome" value="/paginas/principal.xhtml" />
 			<f:viewParam name="value" value="Usuario,Incluir Usuario" />
 			<f:viewParam name="outcome" value="/paginas/usuario/cadastrarUsuario" />
@@ -28,26 +29,26 @@
 
 							<div class="field col col-12 md:col-2">
 								<p:outputLabel for="nome" value="Nome" />
-								<p:inputText value="#{cadastroUsuarioBean.usuario.nome}"
+								<p:inputText value="#{cadastroUsuarioBean.usuario.pessoa.nome}"
 									maxlength="100" style="text-transform:uppercase" id="nome"
 									type="text" required="true"
 									requiredMessage="O Nome é Obrigatório!" />
 							</div>
 							<div class="field col col-12 md:col-2">
 								<p:outputLabel for="cpf" value="CPF" />
-								<p:inputMask value="#{cadastroUsuarioBean.usuario.cpf}"
+								<p:inputMask value="#{cadastroUsuarioBean.usuario.pessoa.cpf}"
 									slotChar="" mask="999.999.999-99" id="cpf" type="text"
 									required="true" />
 							</div>
 
 							<div class="field col col-12 md:col-2">
 								<p:outputLabel for="email" value="Email" />
-								<p:inputText value="#{cadastroUsuarioBean.usuario.email}"
+								<p:inputText value="#{cadastroUsuarioBean.usuario.pessoa.email}"
 									maxlength="50" style="text-transform:lowercase" id="email"
 									type="text" required="true"
 									requiredMessage="O email é obrigatório!" />
 							</div>
-							
+
 							<div class="field col col-12 md:col-2">
 								<p:outputLabel for="login" value="Login" />
 								<p:inputText value="#{cadastroUsuarioBean.usuario.login}"
@@ -55,8 +56,9 @@
 									type="text" required="true"
 									requiredMessage="O login é obrigatório!" />
 							</div>
-							
-							<p:outputPanel styleClass="field col col-12 md:col-2" rendered="#{cadastroUsuarioBean.usuario.id==null}">
+
+							<p:outputPanel styleClass="field col col-12 md:col-2"
+								rendered="#{cadastroUsuarioBean.usuario.id==null}">
 								<p:outputLabel for="pwd" value="Senha" />
 								<p:password id="pwd" redisplay="true"
 									style="border-radius: 10px" onkeyup="checkCapsLock(event)"
@@ -65,95 +67,111 @@
 									autocomplete="false" requiredMessage="A Senha é Obrigatória"
 									promptLabel="Digite a Senha" weakLabel="Fraca"
 									goodLabel="Regular" strongLabel="Ótima" />
-								<p style="color: red; display: none; font-size: 12px !important; font-weight: bold;"
+								<p
+									style="color: red; display: none; font-size: 12px !important; font-weight: bold;"
 									id="capsLockMessage">Caps Lock Ativado!</p>
 							</p:outputPanel>
 
-							<p:outputPanel styleClass="field col col-12 md:col-2" rendered="#{cadastroUsuarioBean.usuario.id==null}">
+							<p:outputPanel styleClass="field col col-12 md:col-2"
+								rendered="#{cadastroUsuarioBean.usuario.id==null}">
 								<p:outputLabel for="cfpwd" value="Confirmar Senha" />
-								<p:password id="cfpwd" maxlength="30" 
+								<p:password id="cfpwd" maxlength="30"
 									value="#{cadastroUsuarioBean.usuario.senhaConfirmacao}"
 									required="true" redisplay="true" autocomplete="false"
 									style="border-radius: 10px"
 									requiredMessage="A Confirmação da Senha é Obrigatória">
 								</p:password>
 							</p:outputPanel>
-							
-							
-							<div class="col-12" align="center">							
-							
-							<div class="field col-12 md:col-8">
-							
-							<p:pickList id="hospitais" 
-									value="#{cadastroUsuarioBean.dualListModelHospitais}" var="hospital"
-									converter="entityConverter" escape="false"
-									itemValue="#{hospital}" showSourceControls="false"
-									orientation="horizontal" showTargetControls="false"
-									showSourceFilter="false" showTargetFilter="false"
-									responsive="true" addAllLabel="Adicionar Todos"
-									removeAllLabel="Remover Todos" style="max-height:50px;margin-bottom:10px;">
-									<f:facet name="sourceCaption">Hospitais Disponíveis</f:facet>
-									<f:facet name="targetCaption">Hospitais Vinculados ao Usuário</f:facet>									
-									<p:ajax event="transfer" listener="#{cadastroUsuarioBean.onTransferHospital}" update="hospital,pickList"/>
-									<p:column>
-										<p:outputLabel value="#{hospital.nome} - #{hospital.sigla}" />
-									</p:column>
-								</p:pickList>
-							
-							
-							<p:outputLabel for="hospital" value="Selecione o Hospital para Vinculação dos Perfis" />
-							<div class="ui-inputgroup" style="margin-bottom:10px">
-							<p:selectOneMenu converter="omnifaces.SelectItemsConverter" disabled="#{!seguranca.incluiUsuario}"
-									filter="true" filterMatchMode="contains" id="hospital"
-									value="#{cadastroUsuarioBean.hospitalSelecionado}">
-									<p:ajax listener="#{cadastroUsuarioBean.onHospitalChange}" update="pickList" />
-									<f:selectItem itemLabel="Selecione o Hospital do Usuário" />
-									<f:selectItems value="#{cadastroUsuarioBean.hospitais}"
-										var="hospital" itemValue="#{hospital}"
-										itemLabel="#{hospital.nome} - #{hospital.sigla}" />
-							</p:selectOneMenu>
-							<p:commandButton icon="pi pi-check" process="@this" styleClass="ui-button-success" action="#{cadastroUsuarioBean.setarHospitalPadraoDoUsuario}"
-							pt:data-tooltip="Clique para definir o hospital padrão do usuário."/>
+
+
+							<div class="col-12" align="center">
+
+								<div class="field col-12 md:col-8">
+
+									<p:pickList id="hospitais"
+										value="#{cadastroUsuarioBean.dualListModelHospitais}"
+										var="hospital" converter="entityConverter" escape="false"
+										itemValue="#{hospital}" showSourceControls="false"
+										orientation="horizontal" showTargetControls="false"
+										showSourceFilter="false" showTargetFilter="false"
+										responsive="true" addAllLabel="Adicionar Todos"
+										removeAllLabel="Remover Todos"
+										style="max-height:50px;margin-bottom:10px;">
+										<f:facet name="sourceCaption">Unidades Disponíveis</f:facet>
+										<f:facet name="targetCaption">Unidades Vinculadas ao Usuário</f:facet>
+										<p:ajax event="transfer"
+											listener="#{cadastroUsuarioBean.onTransferHospital}"
+											update="hospital,pickList" />
+										<p:column>
+											<p:outputLabel value="#{hospital.nome} - #{hospital.sigla}" />
+										</p:column>
+									</p:pickList>
+
+
+									<p:outputLabel for="hospital"
+										value="Selecione a Unidade para Vinculação dos Perfis" />
+									<div class="ui-inputgroup" style="margin-bottom: 10px">
+										<p:selectOneMenu converter="omnifaces.SelectItemsConverter"
+											disabled="#{!seguranca.incluiUsuario}" filter="true"
+											filterMatchMode="contains" id="hospital"
+											value="#{cadastroUsuarioBean.hospitalSelecionado}">
+											<p:ajax listener="#{cadastroUsuarioBean.onHospitalChange}"
+												update="pickList" />
+											<f:selectItem itemLabel="Selecione o Hospital do Usuário" />
+											<f:selectItems value="#{cadastroUsuarioBean.hospitais}"
+												var="hospital" itemValue="#{hospital}"
+												itemLabel="#{hospital.nome} - #{hospital.sigla}" />
+										</p:selectOneMenu>
+										<p:commandButton icon="pi pi-check" process="@this"
+											styleClass="ui-button-success"
+											action="#{cadastroUsuarioBean.setarHospitalPadraoDoUsuario}"
+											pt:data-tooltip="Clique para definir o hospital padrão do usuário." />
+									</div>
+
+
+									<p:pickList id="pickList"
+										value="#{cadastroUsuarioBean.dualListModelPerfis}"
+										var="perfil" converter="entityConverter" escape="false"
+										itemValue="#{perfil}" showSourceControls="false"
+										orientation="horizontal" showTargetControls="false"
+										showSourceFilter="false" showTargetFilter="false"
+										responsive="true" addAllLabel="Adicionar Todos"
+										removeAllLabel="Remover Todos" style="max-height:50px">
+										<f:facet name="sourceCaption">Perfis Disponíveis</f:facet>
+										<f:facet name="targetCaption">Perfis Unidades já Vinculados ao Usuário</f:facet>
+										<p:ajax event="transfer"
+											listener="#{cadastroUsuarioBean.onTransferPerfil}"
+											update="pickList" />
+										<p:column>
+											<p:outputLabel
+												value="#{perfil.nome} - #{perfil.unidade.sigla}" />
+										</p:column>
+									</p:pickList>
+								</div>
+
 							</div>
-							
-							
-								<p:pickList id="pickList"
-									value="#{cadastroUsuarioBean.dualListModelPerfis}" var="perfil"
-									converter="entityConverter" escape="false"
-									itemValue="#{perfil}" showSourceControls="false"
-									orientation="horizontal" showTargetControls="false"
-									showSourceFilter="false" showTargetFilter="false"
-									responsive="true" addAllLabel="Adicionar Todos"
-									removeAllLabel="Remover Todos" style="max-height:50px">
-									<f:facet name="sourceCaption">Perfis Disponíveis</f:facet>
-									<f:facet name="targetCaption">Perfis Hospitares já Vinculados ao Usuário</f:facet>									
-									<p:ajax event="transfer" listener="#{cadastroUsuarioBean.onTransferPerfil}" update="pickList"/>
-									<p:column>
-										<p:outputLabel value="#{perfil.nome} - #{perfil.hospital.sigla}" />
-									</p:column>
-								</p:pickList>
-							</div>	
-							
-							</div>						
 
 						</div>
 					</div>
 
 					<div align="center">
 						<div class="col-12 md:col-5">
-							<p:commandButton value="Salvar" procces="@form" icon="pi pi-save" action="#{cadastroUsuarioBean.cadastrar}"
+							<p:commandButton value="Salvar" procces="@form" icon="pi pi-save"
+								action="#{cadastroUsuarioBean.cadastrar}"
 								styleClass="mr-2 mb-2 ui-button-success" update="@form">
-									<p:confirm header="Confirmação"
-											message="Confirma a gravação com os dados informados?"
-											icon="pi pi-exclamation-triangle" />
+								<p:confirm header="Confirmação"
+									message="Confirma a gravação com os dados informados?"
+									icon="pi pi-exclamation-triangle" />
 							</p:commandButton>
-							
+
 							<p:commandButton value="Limpar" styleClass="ui-button-info"
-								process="@this" update="@form" action="#{cadastroUsuarioBean.reinstanciarVariaveis}" icon="pi pi-trash" />
-							
+								process="@this" update="@form"
+								action="#{cadastroUsuarioBean.reinstanciarVariaveis}"
+								icon="pi pi-trash" />
+
 
 						</div>
-					</div>					
+					</div>
 
 				</div>
 			</div>

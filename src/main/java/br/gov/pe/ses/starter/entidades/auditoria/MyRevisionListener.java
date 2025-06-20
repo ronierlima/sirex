@@ -27,7 +27,7 @@ public class MyRevisionListener implements RevisionListener, Serializable {
 
 			if (authentication.getPrincipal() instanceof UsuarioSistema) {
 				UsuarioSistema usuario = (UsuarioSistema) authentication.getPrincipal();
-				usuarioRevEntity.setUsuario(usuario.getUsuario().getNome());
+				usuarioRevEntity.setUsuario(usuario.getUsuario().getPessoa().getNome());
 				usuarioRevEntity.setUsuarioId(usuario.getUsuario().getId());
 				usuarioRevEntity.setData(new Date());
 			}

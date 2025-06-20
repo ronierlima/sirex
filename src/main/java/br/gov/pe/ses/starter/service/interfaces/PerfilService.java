@@ -4,7 +4,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 
 import br.gov.pe.ses.starter.dto.PerfilFiltroDTO;
-import br.gov.pe.ses.starter.entidades.publico.Hospital;
+import br.gov.pe.ses.starter.entidades.publico.Unidade;
 import br.gov.pe.ses.starter.entidades.publico.Perfil;
 import br.gov.pe.ses.starter.exception.NegocioException;
 
@@ -18,6 +18,6 @@ public interface PerfilService {
 	
 	public Perfil alterarStatus(Perfil perfil) throws NegocioException;
 	
-	public List<Perfil> listarPerfisAtivos(Hospital hospital);
+	public List<Perfil> listarPerfisAtivos(Unidade hospital);
 
 }

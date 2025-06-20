@@ -14,7 +14,7 @@ import br.gov.pe.ses.starter.data.repository.PerfilRepository;
 import br.gov.pe.ses.starter.data.specifications.OrdenacaoUtil;
 import br.gov.pe.ses.starter.data.specifications.PerfilEspecification;
 import br.gov.pe.ses.starter.dto.PerfilFiltroDTO;
-import br.gov.pe.ses.starter.entidades.publico.Hospital;
+import br.gov.pe.ses.starter.entidades.publico.Unidade;
 import br.gov.pe.ses.starter.entidades.publico.Perfil;
 import br.gov.pe.ses.starter.exception.NegocioException;
 import br.gov.pe.ses.starter.service.interfaces.PerfilService;
@@ -54,7 +54,7 @@ public class PerfilServiceImpl implements PerfilService {
 
 			perfil.setFuncionalidades(new ArrayList<>());
 			perfil.setFuncionalidades(new ArrayList<>(perfil.getSelecionadas()));
-			perfil.setHospital(FacesUtil.getHospitalSelecionado());
+			perfil.setUnidade(FacesUtil.getUnidadeSelecionado());
 			perfil.setAtivo(true);
 			perfil = perfilRepository.save(perfil);
 			
@@ -93,7 +93,7 @@ public class PerfilServiceImpl implements PerfilService {
 	}
 
 	@Override
-	public List<Perfil> listarPerfisAtivos(Hospital hospital) {
+	public List<Perfil> listarPerfisAtivos(Unidade hospital) {
 		return perfilRepository.findAllAtivos(hospital);
 	}
 

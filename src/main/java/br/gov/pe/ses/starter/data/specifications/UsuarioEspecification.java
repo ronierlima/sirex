@@ -23,33 +23,29 @@ public class UsuarioEspecification {
 			if (ObjectUtils.allNotNull(filtro)) {
 
 				if (StringUtils.isNotEmpty((String) filtro.getNome())) {
-					Predicate likeLower = criteriaBuilder.like(criteriaBuilder.lower(root.get("nome")),
-							"%" + ((String) filtro.getNome()).toLowerCase() + "%");
-					Predicate likeUpper = criteriaBuilder.like(criteriaBuilder.upper(root.get("nome")),
-							"%" + ((String) filtro.getNome()).toUpperCase() + "%");
-					Predicate nomeMaiuscoMinusculo = criteriaBuilder.or(likeLower, likeUpper);
-					criterios.add(nomeMaiuscoMinusculo);
+					String parametro = "%" + ((String) filtro.getNome()).toLowerCase() + "%";
+
+					Predicate likeLower = criteriaBuilder.like(criteriaBuilder.lower(root.get("pessoa").get("nome")),
+							parametro);
+
+					criterios.add(likeLower);
 				}
 
 				if (StringUtils.isNotEmpty((String) filtro.getLogin())) {
 					Predicate likeLower = criteriaBuilder.like(criteriaBuilder.lower(root.get("login")),
 							"%" + ((String) filtro.getLogin()).toLowerCase() + "%");
-					Predicate likeUpper = criteriaBuilder.like(criteriaBuilder.upper(root.get("login")),
-							"%" + ((String) filtro.getLogin()).toUpperCase() + "%");
-					Predicate loginMaiuscoMinusculo = (Predicate) criteriaBuilder.or(likeLower, likeUpper);
-					criterios.add(loginMaiuscoMinusculo);
+
+					criterios.add(likeLower);
 				}
 
 				if (StringUtils.isNotEmpty((String) filtro.getEmail())) {
-					Predicate likeLower = criteriaBuilder.like(criteriaBuilder.lower(root.get("email")),
+					Predicate likeLower = criteriaBuilder.like(criteriaBuilder.lower(root.get("pessoa").get("email")),
 							"%" + ((String) filtro.getEmail()).toLowerCase() + "%");
-					Predicate likeUpper = criteriaBuilder.like(criteriaBuilder.upper(root.get("email")),
-							"%" + ((String) filtro.getEmail()).toUpperCase() + "%");
-					Predicate loginMaiuscoMinusculo = (Predicate) criteriaBuilder.or(likeLower, likeUpper);
-					criterios.add(loginMaiuscoMinusculo);
+
+					criterios.add(likeLower);
 				}
 
-				criterios.add(criteriaBuilder.equal(root.get("hospital"), FacesUtil.getHospitalSelecionado()));
+				criterios.add(criteriaBuilder.equal(root.get("unidade"), FacesUtil.getUnidadeSelecionado()));
 
 			}
 

@@ -1,3 +1,4 @@
+
 package br.gov.pe.ses.starter.entidades.publico;
 
 import java.io.Serializable;
@@ -28,18 +29,18 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @Entity
-@Table(name = "hospital")
-@SequenceGenerator(sequenceName = "hospital_id_seq", name = "hospital_id_seq", allocationSize = 1)
+@Table(name = "unidade")
+@SequenceGenerator(sequenceName = "unidade_id_seq", name = "unidade_id_seq", allocationSize = 1)
 @Data
 @EqualsAndHashCode(of = "id", callSuper = false)
 @ToString(of = "id")
 @Audited(withModifiedFlag = true)
-public class Hospital extends BaseEntity implements Serializable {
+public class Unidade extends BaseEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hospital_id_seq")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "unidade_id_seq")
 	private Long id;
 
 	@NotEmpty(message = "Você deve informar o Nome do Hospital")
@@ -57,12 +58,12 @@ public class Hospital extends BaseEntity implements Serializable {
 	private Municipio municipio = new Municipio();
 
 	@NotAudited
-	@OneToMany(mappedBy = "hospital", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true)
+	@OneToMany(mappedBy = "unidade", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true)
 	private List<Perfil> perfis = new ArrayList<>();
 
 	@NotAudited
-	@ManyToOne
-	@JoinColumn(name = "id_tipo_unidade", nullable = true)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_tipo", nullable = true)
 	private TipoUnidade tipo;
 
 	@Version

@@ -58,7 +58,7 @@ public class DefinirSenhaBean implements Serializable {
 
 			boolean usuarioExiste = usuarioEncontrado.isPresent();
 			boolean usuarioInexiste = usuarioEncontrado.isEmpty();
-			boolean usuarioInativo = usuarioExiste && !usuarioEncontrado.get().isAtivo();
+			boolean usuarioInativo = usuarioExiste && !usuarioEncontrado.get().getAtivo();
 			boolean tokenDataHoraInvalida = usuarioExiste
 					&& LocalDateTime.now().isAfter(usuarioEncontrado.get().getDataHoraExpToken());
 			boolean tokenRedefinicaoSenhaInvalido = (token == null || token.trim().contentEquals(""));
@@ -123,9 +123,9 @@ public class DefinirSenhaBean implements Serializable {
 		try {
 
 			boolean senhasNaoConferem = !novaSenhaRedefinir.contentEquals(confNovaSenhaRedefinir);
-			boolean dadosInformadosNaoConferem = usuarioEncontrado.get().getEmail() == null
-					|| usuarioEncontrado.get().getEmail().isEmpty()
-					|| !usuarioEncontrado.get().getEmail().contentEquals(usuario.getEmail().trim());
+			boolean dadosInformadosNaoConferem = usuarioEncontrado.get().getPessoa().getEmail() == null
+					|| usuarioEncontrado.get().getPessoa().getEmail().isEmpty() || !usuarioEncontrado.get().getPessoa()
+							.getEmail().contentEquals(usuario.getPessoa().getEmail().trim());
 
 			if (senhasNaoConferem) {
 

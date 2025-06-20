@@ -2,11 +2,12 @@ package br.gov.pe.ses.starter.data.specifications;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.data.jpa.domain.Specification;
 
 import br.gov.pe.ses.starter.dto.PerfilFiltroDTO;
-import br.gov.pe.ses.starter.entidades.publico.Hospital;
 import br.gov.pe.ses.starter.entidades.publico.Perfil;
+import br.gov.pe.ses.starter.entidades.publico.Unidade;
 import br.gov.pe.ses.starter.util.jsf.FacesUtil;
 import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.criteria.Predicate;
@@ -17,7 +18,7 @@ public class PerfilEspecification {
 
 		return (root, query, criteriaBuilder) -> {
 			
-			Hospital hospitalSelecionado = FacesUtil.getHospitalSelecionado();
+			Unidade unidadeSelecionada = FacesUtil.getUnidadeSelecionado();
 
 			List<Predicate> predicates = new ArrayList<>();
 
@@ -28,7 +29,7 @@ public class PerfilEspecification {
 
 			}
 			
-			predicates.add(criteriaBuilder.equal(root.get("hospital").get("id"), hospitalSelecionado.getId()));
+			predicates.add(criteriaBuilder.equal(root.get("unidade").get("id"), unidadeSelecionada.getId()));
 
 			return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
 			

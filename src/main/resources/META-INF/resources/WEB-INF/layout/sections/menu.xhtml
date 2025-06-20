@@ -16,15 +16,16 @@
 
                 <pu:menu widgetVar="layoutMenuWidget">
                 	<p:submenu label="STARTER JSF - #{geralBean.versao}"/>                
-                    <p:submenu id="m_favorites" label="Principal" icon="pi pi-fw pi-home">
+                   
+                    <p:submenu id="m_principal" label="Principal" icon="pi pi-fw pi-home">
                         <p:menuitem id="m_dashboardsales" value="Home" icon="fa fa-fw fa-chart-pie" url="/paginas/principal.xhtml" /> 
                                               
                     </p:submenu>
                     <p:submenu id="m_uikit" label="Cadastros" icon="pi pi-fw pi-star">
                         <p:menuitem id="m_formlayout" value="Usuários" icon="fa fa-fw fa-users" url="/paginas/usuario/listarUsuarios.xhtml" rendered="#{seguranca.exibeMenuUsuarios}" />
                         <p:menuitem id="m_input" value="Perfis" icon="fa fa-fw fa-user-edit" url="/paginas/perfil/listarPerfis.xhtml" rendered="#{seguranca.exibeMenuPerfis}"/> 
-                        <p:menuitem id="m_floatlabel" value="Hospitais" icon="fa fa-fw fa-hospital" url="/paginas/hospital/listarHospitais.xhtml" rendered="#{seguranca.exibeMenuHospitais}"/>
-                        <p:menuitem id="m_tp_1" value="Tipos" icon="fa fa-fw fa-hospital" url="/paginas/tipos/listarTipos.xhtml" />
+                        <p:menuitem id="m_floatlabel" value="Unidades" icon="fa fa-fw fa-hospital" url="/paginas/hospital/listarHospitais.xhtml" rendered="#{seguranca.exibeMenuHospitais}"/>
+                        <p:menuitem id="m_tp_1" value="Tipos" icon="pi pi-flag-fill" url="/paginas/tipos/listarTipos.xhtml" rendered="#{seguranca.exibeMenuTipos}" />
                     </p:submenu> 
                    
                    

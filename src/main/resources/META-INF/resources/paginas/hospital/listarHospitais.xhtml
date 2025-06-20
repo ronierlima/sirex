@@ -5,7 +5,7 @@
 	xmlns:p="http://primefaces.org/ui"
 	template="/WEB-INF/layout/template.xhtml">
 
-	<ui:define name="title">Listar Hospitais</ui:define>
+	<ui:define name="title">Listar Unidades</ui:define>
 
 	<ui:define name="breadcrumb">
 		<f:metadata>
@@ -25,11 +25,11 @@
 
 						<f:facet name="header">
 							<i class="fa-regular fa-hospital"></i>
-							<h:outputText value=" Hospitais" />
+							<h:outputText value=" Unidades" />
 						</f:facet>
 
 						<f:facet name="actions">
-						
+
 							<p:commandButton value="Novo" icon="pi pi-plus"
 								action="#{listarHospitaisBean.incluirHospital}" process="@this"
 								rendered="#{seguranca.podeIncluirHospital}"
@@ -74,7 +74,7 @@
 
 							<f:facet name="header">
 								<div class="customers-table-header">
-									<span style="font-weight: bold">Hospitais Cadastrados</span>
+									<span style="font-weight: bold">Unidades Cadastradas</span>
 								</div>
 							</f:facet>
 
@@ -82,6 +82,12 @@
 								<span class="customer-badge status-#{hospital.statusCss}">#{hospital.ativo
 									? 'Ativo' : 'Inativo'}</span>
 							</p:column>
+
+							<p:column headerText="Tipo">
+								<p:outputLabel style="color:black"
+									value="#{hospital.tipo.descricao}" />
+							</p:column>
+
 
 							<p:column headerText="Nome" sortBy="#{hospital.nome}">
 								<p:outputLabel style="color:black" value="#{hospital.nome}" />
@@ -143,7 +149,7 @@
 									</p:menuitem>
 
 								</p:menuButton>
-								
+
 							</p:column>
 
 						</p:dataTable>

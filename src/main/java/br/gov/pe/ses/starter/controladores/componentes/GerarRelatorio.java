@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -77,10 +78,10 @@ public class GerarRelatorio implements Serializable {
 			parametros.put(JRParameter.REPORT_VIRTUALIZER, fileVirtualizer);
 			parametros.put("SUBREPORT_DIR", pastaPrincipal.getURL().toString());
 			parametros.put("MATRICULA", UtilUserDetails.getUsuarioLogado().getLogin());
-			parametros.put("IMPRESSO_POR", UtilUserDetails.getUsuarioLogado().getNome());
+			parametros.put("IMPRESSO_POR", UtilUserDetails.getUsuarioLogado().getPessoa().getNome());
 			parametros.put("LOGO_PATH", pastaLogos.getURL().toString());
 			parametros.put("REPORT_LOCALE", Locale.of("pt", "BR"));
-			parametros.put("HOSPITAL", UtilUserDetails.getUsuarioLogado().getHospital().getNome());
+			parametros.put("HOSPITAL", UtilUserDetails.getUsuarioLogado().getUnidade().getNome());
 
 			JasperPrint jasperPrint = JasperFillManager.fillReport(inputStream, parametros, dataSource);
 			//JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, dataSource);

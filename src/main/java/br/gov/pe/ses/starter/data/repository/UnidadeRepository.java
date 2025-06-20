@@ -9,16 +9,16 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import br.gov.pe.ses.starter.entidades.publico.Hospital;
+import br.gov.pe.ses.starter.entidades.publico.Unidade;
 
 @Repository
-public interface HospitalRepository extends JpaRepository<Hospital, Long> {
+public interface UnidadeRepository extends JpaRepository<Unidade, Long> {
 
-	List<Hospital> findAll(Specification<Hospital> spec);
+	List<Unidade> findAll(Specification<Unidade> spec);
 
-	Page<Hospital> findAll(Specification<Hospital> spec, Pageable page);
-	
-	@Query("from Hospital h where h.ativo is true order by h.nome")
-	List<Hospital> findAllAtivos();
+	Page<Unidade> findAll(Specification<Unidade> spec, Pageable page);
+
+	@Query("from Unidade h where h.ativo is true order by h.nome")
+	List<Unidade> findAllAtivos();
 
 }

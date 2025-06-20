@@ -8,11 +8,13 @@ import org.springframework.stereotype.Component;
 
 import br.gov.pe.ses.starter.controladores.componentes.UtilSessionBean;
 import br.gov.pe.ses.starter.entidades.publico.Gere;
-import br.gov.pe.ses.starter.entidades.publico.Hospital;
 import br.gov.pe.ses.starter.entidades.publico.MacroRegiao;
 import br.gov.pe.ses.starter.entidades.publico.Municipio;
+import br.gov.pe.ses.starter.entidades.publico.TipoUnidade;
+import br.gov.pe.ses.starter.entidades.publico.Unidade;
 import br.gov.pe.ses.starter.exception.NegocioException;
 import br.gov.pe.ses.starter.service.interfaces.HospitalService;
+import br.gov.pe.ses.starter.service.interfaces.TipoUnidadeService;
 import br.gov.pe.ses.starter.util.jsf.FacesUtil;
 import br.gov.pe.ses.starter.util.jsf.UtilMensagens;
 import jakarta.annotation.PostConstruct;
@@ -26,7 +28,12 @@ public class IncluirHospitalBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private Hospital hospital;
+	private Unidade hospital;
+
+	private List<TipoUnidade> tipos;
+
+	@Autowired
+	private TipoUnidadeService tipoUnidadeService;
 
 	public List<MacroRegiao> macros;
 
@@ -36,22 +43,22 @@ public class IncluirHospitalBean implements Serializable {
 
 	@Autowired
 	private HospitalService hospitalService;
-	
+
 	@Autowired
 	private UtilSessionBean utilSessionBean;
 
 	@PostConstruct
 	public void inicializar() {
-		hospital = new Hospital();
+		hospital = new Unidade();
 		buscarHospital();
 	}
 
 	private void buscarHospital() {
 		try {
-			hospital = (Hospital) utilSessionBean.getParametro("hospitalSelecionado");
+			hospital = (Unidade) utilSessionBean.getParametro("hospitalSelecionado");
 			hospital = hospitalService.porIdComDependencias(hospital.getId());
 		} catch (Exception e) {
-			hospital = new Hospital();
+			hospital = new Unidade();
 		}
 
 		macros = hospitalService.listarMacros();
@@ -60,6 +67,8 @@ public class IncluirHospitalBean implements Serializable {
 			aoSelecionarMacro();
 			aoSelecionarGere();
 		}
+
+		tipos = tipoUnidadeService.listarAtivos();
 	}
 
 	public void aoSelecionarMacro() {
@@ -73,11 +82,11 @@ public class IncluirHospitalBean implements Serializable {
 	}
 
 	public void cadastrar() throws NegocioException {
-		try {		
-		hospitalService.cadastrar(hospital);
-		inicializar();
-		UtilMensagens.msgInfoAposRequest("Hospital Cadastrado");
-		FacesUtil.redirect("/paginas/hospital/listarHospitais.xhtml?faces-redirect=true");
+		try {
+			hospitalService.cadastrar(hospital);
+			inicializar();
+			UtilMensagens.msgInfoAposRequest("Hospital Cadastrado");
+			FacesUtil.redirect("/paginas/hospital/listarHospitais.xhtml?faces-redirect=true");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

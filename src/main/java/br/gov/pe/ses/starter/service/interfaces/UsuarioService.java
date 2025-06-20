@@ -7,7 +7,7 @@ import org.springframework.data.domain.Page;
 
 import br.gov.pe.ses.starter.dto.UsuarioFiltroDTO;
 import br.gov.pe.ses.starter.dto.UsuarioSimplesDTO;
-import br.gov.pe.ses.starter.entidades.publico.Hospital;
+import br.gov.pe.ses.starter.entidades.publico.Unidade;
 import br.gov.pe.ses.starter.entidades.publico.Usuario;
 import br.gov.pe.ses.starter.exception.NegocioException;
 
@@ -35,10 +35,10 @@ public interface UsuarioService {
 
 	int alterarSenha(Usuario u) throws NegocioException;
 
-	public List<UsuarioSimplesDTO> usuariosSimplesPorHospital(Hospital hospital) throws NegocioException;
+	public List<UsuarioSimplesDTO> usuariosSimplesPorHospital(Unidade hospital) throws NegocioException;
 
 	public int alterarHospitalPadrao(Usuario u) throws NegocioException;
 
-	public Set<Usuario> usuariosCompletosPorHospital(Hospital hospital) throws NegocioException;
+	public Set<Usuario> usuariosCompletosPorHospital(Unidade hospital) throws NegocioException;
 
 }

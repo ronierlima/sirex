@@ -3,24 +3,24 @@ package br.gov.pe.ses.starter.builders;
 import java.util.List;
 
 import br.gov.pe.ses.starter.entidades.publico.Funcionalidade;
-import br.gov.pe.ses.starter.entidades.publico.Hospital;
+import br.gov.pe.ses.starter.entidades.publico.Unidade;
 import br.gov.pe.ses.starter.entidades.publico.Perfil;
 
-public class HospitalBuilder {
+public class UnidadeBuilder {
 
-	private Hospital hospital;
+	private Unidade hospital;
 
-	public HospitalBuilder(Hospital hospital) {
+	public UnidadeBuilder(Unidade hospital) {
 		this.hospital = hospital;
 	}
 
-	public HospitalBuilder comPerfilAdministradorGeral(List<Funcionalidade> funcionalidades) {
+	public UnidadeBuilder comPerfilAdministradorGeral(List<Funcionalidade> funcionalidades) {
 
 		Perfil perfil = new Perfil();
 
 		perfil.setAtivo(true);
 		perfil.setNome("Administrador Geral");
-		perfil.setHospital(hospital);
+		perfil.setUnidade(hospital);
 		perfil.setFuncionalidades(funcionalidades);
 
 		hospital.getPerfis().add(perfil);
@@ -29,7 +29,7 @@ public class HospitalBuilder {
 
 	}
 
-	public Hospital construir() {
+	public Unidade construir() {
 
 		this.hospital.setAtivo(true);
 		return hospital;

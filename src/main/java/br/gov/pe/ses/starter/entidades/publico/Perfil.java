@@ -5,12 +5,14 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -50,7 +52,6 @@ public class Perfil implements Serializable {
 	@Column(name = "nome", length = 50, nullable = false)
 	private String nome;
 
-	
 	@SuppressWarnings("deprecation")
 	@Fetch(FetchMode.SUBSELECT)
 	@ManyToMany(fetch = FetchType.EAGER)
@@ -64,12 +65,12 @@ public class Perfil implements Serializable {
 
 	@Transient
 	Set<Funcionalidade> selecionadas = new HashSet<>();
-		
-	@ManyToOne(fetch = FetchType.LAZY)
+
+	@ManyToOne(fetch = FetchType.EAGER)
 	@NotAudited
-	@JoinColumn(name = "id_hospital")
-	private Hospital hospital;
-	
+	@JoinColumn(name = "id_unidade")
+	private Unidade unidade;
+
 	@Version
 	@NotAudited
 	private Integer versao;
@@ -85,10 +86,10 @@ public class Perfil implements Serializable {
 	public List<Funcionalidade> getFilhas(Funcionalidade pai) {
 		return getFuncionalidades().stream().filter(f -> f.getFuncionalidadePai().equals(pai)).toList();
 	}
-	
+
 	public Perfil() {
 		funcionalidades = new ArrayList<Funcionalidade>();
-	
+
 	}
 
 }

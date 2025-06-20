@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
-import br.gov.pe.ses.starter.entidades.publico.Hospital;
+import br.gov.pe.ses.starter.entidades.publico.Unidade;
 import br.gov.pe.ses.starter.entidades.publico.Usuario;
 import br.gov.pe.ses.starter.security.UsuarioSistema;
 import jakarta.faces.context.FacesContext;
@@ -33,7 +33,7 @@ public class FacesUtil {
 		return usuario.getUsuario().getId();
 	}
 
-	public static Hospital getHospitalSelecionado() {
+	public static Unidade getUnidadeSelecionado() {
 		UsuarioSistema usuario = null;
 		UsernamePasswordAuthenticationToken auth = (UsernamePasswordAuthenticationToken) FacesContext
 				.getCurrentInstance().getExternalContext().getUserPrincipal();
@@ -42,7 +42,7 @@ public class FacesUtil {
 			usuario = (UsuarioSistema) auth.getPrincipal();
 		}
 
-		return usuario.getUsuario().getHospital();
+		return usuario.getUsuario().getUnidade();	
 	}
 
 	/**

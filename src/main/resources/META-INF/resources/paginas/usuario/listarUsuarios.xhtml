@@ -8,7 +8,7 @@
 	<ui:define name="title">Listar Usuários</ui:define>
 
 	<ui:define name="breadcrumb">
-		<f:metadata>		    
+		<f:metadata>
 			<f:viewParam name="homeOutcome" value="/paginas/principal.xhtml" />
 			<f:viewParam name="value" value="Usuarios" />
 			<f:viewParam name="outcome"
@@ -29,12 +29,12 @@
 						</f:facet>
 
 						<f:facet name="actions">
-													
+
 							<p:commandButton value="Novo" icon="pi pi-plus"
 								action="#{listarUsuariosBean.incluirUsuario}" process="@this"
 								rendered="#{seguranca.incluiUsuario}"
-								styleClass="ui-button-success mr-2 mb-2" />	
-							
+								styleClass="ui-button-success mr-2 mb-2" />
+
 						</f:facet>
 
 						<h5>Parâmetros de Pesquisa</h5>
@@ -96,18 +96,18 @@
 									? 'Ativo' : 'Inativo'}</span>
 							</p:column>
 
-							<p:column headerText="Nome" sortBy="#{usuario.nome}">
-								<p:outputLabel style="color:black" value="#{usuario.nome}" />
-							</p:column>
-
-							<p:column headerText="CPF" sortBy="#{usuario.cpf}">
+							<p:column headerText="Nome" sortBy="#{usuario.pessoa.nome}">
 								<p:outputLabel style="color:black"
-									value="#{usuario.cpf!=null?usuario.cpf:'Não Informado'}" />
+									value="#{usuario.pessoa.nome}" />
 							</p:column>
 
-							<p:column headerText="Email" sortBy="#{usuario.email}">
+							<p:column headerText="CPF" sortBy="#{usuario.pessoa.cpf}">
+								<p:outputLabel style="color:black" value="#{usuario.pessoa.cpf}" />
+							</p:column>
+
+							<p:column headerText="Email" sortBy="#{usuario.pessoa.email}">
 								<h:outputText style="vertical-align: middle; margin-left: .5rem"
-									value="#{usuario.email}" />
+									value="#{usuario.pessoa.email}" />
 							</p:column>
 
 							<p:column headerText="Login" sortBy="#{usuario.login}">

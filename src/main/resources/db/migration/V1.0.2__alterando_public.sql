@@ -43,13 +43,11 @@ CREATE TABLE public.usuario (
 	id serial4 NOT NULL,
 	login varchar(20) NOT NULL,
 	senha varchar(255) NOT NULL,
-	nome varchar(100) NOT NULL,
-	email varchar(100) NOT NULL,
 	ativo bool DEFAULT false NOT NULL,
 	validade_codigo_redefinicao timestamptz NULL,
 	codigo_redefinicao varchar(255) NULL,
-	id_hospital int8 NULL,
-	cpf varchar(30) NULL,
+	id_unidade int8 NULL,
+	id_pessoa int8 NULL,
 	usuario_inclusao int8 NULL,
 	usuario_alteracao int8 NULL,
 	data_inclusao timestamp NULL,
@@ -58,15 +56,33 @@ CREATE TABLE public.usuario (
 	dt_hora_exp_token timestamp NULL,
 	dt_hora_reset_senha timestamp NULL,
 	versao int8 DEFAULT 0 NOT NULL,
-	CONSTRAINT cpf_unique UNIQUE (cpf),
 	CONSTRAINT pk_usuario PRIMARY KEY (id),
-	CONSTRAINT uk_usuario_email UNIQUE (email),
 	CONSTRAINT uk_usuario_login UNIQUE (login)
 );
 
--- public.hospital definição
+-- public.tipo_unidade definição
 
-CREATE TABLE public.hospital (
+-- Drop table
+
+-- DROP TABLE public.tipo_unidade;
+
+CREATE TABLE public.tipo_unidade (
+	id bigserial NOT NULL,
+	ativo bool NULL,
+	data_alteracao timestamp(6) NULL,
+	data_inclusao timestamp(6) NULL,
+	descricao varchar(255) NULL,
+	versao int4 DEFAULT 0 NULL,
+	usuario_alteracao int8 NULL,
+	usuario_inclusao int8 NULL,
+	CONSTRAINT tipo_unidade_pkey PRIMARY KEY (id),
+	CONSTRAINT fk3eel6w1i62e9ai1ywjpmyc3oy FOREIGN KEY (usuario_alteracao) REFERENCES public.usuario(id),
+	CONSTRAINT fktjmb4hcqvf5sotu9hrob9qwdm FOREIGN KEY (usuario_inclusao) REFERENCES public.usuario(id)
+);
+
+-- public.unidade definição
+
+CREATE TABLE public.unidade (
 	id serial4 NOT NULL,
 	nome varchar(255) NOT NULL,
 	cnpj varchar(255) NULL,
@@ -77,11 +93,13 @@ CREATE TABLE public.hospital (
 	data_inclusao timestamp NULL,
 	data_alteracao timestamp NULL,
 	id_municipio int8 NULL,
+	id_tipo int8 NULL,
 	versao int8 DEFAULT 0 NOT NULL,
-	CONSTRAINT pk_hospital PRIMARY KEY (id),
-	CONSTRAINT hospital_municipio_fk FOREIGN KEY (id_municipio) REFERENCES public.municipio(id),
-	CONSTRAINT hospital_usuario_fk FOREIGN KEY (usuario_inclusao) REFERENCES public.usuario(id),
-	CONSTRAINT hospital_usuario_fk_1 FOREIGN KEY (usuario_alteracao) REFERENCES public.usuario(id)
+	CONSTRAINT pk_unidade PRIMARY KEY (id),
+	CONSTRAINT unidade_municipio_fk FOREIGN KEY (id_municipio) REFERENCES public.municipio(id),
+	CONSTRAINT unidade_usuario_fk FOREIGN KEY (usuario_inclusao) REFERENCES public.usuario(id),
+	CONSTRAINT unidadel_usuario_fk_1 FOREIGN KEY (usuario_alteracao) REFERENCES public.usuario(id),
+	CONSTRAINT unidadel_tipo_fk_1 FOREIGN KEY (id_tipo) REFERENCES public.tipo_unidade(id)
 );
 
 -- public.perfil definição
@@ -90,10 +108,10 @@ CREATE TABLE public.perfil (
 	id serial4 NOT NULL,
 	nome varchar(50) NOT NULL,
 	ativo bool DEFAULT false NOT NULL,
-	id_hospital int8 NULL,
+	id_unidade int8 NULL,
 	versao int8 DEFAULT 0 NOT NULL,
 	CONSTRAINT pk_perfil_id PRIMARY KEY (id),
-	CONSTRAINT perfil_hospital_fk FOREIGN KEY (id_hospital) REFERENCES public.hospital(id)
+	CONSTRAINT perfil_unidade_fk FOREIGN KEY (id_unidade) REFERENCES public.unidade(id)
 );
 
 
@@ -107,15 +125,15 @@ CREATE TABLE public.perfil_funcionalidade (
 	CONSTRAINT uq_perfil_funcionalidade UNIQUE (id_perfil, id_funcionalidade)
 );
 
--- public.usuario_hospital definição
+-- public.usuario_ definição
 
-CREATE TABLE public.usuario_hospital (
+CREATE TABLE public.usuario_unidade (
 	id serial4 NOT NULL,
 	id_usuario int8 NOT NULL,
-	id_hospital int8 NOT NULL,
-	CONSTRAINT usuario_hospital_unique UNIQUE (id_usuario, id_hospital),
-	CONSTRAINT usuario_hospital_hospital_fk FOREIGN KEY (id_hospital) REFERENCES public.hospital(id),
-	CONSTRAINT usuario_hospital_usuario_fk FOREIGN KEY (id_usuario) REFERENCES public.usuario(id)
+	id_unidade int8 NOT NULL,
+	CONSTRAINT usuario_unidade_unique UNIQUE (id_usuario, id_unidade),
+	CONSTRAINT usuario_unidade_fk FOREIGN KEY (id_unidade) REFERENCES public.unidade(id),
+	CONSTRAINT usuario_unidade_usuario_fk FOREIGN KEY (id_usuario) REFERENCES public.usuario(id)
 );
 
 -- public.perfil_usuario definição
@@ -127,6 +145,24 @@ CREATE TABLE public.perfil_usuario (
 	CONSTRAINT fk_perfil FOREIGN KEY (id_perfil) REFERENCES public.perfil(id) MATCH FULL,
 	CONSTRAINT fk_usuario FOREIGN KEY (id_usuario) REFERENCES public.usuario(id) MATCH FULL
 );
+
+CREATE TABLE public.pessoa (
+	id serial4 NOT NULL,
+	nome varchar(255) NOT NULL,
+	cpf varchar(20) NULL,
+	email varchar(100) NULL,
+	id_unidade_cadastro int8 NULL,
+	versao int DEFAULT 0 NULL,
+	ativo boolean NULL,
+	usuario_inclusao int8 NULL,
+	usuario_alteracao int8 NULL,
+	data_inclusao timestamp NULL,
+	data_alteracao timestamp NULL,
+	data_nascimento date NULL,
+	CONSTRAINT pessoa_usuario_fk FOREIGN KEY (usuario_inclusao) REFERENCES public.usuario(id),
+	CONSTRAINT pessoa_usuario_fk_1 FOREIGN KEY (usuario_alteracao) REFERENCES public.usuario(id)
+);
+
 
 
 INSERT INTO public.funcionalidade
@@ -188,130 +224,31 @@ INSERT INTO public.funcionalidade
 VALUES(25, 'ROLE_PACIENTE_VISUALIZAR', 'Visualizar Paciente', true, 21);
 INSERT INTO public.funcionalidade
 (id, nome, "label", exibir, id_funcionalidade)
-VALUES(26, 'ROLE_HOSPITAL', 'Hospitais', true, 26);
+VALUES(26, 'ROLE_UNIDADE', 'Unidades', true, 26);
 INSERT INTO public.funcionalidade
 (id, nome, "label", exibir, id_funcionalidade)
-VALUES(27, 'ROLE_HOSPITAL_INCLUIR', 'Incluir Hospital', true, 26);
+VALUES(27, 'ROLE_UNIDADE_INCLUIR', 'Incluir Unidade', true, 26);
 INSERT INTO public.funcionalidade
 (id, nome, "label", exibir, id_funcionalidade)
-VALUES(28, 'ROLE_HOSPITAL_ALTERAR', 'Alterar Hospital', true, 26);
+VALUES(28, 'ROLE_UNIDADE_ALTERAR', 'Alterar Unidade', true, 26);
 INSERT INTO public.funcionalidade
 (id, nome, "label", exibir, id_funcionalidade)
-VALUES(29, 'ROLE_HOSPITAL_EXCLUIR', 'Excluir Hospital', true, 26);
+VALUES(29, 'ROLE_UNIDADE_EXCLUIR', 'Excluir Unidade', true, 26);
 INSERT INTO public.funcionalidade
 (id, nome, "label", exibir, id_funcionalidade)
-VALUES(30, 'ROLE_HOSPITAL_ATIVAR', 'Ativar Hospital', true, 26);
+VALUES(43, 'ROLE_TIPO_UNIDADE', 'Tipo de Unidade', true, 43);
 INSERT INTO public.funcionalidade
 (id, nome, "label", exibir, id_funcionalidade)
-VALUES(33, 'ROLE_ESTOQUE_GERAL_INCLUIR', 'Incluir Produto no Estoque', true, 32);
+VALUES(44, 'ROLE_TIPO_UNIDADE_INCLUIR', 'Incluir Tipo de Unidade', true, 43);
 INSERT INTO public.funcionalidade
 (id, nome, "label", exibir, id_funcionalidade)
-VALUES(34, 'ROLE_ESTOQUE_GERAL_ALTERAR', 'Alterar Produto do Estoque', true, 32);
+VALUES(45, 'ROLE_TIPO_UNIDADE_ALTERAR', 'Alterar Tipo de Unidade', true, 43);
 INSERT INTO public.funcionalidade
 (id, nome, "label", exibir, id_funcionalidade)
-VALUES(35, 'ROLE_ESTOQUE_GERAL_EXCLUIR', 'Excluir Produto do Estoque', true, 32);
+VALUES(46, 'ROLE_TIPO_UNIDADE__EXCLUIR', 'Excluir Tipo de Unidade', true, 43);
 INSERT INTO public.funcionalidade
 (id, nome, "label", exibir, id_funcionalidade)
-VALUES(37, 'ROLE_ESTOQUE_GERAL_TRANSFERENCIA', 'Transferência de Estoque', true, 32);
-INSERT INTO public.funcionalidade
-(id, nome, "label", exibir, id_funcionalidade)
-VALUES(39, 'ROLE_RELATORIO', 'Emitir Relatórios', true, 14);
-INSERT INTO public.funcionalidade
-(id, nome, "label", exibir, id_funcionalidade)
-VALUES(50, 'ROLE_ATENDIMENTO', 'Atendimento', true, 50);
-INSERT INTO public.funcionalidade
-(id, nome, "label", exibir, id_funcionalidade)
-VALUES(51, 'ROLE_INICIAR_ATENDIMENTO', 'Iniciar Atendimento', true, 50);
-INSERT INTO public.funcionalidade
-(id, nome, "label", exibir, id_funcionalidade)
-VALUES(53, 'ROLE_VISUALIZAR_ATENDIMENTO', 'Visualizar Atendimento', true, 50);
-INSERT INTO public.funcionalidade
-(id, nome, "label", exibir, id_funcionalidade)
-VALUES(54, 'ROLE_ALTERAR_ATENDIMENTO', 'Alterar Atendimento', true, 50);
-INSERT INTO public.funcionalidade
-(id, nome, "label", exibir, id_funcionalidade)
-VALUES(55, 'ROLE_EXCLUIR_ATENDIMENTO', 'Excluir Atendimento', true, 50);
-INSERT INTO public.funcionalidade
-(id, nome, "label", exibir, id_funcionalidade)
-VALUES(52, 'ROLE_INICIAR_ATENDIMENTO_EMERGENGIAL', 'Iniciar Atendimento Emergencial', true, 50);
-INSERT INTO public.funcionalidade
-(id, nome, "label", exibir, id_funcionalidade)
-VALUES(56, 'ROLE_INCLUIR_ATENDIMENTO', 'Incluir Atendimento', true, 50);
-INSERT INTO public.funcionalidade
-(id, nome, "label", exibir, id_funcionalidade)
-VALUES(57, 'ROLE_ESTOQUE_FARMACIA', 'Estoque da Farmácia', true, 57);
-INSERT INTO public.funcionalidade
-(id, nome, "label", exibir, id_funcionalidade)
-VALUES(58, 'ROLE_ESTOQUE_FARMACIA_VISUALIZAR_ESTOQUE', 'Visualizar Estoque', true, 57);
-INSERT INTO public.funcionalidade
-(id, nome, "label", exibir, id_funcionalidade)
-VALUES(59, 'ROLE_ESTOQUE_FARMACIA_SOLICITAR', 'Solicitar Transferência de Estoque', true, 57);
-INSERT INTO public.funcionalidade
-(id, nome, "label", exibir, id_funcionalidade)
-VALUES(60, 'ROLE_ESTOQUE_FARMACIA_VISUALIZAR_SOLICITACAO', 'Visualizar Solicitações de Estoque', true, 57);
-INSERT INTO public.funcionalidade
-(id, nome, "label", exibir, id_funcionalidade)
-VALUES(61, 'ROLE_ESTOQUE_FARMACIA_ALTERAR_SOLICITACAO', 'Alterar Solicitação de Estoque', true, 57);
-INSERT INTO public.funcionalidade
-(id, nome, "label", exibir, id_funcionalidade)
-VALUES(32, 'ROLE_ESTOQUE_GERAL', 'Estoque Geral', true, 32);
-INSERT INTO public.funcionalidade
-(id, nome, "label", exibir, id_funcionalidade)
-VALUES(36, 'ROLE_ESTOQUE_GERAL_VISUALIZAR', 'Visualizar Produtos em Estoque', true, 32);
-INSERT INTO public.funcionalidade
-(id, nome, "label", exibir, id_funcionalidade)
-VALUES(64, 'ROLE_ESTOQUE_GERAL_VISUALIZAR_SOLICITACAO', 'Visualizar Solicitações da Farmácia', true, 32);
-INSERT INTO public.funcionalidade
-(id, nome, "label", exibir, id_funcionalidade)
-VALUES(62, 'ROLE_ESTOQUE_FARMACIA_EXCLUIR_SOLICITACAO', 'Excluir Solicitação de Estoque', true, 57);
-INSERT INTO public.funcionalidade
-(id, nome, "label", exibir, id_funcionalidade)
-VALUES(63, 'ROLE_ESTOQUE_GERAL_ATENDER_SOLICITACAO', 'Atender Solicitação da Farmácia', true, 32);
-INSERT INTO public.funcionalidade
-(id, nome, "label", exibir, id_funcionalidade)
-VALUES(42, 'ROLE_LIBERAR_ESTOQUE_FARMACIA', 'Liberar Produtos', true, 57);
-INSERT INTO public.funcionalidade
-(id, nome, "label", exibir, id_funcionalidade)
-VALUES(38, 'ROLE_ALTERA_CONFIGURACAO', 'Alterar Configurações', true, 1);
-INSERT INTO public.funcionalidade
-(id, nome, "label", exibir, id_funcionalidade)
-VALUES(65, 'ROLE_ESTOQUE_GERAL_NOTIFICACOES', 'Notificações', true, 32);
-INSERT INTO public.funcionalidade
-(id, nome, "label", exibir, id_funcionalidade)
-VALUES(66, 'ROLE_ESTOQUE_FARMACIA_NOTIFICACOES', 'Notificações', true, 57);
-INSERT INTO public.funcionalidade
-(id, nome, "label", exibir, id_funcionalidade)
-VALUES(69, 'ROLE_ESTOQUE_FARMACIA_RESP_RETIRADA', 'Incluir CNPJ', true, 57);
-INSERT INTO public.funcionalidade
-(id, nome, "label", exibir, id_funcionalidade)
-VALUES(67, 'ROLE_MANUTENCAO', 'Manutenção', true, 67);
-INSERT INTO public.funcionalidade
-(id, nome, "label", exibir, id_funcionalidade)
-VALUES(68, 'ROLE_MANUTENCAO_REVERTER_ATENDIMENTOS', 'Reverter Atendimentos', true, 67);
-INSERT INTO public.funcionalidade
-(id, nome, "label", exibir, id_funcionalidade)
-VALUES(70, 'ROLE_MANUTENCAO_INVENTARIO_FARMACIA', 'Inventário da Farmácia', true, 67);
-INSERT INTO public.funcionalidade
-(id, nome, "label", exibir, id_funcionalidade)
-VALUES(71, 'ROLE_PACIENTE_VISUALIZAR_DADOS_SAUDE', 'Visualizar Dados de Saúde', true, 21);
-INSERT INTO public.funcionalidade
-(id, nome, "label", exibir, id_funcionalidade)
-VALUES(72, 'ROLE_PACIENTE_EDITAR_DADOS_SAUDE', 'Editar Dados de Saúde', true, 21);
-INSERT INTO public.funcionalidade
-(id, nome, "label", exibir, id_funcionalidade)
-VALUES(73, 'ROLE_MANUTENCAO_INVENTARIO_GERAL', 'Inventário do Estoque Geral', true, 67);
-INSERT INTO public.funcionalidade
-(id, nome, "label", exibir, id_funcionalidade)
-VALUES(31, 'ROLE_HOSPITAL_VISUALIZAR', 'Visualizar Hospital', true, 26);
-INSERT INTO public.funcionalidade
-(id, nome, "label", exibir, id_funcionalidade)
-VALUES(74, 'ROLE_RELATORIO_ATIVIDADES', 'Relatório de Atividades', true, 14);
-INSERT INTO public.funcionalidade
-(id, nome, "label", exibir, id_funcionalidade)
-VALUES(75, 'ROLE_PACIENTE_BOLSA_TESTE', 'Bolsas de Teste', true, 21);
-INSERT INTO public.funcionalidade
-(id, nome, "label", exibir, id_funcionalidade)
-VALUES(76, 'ROLE_PACIENTE_TRANSFERENCIA', 'Transferir Pacientes', true, 21);
+VALUES(47, 'ROLE_TIPO_UNIDADE__VISUALIZAR', 'Visualizar Tipo de Unidade', true, 43);
 
 INSERT INTO public.macroregional
 (id, nome)
@@ -912,169 +849,39 @@ INSERT INTO public.municipio
 VALUES(298, 'Trindade', 9);
 
 
+INSERT INTO public.pessoa
+(id, nome, cpf, email, id_unidade_cadastro, versao)
+VALUES(1, 'Admistrador Geral', '000.000.000-00', 'template@ses.pe.gov.br', 84, 0);
 
 INSERT INTO public.usuario
-(id, login, senha, nome, email, ativo, validade_codigo_redefinicao, codigo_redefinicao, id_hospital, cpf, usuario_inclusao, usuario_alteracao, data_inclusao, data_alteracao, reset_token, dt_hora_exp_token, dt_hora_reset_senha, versao)
-VALUES(1, 'estomia.admin', '$2a$12$xovrAHxFy5rLzIkwt9OIvOc0otMAIfPRp.GHIYCZSxhCEWeGplD6O', 'Administrador Geral', 'noreply@saude.pe.gov.br', true, NULL, NULL, 84, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+(id, id_pessoa, login, senha, ativo, validade_codigo_redefinicao, codigo_redefinicao, id_unidade, usuario_inclusao, usuario_alteracao, data_inclusao, data_alteracao, reset_token, dt_hora_exp_token, dt_hora_reset_senha, versao)
+VALUES(1, 1, 'estomia.admin', '$2a$12$xovrAHxFy5rLzIkwt9OIvOc0otMAIfPRp.GHIYCZSxhCEWeGplD6O', true, NULL, NULL, 84, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
 
-INSERT INTO public.hospital
-(id, nome, cnpj, sigla, ativo, usuario_inclusao, usuario_alteracao, data_inclusao, data_alteracao, id_municipio, versao)
-VALUES(84, 'Hospital Barão de Lucena', '37.471.854/0001-66', 'HBL', true, 1, 1, '2024-08-22 08:50:42.428', '2024-09-13 16:29:25.854', 18, 0);
+INSERT INTO public.tipo_unidade
+(id, ativo, data_alteracao, data_inclusao, descricao, versao, usuario_alteracao, usuario_inclusao)
+VALUES(1, true, '2025-06-20 11:39:52.662', '2025-06-20 11:39:52.662', 'Hospital', 0, NULL, 1);
+
+INSERT INTO public.unidade
+(id, nome, cnpj, sigla, ativo, usuario_inclusao, usuario_alteracao, data_inclusao, data_alteracao, id_municipio, versao, id_tipo)
+VALUES(84, 'Hospital Barão de Lucena', '37.471.854/0001-66', 'HBL', true, 1, 1, '2024-08-22 08:50:42.428', '2024-09-13 16:29:25.854', 18, 0, 1);
 
 
 INSERT INTO public.perfil
-(id, nome, ativo, id_hospital, versao)
+(id, nome, ativo, id_unidade, versao)
 VALUES(1, 'Administrador', true, 84, 0);
 
 INSERT INTO public.perfil_usuario
 (id_usuario, id_perfil)
 VALUES(1, 1);
 
-INSERT INTO public.usuario_hospital
-(id, id_usuario, id_hospital)
+INSERT INTO public.usuario_unidade
+(id, id_usuario, id_unidade)
 VALUES(1, 1, 84);
 
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3413, 1, 5);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3414, 1, 6);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3415, 1, 70);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3416, 1, 7);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3417, 1, 71);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3418, 1, 72);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3419, 1, 9);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3420, 1, 73);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3421, 1, 10);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3422, 1, 11);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3423, 1, 12);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3424, 1, 13);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3425, 1, 22);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3426, 1, 23);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3427, 1, 24);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3428, 1, 25);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3429, 1, 27);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3430, 1, 28);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3431, 1, 29);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3432, 1, 30);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3433, 1, 31);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3434, 1, 33);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3435, 1, 34);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3436, 1, 35);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3437, 1, 36);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3438, 1, 37);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3439, 1, 38);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3440, 1, 39);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3441, 1, 42);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3442, 1, 51);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3443, 1, 52);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3444, 1, 53);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3445, 1, 54);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3446, 1, 55);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3447, 1, 56);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3448, 1, 58);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3449, 1, 59);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3450, 1, 60);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3451, 1, 61);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3452, 1, 62);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3453, 1, 63);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3454, 1, 64);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3455, 1, 65);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3456, 1, 66);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3457, 1, 3);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3458, 1, 4);
-INSERT INTO public.perfil_funcionalidade
-(id, id_perfil, id_funcionalidade)
-VALUES(3459, 1, 68);
+INSERT INTO public.perfil_funcionalidade (id_perfil, id_funcionalidade)
+SELECT 1 AS id_perfil, f.id AS id_funcionalidade
+FROM public.funcionalidade f
+where f.id != f.id_funcionalidade;
 
 CREATE SEQUENCE public.revinfo_seq
 	INCREMENT BY 50

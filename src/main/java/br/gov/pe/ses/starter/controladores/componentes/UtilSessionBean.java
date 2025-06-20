@@ -24,7 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-import br.gov.pe.ses.starter.entidades.publico.Hospital;
+import br.gov.pe.ses.starter.entidades.publico.Unidade;
 import br.gov.pe.ses.starter.security.Seguranca;
 import br.gov.pe.ses.starter.security.UtilUserDetails;
 import br.gov.pe.ses.starter.service.interfaces.UsuarioService;
@@ -46,7 +46,7 @@ public class UtilSessionBean implements Serializable {
 
 	private StreamedContent imagemUsuario;
 
-	private List<Hospital> hospitaisVinculadosUsuario = new ArrayList<Hospital>();
+	private List<Unidade> hospitaisVinculadosUsuario = new ArrayList<Unidade>();
 
 	@Autowired
 	private Seguranca seguranca;
@@ -87,7 +87,7 @@ public class UtilSessionBean implements Serializable {
 
 		try {
 
-			String nomeCompleto = UtilUserDetails.getUsuarioLogado().getNome();
+			String nomeCompleto = UtilUserDetails.getUsuarioLogado().getPessoa().getNome();
 			String iniciais = getIniciais(nomeCompleto);
 
 			int width = 100, height = 100;
@@ -142,17 +142,17 @@ public class UtilSessionBean implements Serializable {
 		this.imagemUsuario = imagemUsuario;
 	}
 
-	public List<Hospital> getHospitaisVinculadosUsuario() {
+	public List<Unidade> getHospitaisVinculadosUsuario() {
 		return hospitaisVinculadosUsuario;
 	}
 
-	public void setHospitaisVinculadosUsuario(List<Hospital> hospitaisVinculadosUsuario) {
+	public void setHospitaisVinculadosUsuario(List<Unidade> hospitaisVinculadosUsuario) {
 		this.hospitaisVinculadosUsuario = hospitaisVinculadosUsuario;
 	}
 
 	protected void listarHospitaisVinculadosUsuario() {
 
-		hospitaisVinculadosUsuario = new ArrayList<Hospital>();
+		hospitaisVinculadosUsuario = new ArrayList<Unidade>();
 
 		try {
 
@@ -179,7 +179,7 @@ public class UtilSessionBean implements Serializable {
 			StringBuilder texto = new StringBuilder();
 
 			texto.append("As permissões foram atualizadas conforme o contexto do hospital: ")
-					.append(FacesUtil.getHospitalSelecionado().getSigla())
+					.append(FacesUtil.getUnidadeSelecionado().getSigla())
 					.append(". Certas funcionalidades podem não estar disponíveis.");
 
 			UtilMensagens.msgInfoAposRequest(texto.toString());

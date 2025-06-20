@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.gov.pe.ses.starter.controladores.componentes.UtilSessionBean;
-import br.gov.pe.ses.starter.entidades.publico.Hospital;
+import br.gov.pe.ses.starter.entidades.publico.Unidade;
 import br.gov.pe.ses.starter.service.interfaces.HospitalService;
 import br.gov.pe.ses.starter.util.jsf.FacesUtil;
 import jakarta.annotation.PostConstruct;
@@ -20,7 +20,7 @@ public class VisualizarHospitalBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private Hospital hospital;
+	private Unidade hospital;
 
 	@Autowired
 	private HospitalService hospitalService;
@@ -31,7 +31,7 @@ public class VisualizarHospitalBean implements Serializable {
 	@PostConstruct
 	public void inicializar() {
 		try {
-			hospital = (Hospital) utilSessionBean.getParametro("hospitalSelecionado");
+			hospital = (Unidade) utilSessionBean.getParametro("hospitalSelecionado");
 			hospital = hospitalService.porIdComDependencias(hospital.getId());
 		} catch (Exception e) {
 			FacesUtil.redirect("/paginas/hospital/listarHospitais.xhtml?faces-redirect=true");

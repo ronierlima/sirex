@@ -43,7 +43,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 		List<SimpleGrantedAuthority> permissoes = new ArrayList<>();
 
-		usuario.getPerfis().stream().filter(perfil -> perfil.getHospital() != null && perfil.getHospital().equals(usuario.getHospital()))
+		usuario.getPerfis().stream().filter(perfil -> perfil.getUnidade() != null && perfil.getUnidade().equals(usuario.getUnidade()))
         .forEach(perfil -> {
             perfil.getFuncionalidades().forEach(funcionalidade -> {
                 permissoes.add(new SimpleGrantedAuthority(funcionalidade.getNome()));
@@ -58,7 +58,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         
         List<SimpleGrantedAuthority> permissoes = new ArrayList<>();
 
-        usuario.getUsuario().getPerfis().stream().filter(perfil -> perfil.getHospital() != null && perfil.getHospital().equals(usuario.getUsuario().getHospital()))
+        usuario.getUsuario().getPerfis().stream().filter(perfil -> perfil.getUnidade() != null && perfil.getUnidade().equals(usuario.getUsuario().getUnidade()))
         .forEach(perfil -> {
             perfil.getFuncionalidades().forEach(funcionalidade -> {
                 permissoes.add(new SimpleGrantedAuthority(funcionalidade.getNome()));

@@ -11,7 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import br.gov.pe.ses.starter.dto.HospitalFiltroDTO;
-import br.gov.pe.ses.starter.entidades.publico.Hospital;
+import br.gov.pe.ses.starter.entidades.publico.Unidade;
 import br.gov.pe.ses.starter.service.interfaces.HospitalService;
 import br.gov.pe.ses.starter.util.jsf.UtilMensagens;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ import lombok.Setter;
 
 @Service
 @RequiredArgsConstructor
-public class HospitalLazyDataModel extends LazyDataModel<Hospital> {
+public class HospitalLazyDataModel extends LazyDataModel<Unidade> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -28,10 +28,10 @@ public class HospitalLazyDataModel extends LazyDataModel<Hospital> {
 
 	private final HospitalService hospitalService;
 
-	private List<Hospital> datasource = new ArrayList<>();
+	private List<Unidade> datasource = new ArrayList<>();
 
 	@Override
-	public List<Hospital> load(int first, int pageSize, Map<String, SortMeta> sortBy,
+	public List<Unidade> load(int first, int pageSize, Map<String, SortMeta> sortBy,
 			Map<String, FilterMeta> filterBy) {
 
 		try {
@@ -45,7 +45,7 @@ public class HospitalLazyDataModel extends LazyDataModel<Hospital> {
 			filtro.setFirst(first);
 			filtro.setPageSize(pageSize);
 
-			Page<Hospital> buscaPaginada = hospitalService.buscaPaginada(filtro);
+			Page<Unidade> buscaPaginada = hospitalService.buscaPaginada(filtro);
 
 			if (buscaPaginada != null) {
 				this.setRowCount((int) buscaPaginada.getTotalElements());
@@ -67,13 +67,13 @@ public class HospitalLazyDataModel extends LazyDataModel<Hospital> {
 	}
 
 	@Override
-	public String getRowKey(Hospital hospital) {
+	public String getRowKey(Unidade hospital) {
 		return hospital.getId().toString();
 	}
 
 	@Override
-	public Hospital getRowData(String rowKey) {
-		for (Hospital hospital : this.datasource) {
+	public Unidade getRowData(String rowKey) {
+		for (Unidade hospital : this.datasource) {
 			if (hospital.getId().toString().equalsIgnoreCase(rowKey)) {
 				return hospital;
 			}

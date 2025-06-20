@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 import br.gov.pe.ses.starter.controladores.componentes.UtilSessionBean;
 import br.gov.pe.ses.starter.dto.HospitalFiltroDTO;
-import br.gov.pe.ses.starter.entidades.publico.Hospital;
+import br.gov.pe.ses.starter.entidades.publico.Unidade;
 import br.gov.pe.ses.starter.exception.NegocioException;
 import br.gov.pe.ses.starter.lazy.HospitalLazyDataModel;
 import br.gov.pe.ses.starter.service.interfaces.HospitalService;
@@ -24,7 +24,7 @@ public class ListarHospitaisBean implements Serializable {
 
 	private HospitalFiltroDTO filtro;
 
-	private Hospital hospitalSelecionado;
+	private Unidade hospitalSelecionado;
 
 	@Autowired
 	private HospitalService hospitalService;
@@ -41,7 +41,7 @@ public class ListarHospitaisBean implements Serializable {
 
 	@PostConstruct
 	public void inicializar() {
-		hospitalSelecionado = new Hospital();
+		hospitalSelecionado = new Unidade();
 		filtro = new HospitalFiltroDTO();
 		pesquisar();
 	}

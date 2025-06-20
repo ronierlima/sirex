@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import br.gov.pe.ses.starter.entidades.publico.Hospital;
+import br.gov.pe.ses.starter.entidades.publico.Unidade;
 import br.gov.pe.ses.starter.entidades.publico.Perfil;
 
 @Repository
@@ -21,8 +21,8 @@ public interface PerfilRepository extends JpaRepository<Perfil, Long> {
 	List<Perfil> findAll(Specification<Perfil> spec);
 
 	Page<Perfil> findAll(Specification<Perfil> spec, Pageable page);
-	
-	@Query("from Perfil p where p.hospital=:hospital and p.ativo is true")
-	List<Perfil> findAllAtivos(Hospital hospital);
+
+	@Query("from Perfil p where p.unidade=:unidade and p.ativo is true")
+	List<Perfil> findAllAtivos(Unidade unidade);
 
 }

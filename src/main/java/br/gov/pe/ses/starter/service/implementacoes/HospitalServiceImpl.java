@@ -10,9 +10,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.gov.pe.ses.starter.builders.HospitalBuilder;
+import br.gov.pe.ses.starter.builders.UnidadeBuilder;
 import br.gov.pe.ses.starter.data.repository.GereRepository;
-import br.gov.pe.ses.starter.data.repository.HospitalRepository;
+import br.gov.pe.ses.starter.data.repository.UnidadeRepository;
 import br.gov.pe.ses.starter.data.repository.MacroRepository;
 import br.gov.pe.ses.starter.data.repository.MunicipioRepository;
 import br.gov.pe.ses.starter.data.specifications.HospitalEspecification;
@@ -20,7 +20,7 @@ import br.gov.pe.ses.starter.data.specifications.OrdenacaoUtil;
 import br.gov.pe.ses.starter.dto.HospitalFiltroDTO;
 import br.gov.pe.ses.starter.entidades.publico.Funcionalidade;
 import br.gov.pe.ses.starter.entidades.publico.Gere;
-import br.gov.pe.ses.starter.entidades.publico.Hospital;
+import br.gov.pe.ses.starter.entidades.publico.Unidade;
 import br.gov.pe.ses.starter.entidades.publico.MacroRegiao;
 import br.gov.pe.ses.starter.entidades.publico.Municipio;
 import br.gov.pe.ses.starter.exception.NegocioException;
@@ -33,7 +33,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class HospitalServiceImpl implements HospitalService {
 
-	private final HospitalRepository hospitalRepository;
+	private final UnidadeRepository hospitalRepository;
 
 	private final MacroRepository macroRepository;
 
@@ -44,11 +44,11 @@ public class HospitalServiceImpl implements HospitalService {
 	private final FuncionalidadeService funcionalidadeService;
 
 	@Override
-	public Page<Hospital> buscaPaginada(HospitalFiltroDTO filtro) {
+	public Page<Unidade> buscaPaginada(HospitalFiltroDTO filtro) {
 
 		Sort ordenacao = Sort.by(Sort.Order.desc("id"));
 
-		Specification<Hospital> restricoes = HospitalEspecification.build(filtro);
+		Specification<Unidade> restricoes = HospitalEspecification.build(filtro);
 		ordenacao = OrdenacaoUtil.criar(filtro.getSortBy());
 
 		Pageable page = PageRequest.of(filtro.getQtdRegistros(), filtro.getPageSize(), ordenacao);
@@ -59,7 +59,7 @@ public class HospitalServiceImpl implements HospitalService {
 
 	@Override
 	@Transactional
-	public Hospital cadastrar(Hospital hospital) throws NegocioException {
+	public Unidade cadastrar(Unidade hospital) throws NegocioException {
 
 		try {
 
@@ -68,7 +68,7 @@ public class HospitalServiceImpl implements HospitalService {
 
 			if (hospital.isNovo()) {
 
-				hospital = new HospitalBuilder(hospital).comPerfilAdministradorGeral(funcionalidades).construir();
+				hospital = new UnidadeBuilder(hospital).comPerfilAdministradorGeral(funcionalidades).construir();
 
 			}
 
@@ -88,7 +88,7 @@ public class HospitalServiceImpl implements HospitalService {
 	}
 
 	@Override
-	public Hospital alterarStatus(Hospital hospital) throws NegocioException {
+	public Unidade alterarStatus(Unidade hospital) throws NegocioException {
 		try {
 			boolean statusAtual = hospital.getAtivo();
 			hospital.setAtivo(!statusAtual);
@@ -100,12 +100,12 @@ public class HospitalServiceImpl implements HospitalService {
 	}
 
 	@Override
-	public List<Hospital> listarHospitaisAtivos() {
+	public List<Unidade> listarHospitaisAtivos() {
 		return hospitalRepository.findAllAtivos();
 	}
 
 	@Override
-	public Hospital porIdComDependencias(Long id) {
+	public Unidade porIdComDependencias(Long id) {
 		return hospitalRepository.findById(id).get();
 	}
 
@@ -126,7 +126,7 @@ public class HospitalServiceImpl implements HospitalService {
 
 	@Override
 	@Transactional
-	public void alterarConfiguracao(Hospital hospital) throws NegocioException {
+	public void alterarConfiguracao(Unidade hospital) throws NegocioException {
 		hospitalRepository.save(hospital);
 	}
 

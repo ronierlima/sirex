@@ -7,12 +7,12 @@
 
     <div class="layout-inline-menu">
         <a class="layout-inline-menu-action flex flex-row align-items-center #{app.isHorizontalMenu() ? 'p-3 py-3' : 'p-3'}" style="min-width: #{app.isHorizontalMenu() ? '165px' : '0'}"
-            data-tooltip="#{seguranca.usuarioLogado.usuario.nome}"
+            data-tooltip="#{seguranca.usuarioLogado.usuario.pessoa.nome}"
             data-p-styleclass="{ selector: '@next', enterClass: 'hidden', enterActiveClass: 'slidedown', leaveToClass: 'hidden', leaveActiveClass: 'slideup', hideOnOutsideClick: #{app.isSlimMenu() or app.isHorizontalMenu()} }">
             <p:graphicImage value="#{utilSessionBean.imagemUsuario}" cache="false" style="width: 32px; height: 32px;" />
             <span class="flex flex-column #{app.rtl ? 'mr-2' : 'ml-2'}">
-                <span class="font-bold">#{seguranca.usuarioLogado.usuario.nome}</span>
-                <small><span class="font-bold" style="font-size: 10px;">#{seguranca.usuario.hospital.nome}</span></small>
+                <span class="font-bold">#{seguranca.usuarioLogado.usuario.pessoa.nome}</span>
+                <small><span class="font-bold" style="font-size: 10px;">#{seguranca.usuario.unidade.nome}</span></small>
             </span>
             <i class="layout-inline-menu-icon pi pi-angle-down #{app.rtl ? 'mr-auto' : 'ml-auto'}"></i>
         </a>

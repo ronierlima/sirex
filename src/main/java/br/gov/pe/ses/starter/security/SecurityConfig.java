@@ -1,8 +1,7 @@
 package br.gov.pe.ses.starter.security;
 
-import static br.gov.pe.ses.starter.util.Funcionalidades.*;
-
 import javax.security.auth.login.AccountExpiredException;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,6 +23,7 @@ import org.springframework.security.web.context.DelegatingSecurityContextReposit
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.RequestAttributeSecurityContextRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -91,35 +91,13 @@ public class SecurityConfig {
 			.requestMatchers("/paginas/perfil/incluirPerfil.xhtml").hasAnyRole("PERFIL_INCLUIR", "PERFIL_ALTERAR")
 			.requestMatchers("/paginas/perfil/listarPacientes.xhtml").hasAnyRole("PACIENTE_VISUALIZAR")
 			.requestMatchers("/paginas/perfil/incluirPerfil.xhtml").hasAnyRole("PACIENTE_INCLUIR", "PACIENTE_ALTERAR")
-			.requestMatchers("/paginas/perfil/listarHospitais.xhtml").hasAnyRole("HOSPITAL_VISUALIZAR")
-			.requestMatchers("/paginas/perfil/incluirPerfil.xhtml").hasAnyRole("HOSPITAL_INCLUIR", "HOSPITAL_ALTERAR")	
+			.requestMatchers("/paginas/perfil/listarHospitais.xhtml").hasAnyRole("UNIDADE_VISUALIZAR")
+			.requestMatchers("/paginas/perfil/incluirPerfil.xhtml").hasAnyRole("PERFIL_INCLUIR", "PERFIL_ALTERAR")	
 			
-			//CONFIGURACOES
-			.requestMatchers("/paginas/configuracao/configurar.xhtml").hasRole(habilitaConfiguracao)
 			
-			//ESTOQUE GERAL
-			.requestMatchers("/paginas/estoqueGeral/listarEstoqueGeral.xhtml").hasAnyRole("ESTOQUE_GERAL_VISUALIZAR")
-			.requestMatchers("/paginas/estoqueGeral/visualizarEstoqueGeral.xhtml").hasAnyRole("ESTOQUE_GERAL_VISUALIZAR")
-			.requestMatchers("/paginas/estoqueGeral/movimentoEstoqueGeral.xhtml").hasAnyRole("ESTOQUE_GERAL_INCLUIR","ESTOQUE_GERAL_ALTERAR")
-			.requestMatchers("/paginas/estoqueGeral/detalheSolicitacaoFarmacia.xhtml").hasAnyRole("ESTOQUE_GERAL_ATENDER_SOLICITACAO")
-			.requestMatchers("/paginas/estoqueGeral/listarSolicitacoesFarmacia.xhtml","/paginas/estoqueGeral/visualizarSolicitacaoFarmacia.xhtml").hasAnyRole("ESTOQUE_GERAL_VISUALIZAR_SOLICITACAO")
 						
-			 //FARMÁCIA
-			.requestMatchers("/paginas/farmacia/listarItensEstoqueFarmacia.xhtml").hasAnyRole("ESTOQUE_FARMACIA_VISUALIZAR_ESTOQUE")
-			.requestMatchers("/paginas/farmacia/solicitacoesTransferencia.xhtml").hasAnyRole("ESTOQUE_FARMACIA_VISUALIZAR_SOLICITACAO")
-			.requestMatchers("/paginas/farmacia/visualizarSolicitacaoEstoque.xhtml").hasAnyRole("ESTOQUE_FARMACIA_VISUALIZAR_SOLICITACAO")
-			.requestMatchers("/paginas/farmacia/cadastroSolicitacaoEstoque.xhtml").hasAnyRole("ESTOQUE_FARMACIA_SOLICITAR","ESTOQUE_FARMACIA_ALTERAR_SOLICITACAO")
-			.requestMatchers("/paginas/farmacia/liberarProdutos.xhtml").hasAnyRole(liberarEstoqueFarmacia)
+		
 			
-			//MANUTENÇÃO
-			.requestMatchers("/paginas/manutencao/atendimentos/reverterAtendimentos.xhtml").hasRole(manutencaoReverterAtendimentos)
-			.requestMatchers("/paginas/manutencao/inventarioFarmacia.xhtml").hasRole(manutencaoInventarioFarmacia)
-			.requestMatchers("/paginas/manutencao/inventarioEstoqueGeral.xhtml").hasRole(manutencaoInventarioEstoqueGeral)
-			
-			//RELATÓRIOS
-			.requestMatchers("/paginas/farmacia/relatorios/**").hasRole(emissaoRelatorios)
-			.requestMatchers("/paginas/paciente/relatorios/**").hasRole(emissaoRelatorios)
-			.requestMatchers("/paginas/administracao/relatorios/relatorioAtividades.xhtml").hasRole(relatorioAtividades)
 			
 			.anyRequest().authenticated())							
 			.formLogin((formLogin) -> formLogin

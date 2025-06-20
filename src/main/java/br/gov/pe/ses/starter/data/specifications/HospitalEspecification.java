@@ -6,13 +6,13 @@ import java.util.List;
 import org.springframework.data.jpa.domain.Specification;
 
 import br.gov.pe.ses.starter.dto.HospitalFiltroDTO;
-import br.gov.pe.ses.starter.entidades.publico.Hospital;
+import br.gov.pe.ses.starter.entidades.publico.Unidade;
 import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.criteria.Predicate;
 
 public class HospitalEspecification {
 
-	public static Specification<Hospital> build(HospitalFiltroDTO filtro) {
+	public static Specification<Unidade> build(HospitalFiltroDTO filtro) {
 
 		return (root, query, criteriaBuilder) -> {
 

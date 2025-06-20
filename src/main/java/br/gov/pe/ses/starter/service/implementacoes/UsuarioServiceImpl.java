@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,8 +19,8 @@ import br.gov.pe.ses.starter.data.specifications.OrdenacaoUtil;
 import br.gov.pe.ses.starter.data.specifications.UsuarioEspecification;
 import br.gov.pe.ses.starter.dto.UsuarioFiltroDTO;
 import br.gov.pe.ses.starter.dto.UsuarioSimplesDTO;
-import br.gov.pe.ses.starter.entidades.publico.Hospital;
 import br.gov.pe.ses.starter.entidades.publico.Perfil;
+import br.gov.pe.ses.starter.entidades.publico.Unidade;
 import br.gov.pe.ses.starter.entidades.publico.Usuario;
 import br.gov.pe.ses.starter.exception.NegocioException;
 import br.gov.pe.ses.starter.service.interfaces.UsuarioService;
@@ -40,7 +41,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 	@Override
 	public Page<Usuario> buscaPaginada(UsuarioFiltroDTO filtro) {
 
-		Sort ordenacao = Sort.by(Sort.Order.asc("nome"));
+		Sort ordenacao = Sort.by(Sort.Order.asc("pessoa.nome"));
 
 		Specification<Usuario> restricoes = UsuarioEspecification.build(filtro);
 		ordenacao = OrdenacaoUtil.criar(filtro.getSortBy());
@@ -54,63 +55,68 @@ public class UsuarioServiceImpl implements UsuarioService {
 	@Transactional
 	@Override
 	public Usuario cadastrar(Usuario usuario) throws Exception {
-		
+
 		try {
-		
+
 			if (usuario.isNovo()) {
 
-				usuario.setEmail(usuario.getEmail().toLowerCase());
-				usuario.setLogin(usuario.getLogin().toLowerCase());				
+				usuario.getPessoa().setEmail((usuario.getPessoa().getEmail().toLowerCase()));
+				usuario.setLogin(usuario.getLogin().toLowerCase());
 				usuario.setAtivo(true);
 				usuario.setSenha(BCrypt.hashpw(usuario.getSenha(), BCrypt.gensalt()));
-				usuario.setHospital(usuario.getHospitaisAssociados().getFirst());
+				usuario.setUnidade(usuario.getHospitaisAssociados().getFirst());
 
 			}
-			
-			Set<Hospital> hospitaisAssociados = usuario.getHospitaisAssociados().stream().collect(Collectors.toSet());
-			
-			boolean todosPerfisValidos = usuario.getPerfis().stream().allMatch(perfil -> hospitaisAssociados.contains(perfil.getHospital()));
-		    
+
+			Set<Unidade> hospitaisAssociados = usuario.getHospitaisAssociados().stream().collect(Collectors.toSet());
+
+			boolean todosPerfisValidos = usuario.getPerfis().stream()
+					.allMatch(perfil -> hospitaisAssociados.contains(perfil.getUnidade()));
+
 			if (!todosPerfisValidos) {
-		        throw new NegocioException("Atenção! Existem perfis relacionados a hospitais não vinculados ao cadastro do usuário.");
-		        
-		    }
-						
-			Hospital h = usuario.getHospital();
+				throw new NegocioException(
+						"Atenção! Existem perfis relacionados a hospitais não vinculados ao cadastro do usuário.");
+
+			}
+
+			Unidade h = usuario.getUnidade();
 			List<Perfil> perfis = usuario.getPerfis();
-			
+
 			boolean todosOsHospitaisComPerfilCorrespondente = hospitaisAssociados.stream()
-				    .allMatch(hospital -> perfis.stream().anyMatch(perfil -> perfil.getHospital().equals(hospital)));		
-			
+					.allMatch(hospital -> perfis.stream().anyMatch(perfil -> perfil.getUnidade().equals(hospital)));
+
 			if (!todosOsHospitaisComPerfilCorrespondente) {
-			    throw new NegocioException("Atenção! Existe(m) hospital(is) vinculado(s) ao usuário sem perfil de navegação correspondente.");
-			}			
-			
-			boolean hospitalPadraoValido = hospitaisAssociados.stream().anyMatch(p->p.equals(h));			
-						
+				throw new NegocioException(
+						"Atenção! Existe(m) hospital(is) vinculado(s) ao usuário sem perfil de navegação correspondente.");
+			}
+
+			boolean hospitalPadraoValido = hospitaisAssociados.stream().anyMatch(p -> p.equals(h));
+
 			if (!hospitalPadraoValido) {
-		        throw new NegocioException("Atenção! O hospital definido como padrão não corresponde a um hospital associado ao usuário.");
-		    }
+				throw new NegocioException(
+						"Atenção! O hospital definido como padrão não corresponde a um hospital associado ao usuário.");
+			}
 
 			usuario = usuarioRepository.save(usuario);
 
-		return usuario;
-		
-		} catch (org.springframework.orm.ObjectOptimisticLockingFailureException | org.hibernate.StaleObjectStateException e) {
+			return usuario;
+
+		} catch (org.springframework.orm.ObjectOptimisticLockingFailureException
+				| org.hibernate.StaleObjectStateException e) {
 			e.printStackTrace();
-			UtilMensagens.mensagemError("Este registro foi alterado por outro usuário. Por favor, refaça a operação!");			
+			UtilMensagens.mensagemError("Este registro foi alterado por outro usuário. Por favor, refaça a operação!");
 			return usuario;
 		} catch (Exception e) {
-			e.printStackTrace();			
+			e.printStackTrace();
 			throw new NegocioException("Erro ao Cadastrar/Atualizar o Usuário.");
-		}	
-		
+		}
+
 	}
 
 	@Override
 	public Usuario alterarStatus(Usuario usuario) {
 
-		boolean statusAtual = usuario.isAtivo();
+		boolean statusAtual = usuario.getAtivo();
 		usuario.setAtivo(!statusAtual);
 		usuario = usuarioRepository.save(usuario);
 		UtilMensagens.addInfoMessageGrowl("Sucesso!", "Status Alterado com Sucesso!");
@@ -127,27 +133,27 @@ public class UsuarioServiceImpl implements UsuarioService {
 	public Usuario porCpf(String cpf) {
 		return usuarioRepository.porCpf(cpf);
 	}
-	
+
 	@Override
 	public Optional<Usuario> porEmail(String email) throws NegocioException {
-		
+
 		try {
-			
+
 			return usuarioRepository.porEmail(email);
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new NegocioException("Erro ao Buscar Usuário por Email!");
 		}
-		
+
 	}
-	
+
 	@Override
 	public int resetToken(Usuario u) {
 
 		try {
 
-			return usuarioRepository.definirResetToken(u.getResetToken(), u.getDataHoraExpToken(),u.getId());
+			return usuarioRepository.definirResetToken(u.getResetToken(), u.getDataHoraExpToken(), u.getId());
 
 		} catch (Exception e) {
 
@@ -159,8 +165,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 		return 0;
 
 	}
-	
-	@Override	
+
+	@Override
 	public Optional<Usuario> usuarioPorResetToken(String resetToken) throws NegocioException {
 
 		try {
@@ -172,10 +178,9 @@ public class UsuarioServiceImpl implements UsuarioService {
 			throw new NegocioException("Erro ao Buscar Dados do Usuário!");
 		}
 
-
 	}
-	
-	@Override	
+
+	@Override
 	public int alterarSenha(Usuario u) throws NegocioException {
 
 		try {
@@ -187,19 +192,19 @@ public class UsuarioServiceImpl implements UsuarioService {
 			e.printStackTrace();
 			throw new NegocioException("Erro ao Atualizar Senha!");
 
-		}		
+		}
 
 	}
-	
+
 	@Override
 	public Optional<Usuario> porId(Long id) {
 		return usuarioRepository.porId(id);
 
 	}
-	
+
 	@Override
-	public List<UsuarioSimplesDTO> usuariosSimplesPorHospital(Hospital hospital) throws NegocioException {
-		
+	public List<UsuarioSimplesDTO> usuariosSimplesPorHospital(Unidade hospital) throws NegocioException {
+
 		try {
 			return usuarioRepository.usuariosSimplesPorHospital(hospital);
 		} catch (Exception e) {
@@ -207,26 +212,26 @@ public class UsuarioServiceImpl implements UsuarioService {
 			throw new NegocioException("Erro ao Listar Usuários do Hospital!");
 		}
 	}
-	
-	@Override	
+
+	@Override
 	public int alterarHospitalPadrao(Usuario u) throws NegocioException {
 
 		try {
 
-			return usuarioRepository.atualizarHospitalPadrao(u);
+			return usuarioRepository.atualizarUnidadePadrao(u);
 
 		} catch (Exception e) {
 
 			e.printStackTrace();
 			throw new NegocioException("Erro ao Atualizar Hospital Padrão!");
 
-		}		
+		}
 
 	}
-	
+
 	@Override
-	public Set<Usuario> usuariosCompletosPorHospital(Hospital hospital) throws NegocioException {
-		
+	public Set<Usuario> usuariosCompletosPorHospital(Unidade hospital) throws NegocioException {
+
 		try {
 			return usuarioRepository.usuariosCompletosAtivosPorHospital(hospital);
 		} catch (Exception e) {
