@@ -9,20 +9,26 @@ public class UtilUserDetails {
 
 	public static Usuario getUsuarioLogado() {
 
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		try {
 
-		UsuarioSistema usuarioSistema = null;
-		
-		if (!(authentication.getPrincipal() instanceof UsuarioSistema)) {
-			return null;
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+			UsuarioSistema usuarioSistema = null;
+
+			if (!(authentication.getPrincipal() instanceof UsuarioSistema)) {
+				return null;
+			}
+
+			if (authentication != null && authentication.getPrincipal() != null) {
+				usuarioSistema = (UsuarioSistema) authentication.getPrincipal();
+				return usuarioSistema.getUsuario();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		
-		if (authentication != null && authentication.getPrincipal() != null) {
-			usuarioSistema = (UsuarioSistema) authentication.getPrincipal();
-			return usuarioSistema.getUsuario();
-		}
-		
-		throw new RuntimeException("Não foi possível obter o usuário logado!");
+
+		return null;
+
 	}
 
 }

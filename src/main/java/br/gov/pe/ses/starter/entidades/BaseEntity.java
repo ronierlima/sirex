@@ -53,9 +53,7 @@ public class BaseEntity implements Serializable {
 	@PreUpdate
 	public void preUpdate() {
 		dataAlteracao = new Date();
-		if (UtilUserDetails.getUsuarioLogado() != null) {
-			usuarioAlteracao = UtilUserDetails.getUsuarioLogado();
-		}
+		usuarioAlteracao = UtilUserDetails.getUsuarioLogado();
 
 	}
 
