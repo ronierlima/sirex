@@ -1,0 +1,11 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Start Tomcat Puglin - debug",
+        "type": "shell",
+        "command": "mvnDebug spring-boot:run",
+      }
+    ]
+  }
+  
