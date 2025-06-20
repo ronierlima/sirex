@@ -1,0 +1,102 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/layout/template.xhtml">
+
+	<ui:define name="title">Listar Hospitais</ui:define>
+
+	<ui:define name="breadcrumb">
+		<f:metadata>
+			<f:viewParam name="homeOutcome" value="/paginas/principal.xhtml" />
+			<f:viewParam name="value" value="Hospitais" />
+			<f:viewParam name="outcome" value="/paginas/tipos/listarTipos.xhtml" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="content">
+		<h:form id="frmPrincipal">
+			<div class="grid panel-demo">
+				<div class="col-12">
+
+					<p:panel id="custom">
+
+						<f:facet name="header">
+							<i class="fa-regular fa-hospital"></i>
+							<h:outputText value=" Tipos" />
+						</f:facet>
+
+						<f:facet name="actions">
+
+							<p:button outcome="/paginas/tipos/incluirTipos.xhtml" value="Novo"
+								icon="pi pi-plus" process="@this"
+								rendered="#{seguranca.podeIncluirHospital}"
+								styleClass="ui-button-success mr-2 mb-2" />
+
+						</f:facet>
+
+						<h5>Parâmetros de Pesquisa</h5>
+						<div class="formgroup-inline">
+
+							<div class="field">
+								<p:inputText id="nome" type="text" placeholder="Nome"
+									required="true" requiredMessage="Nome é obrigatório"
+									value="#{listarTiposBean.filtro.descricao}"
+									styleClass="mr-2 mb-2" />
+							</div>
+
+							<p:commandButton value="Pesquisar" styleClass="mr-2 mb-2"
+								process="nome @this" update="@form"
+								action="#{listarTiposBean.pesquisar}" icon="pi pi-search" />
+
+							<p:commandButton value="Limpar" styleClass="ui-button-danger"
+								process="@this" update="@form"
+								action="#{listarTiposBean.inicializar}" icon="pi pi-refresh" />
+						</div>
+
+					</p:panel>
+				</div>
+			</div>
+
+			<div class="grid table-demo">
+				<div class="col-12">
+					<div class="card">
+
+						<p:dataTable widgetVar="hospitalDT" var="tipoUnidade" lazy="true"
+							value="#{listarTiposBean.lazyDataModel}" reflow="true"
+							rowKey="#{tipoUnidade.id}" paginator="true" rows="10"
+							paginatorPosition="bottom" selectionMode="single"
+							rowsPerPageTemplate="10,20,30,40,50,60,80,90,100"
+							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							currentPageReportTemplate="Exibindo de {startRecord} a {endRecord} no total de {totalRecords} registros - Página: {currentPage}/{totalPages}">
+
+							<f:facet name="header">
+								<div class="customers-table-header">
+									<span style="font-weight: bold">Tipos Cadastrados</span>
+								</div>
+							</f:facet>
+
+							<p:column headerText="Status">
+								<span class="customer-badge status-#{tipoUnidade.statusCss}">#{tipoUnidade.ativo
+									? 'Ativo' : 'Inativo'}</span>
+							</p:column>
+
+							<p:column headerText="Nome" sortBy="#{tipoUnidade.descricao}">
+								<p:outputLabel style="color:black"
+									value="#{tipoUnidade.descricao}" />
+							</p:column>
+
+
+						</p:dataTable>
+
+
+
+					</div>
+				</div>
+			</div>
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>

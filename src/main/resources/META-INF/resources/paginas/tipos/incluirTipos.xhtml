@@ -1,0 +1,65 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/layout/template.xhtml">
+
+	<ui:define name="title">Incluir Hospital</ui:define>
+
+	<ui:define name="">
+		<f:metadata>
+			<f:viewParam name="paginaAnterior"
+				value="/paginas/tipos/listarTipos.xhtml" />
+			<f:viewParam name="homeOutcome" value="/paginas/principal" />
+			<f:viewParam name="value" value="Tipos,Incluir Tipo" />
+			<f:viewParam name="outcome" value="/paginas/tipos/incluirTipos.xhtml" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="content">
+
+		<h:form>
+			<div class="grid">
+				<div class="col-12 md:col-12">
+					<div class="card ui-fluid">
+						<h5>Incluir Tipo</h5>
+
+						<div class="formgrid grid">
+
+							<div class="field col-12 md:col-4">
+								<p:outputLabel for="@next" value="Nome" />
+								<p:inputText id="name2"
+									value="#{incluirTiposBean.tipo.descricao}" required="true" />
+							</div>
+
+
+						</div>
+
+
+
+						<div class="grid">
+
+							<div class="col-2">
+								<p:commandButton value="Salvar" icon="pi pi-save"
+									action="#{incluirTiposBean.salvar}" update="@form"
+									styleClass="mr-2 mb-2" />
+							</div>
+
+							<div class="col-2">
+								<p:button outcome="/paginas/tipos/listarTipos.xhtml"
+									value="Voltar" icon="pi pi-arrow-left"
+									styleClass="ui-button-danger" />
+							</div>
+
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>

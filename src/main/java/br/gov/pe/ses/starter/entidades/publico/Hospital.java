@@ -60,6 +60,11 @@ public class Hospital extends BaseEntity implements Serializable {
 	@OneToMany(mappedBy = "hospital", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true)
 	private List<Perfil> perfis = new ArrayList<>();
 
+	@NotAudited
+	@ManyToOne
+	@JoinColumn(name = "id_tipo_unidade", nullable = true)
+	private TipoUnidade tipo;
+
 	@Version
 	@NotAudited
 	private Integer versao;
