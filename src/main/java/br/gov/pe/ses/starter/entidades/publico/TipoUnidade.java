@@ -11,6 +11,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotEmpty;
@@ -24,12 +25,13 @@ import lombok.ToString;
 @EqualsAndHashCode(of = "id", callSuper = false)
 @ToString(of = "id")
 @Audited(withModifiedFlag = true)
+@SequenceGenerator(name = "tipo_unidade_id_seq", sequenceName = "tipo_unidade_id_seq", allocationSize = 1)
 public class TipoUnidade extends BaseEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "tipo_unidade_id_seq")
 	private Long id;
 
 	@NotEmpty(message = "Você deve informar a Descrição")

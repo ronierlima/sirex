@@ -47,13 +47,16 @@
 
             <div class="layout-content">
                 <ui:insert name="content"/>
+                <ui:include src="./sections/loader.xhtml" />
+				<ui:include src="./sections/growl.xhtml" />
+				<ui:include src="./sections/confirmDialog.xhtml" />
             </div>
 
             <ui:include src="./sections/footer.xhtml"/>
         </div>
 
         <ui:include src="./sections/config.xhtml" />
-        <ui:include src="./sections/loader.xhtml" />
+      
     </div>
 
     <!-- **CSS** -->

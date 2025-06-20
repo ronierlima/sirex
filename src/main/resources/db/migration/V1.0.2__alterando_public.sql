@@ -890,4 +890,7 @@ CREATE SEQUENCE public.revinfo_seq
 	START 1
 	CACHE 1
 	NO CYCLE;
+	
+ALTER TABLE public.pessoa ADD CONSTRAINT pessoa_pk PRIMARY KEY (id);	
+	
 

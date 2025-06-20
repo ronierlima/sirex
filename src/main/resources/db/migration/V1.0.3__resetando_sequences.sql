@@ -7,3 +7,5 @@ SELECT setval('public.perfil_funcionalidade_id_seq', 3470, true);
 SELECT setval('public.perfil_id_seq', 34, true);
 SELECT setval('public.usuario_unidade_id_seq', 42, true);
 SELECT setval('public.usuario_id_seq', 179, true);
+SELECT setval('public.pessoa_id_seq', 2, true);
+SELECT setval('public.tipo_unidade_id_seq', 2, true);

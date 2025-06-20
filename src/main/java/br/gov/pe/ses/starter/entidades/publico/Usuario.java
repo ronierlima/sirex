@@ -36,7 +36,7 @@ import lombok.ToString;
 
 @Entity
 @Table(name = "usuario")
-@SequenceGenerator(name = "usuario_seq", sequenceName = "usuario_seq", allocationSize = 1)
+@SequenceGenerator(name = "usuario_id_seq", sequenceName = "usuario_id_seq", allocationSize = 1)
 @Data
 @EqualsAndHashCode(of = "id", callSuper = false)
 @ToString(of = "id")
@@ -47,7 +47,7 @@ public class Usuario extends BaseEntity implements Serializable {
 
 	@Id
 	@Column(name = "id", nullable = false)
-	@GeneratedValue(strategy = GenerationType.AUTO, generator = "usuario_seq")
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "usuario_id_seq")
 	private Long id;
 
 	@Column(name = "login", length = 14, nullable = false, unique = true)
@@ -108,7 +108,7 @@ public class Usuario extends BaseEntity implements Serializable {
 	private Integer versao;
 
 	public Usuario() {
-		this.pessoa = new Pessoa();	
+		this.pessoa = new Pessoa();
 		perfis = new ArrayList<Perfil>();
 		hospitaisAssociados = new ArrayList<Unidade>();
 
