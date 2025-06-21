@@ -28,11 +28,11 @@ public class BaseEntity implements Serializable {
 	private Boolean ativo = true;
 
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "usuario_inclusao", updatable = false)
+	@JoinColumn(name = "usuario_inclusao", updatable = false, unique = false)
 	private Usuario usuarioInclusao;
 
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "usuario_alteracao")
+	@JoinColumn(name = "usuario_alteracao", unique = false)
 	private Usuario usuarioAlteracao;
 
 	@CreationTimestamp

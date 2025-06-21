@@ -66,10 +66,6 @@ public class Funcionalidades {
 
 	public static final String visualizarPaciente = "PACIENTE_VISUALIZAR";
 
-	public static final String visualizarDadosSaudePaciente = "PACIENTE_VISUALIZAR_DADOS_SAUDE";
-
-	public static final String editarDadosSaudePaciente = "PACIENTE_EDITAR_DADOS_SAUDE";
-
 	public static Set<String> permissoesDePacientes = Set.of(incluirPaciente, alterarPaciente, excluirPaciente,
 			visualizarPaciente);
 

@@ -22,6 +22,7 @@
                                               
                     </p:submenu>
                     <p:submenu id="m_uikit" label="Cadastros" icon="pi pi-fw pi-star">
+                        <p:menuitem id="m_formlayout_1" value="Pacientes" icon="fa fa-fw fa-hospital-user" url="/paginas/paciente/listarPacientes.xhtml" rendered="#{seguranca.exibeMenuPacientes}" />
                         <p:menuitem id="m_formlayout" value="Usuários" icon="fa fa-fw fa-users" url="/paginas/usuario/listarUsuarios.xhtml" rendered="#{seguranca.exibeMenuUsuarios}" />
                         <p:menuitem id="m_input" value="Perfis" icon="fa fa-fw fa-user-edit" url="/paginas/perfil/listarPerfis.xhtml" rendered="#{seguranca.exibeMenuPerfis}"/> 
                         <p:menuitem id="m_floatlabel" value="Unidades" icon="fa fa-fw fa-hospital" url="/paginas/hospital/listarHospitais.xhtml" rendered="#{seguranca.exibeMenuHospitais}"/>

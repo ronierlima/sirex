@@ -26,6 +26,9 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 
 import static br.gov.pe.ses.starter.util.Funcionalidades.gerenciarSistema;
+import static br.gov.pe.ses.starter.util.Funcionalidades.visualizarPaciente;
+import static br.gov.pe.ses.starter.util.Funcionalidades.incluirPaciente;
+import static br.gov.pe.ses.starter.util.Funcionalidades.alterarPaciente;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -90,14 +93,13 @@ public class SecurityConfig {
 			.requestMatchers("/paginas/usuario/listarUsuarios.xhtml","/paginas/usuario/visualizarUsuario.xhtml").hasAnyRole("USUARIO_VISUALIZAR")
 			.requestMatchers("/paginas/usuario/cadastrarUsuario.xhtml").hasAnyRole("USUARIO_INCLUIR", "USUARIO_ALTERAR")
 			.requestMatchers("/paginas/perfil/listarPerfis.xhtml").hasAnyRole("PERFIL_VISUALIZAR")
-			.requestMatchers("/paginas/perfil/incluirPerfil.xhtml").hasAnyRole("PERFIL_INCLUIR", "PERFIL_ALTERAR")
-			.requestMatchers("/paginas/perfil/listarPacientes.xhtml").hasAnyRole("PACIENTE_VISUALIZAR")
-			.requestMatchers("/paginas/perfil/incluirPerfil.xhtml").hasAnyRole("PACIENTE_INCLUIR", "PACIENTE_ALTERAR")
-			.requestMatchers("/paginas/perfil/listarHospitais.xhtml").hasAnyRole("UNIDADE_VISUALIZAR")
 			.requestMatchers("/paginas/perfil/incluirPerfil.xhtml").hasAnyRole("PERFIL_INCLUIR", "PERFIL_ALTERAR")	
-			.requestMatchers("/paginas/configuracao/configurar.xhtml").hasAnyRole("CONFIGURACAO_SISTEMA")	
 			
-			.requestMatchers("/paginas/manutencao/atendimentos/reverterAtendimentos.xhtml").hasRole(gerenciarSistema)	
+			.requestMatchers("/paginas/perfil/listarHospitais.xhtml").hasAnyRole("UNIDADE_VISUALIZAR")
+			
+			.requestMatchers("/paginas/configuracao/configurar.xhtml").hasAnyRole(gerenciarSistema)	
+			.requestMatchers("/paginas/paciente/listarPacientes.xhtml").hasAnyRole(visualizarPaciente)	
+			.requestMatchers("/paginas/paciente/incluirPaciente.xhtml").hasAnyRole(incluirPaciente, alterarPaciente)	
 			
 			.anyRequest().authenticated())							
 			.formLogin((formLogin) -> formLogin

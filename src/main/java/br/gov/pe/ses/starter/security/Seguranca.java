@@ -4,23 +4,21 @@ import static br.gov.pe.ses.starter.util.Funcionalidades.alterarPaciente;
 import static br.gov.pe.ses.starter.util.Funcionalidades.alterarPerfil;
 import static br.gov.pe.ses.starter.util.Funcionalidades.alterarUnidade;
 import static br.gov.pe.ses.starter.util.Funcionalidades.alterarUsuario;
-import static br.gov.pe.ses.starter.util.Funcionalidades.editarDadosSaudePaciente;
+import static br.gov.pe.ses.starter.util.Funcionalidades.gerenciarSistema;
 import static br.gov.pe.ses.starter.util.Funcionalidades.incluirPaciente;
 import static br.gov.pe.ses.starter.util.Funcionalidades.incluirPerfil;
 import static br.gov.pe.ses.starter.util.Funcionalidades.incluirUnidade;
 import static br.gov.pe.ses.starter.util.Funcionalidades.incluirUsuario;
+import static br.gov.pe.ses.starter.util.Funcionalidades.permissoesDeConfiguracoes;
 import static br.gov.pe.ses.starter.util.Funcionalidades.permissoesDeHospital;
 import static br.gov.pe.ses.starter.util.Funcionalidades.permissoesDePacientes;
 import static br.gov.pe.ses.starter.util.Funcionalidades.permissoesDePerfis;
 import static br.gov.pe.ses.starter.util.Funcionalidades.permissoesDeTiposUnidades;
 import static br.gov.pe.ses.starter.util.Funcionalidades.permissoesDeUsuarios;
-import static br.gov.pe.ses.starter.util.Funcionalidades.permissoesDeConfiguracoes;
-import static br.gov.pe.ses.starter.util.Funcionalidades.visualizarDadosSaudePaciente;
 import static br.gov.pe.ses.starter.util.Funcionalidades.visualizarPaciente;
 import static br.gov.pe.ses.starter.util.Funcionalidades.visualizarPerfil;
 import static br.gov.pe.ses.starter.util.Funcionalidades.visualizarUnidade;
 import static br.gov.pe.ses.starter.util.Funcionalidades.visualizarUsuario;
-import static br.gov.pe.ses.starter.util.Funcionalidades.gerenciarSistema;
 
 import java.io.Serializable;
 
@@ -81,7 +79,7 @@ public class Seguranca implements Serializable {
 
 		return usuarioSistema.getUsuario();
 	}
-	
+
 	public boolean isPodeIncluirHospital() {
 		return externalContext.isUserInRole(incluirUnidade);
 	}
@@ -94,7 +92,6 @@ public class Seguranca implements Serializable {
 		return externalContext.isUserInRole(alterarUnidade);
 	}
 
-	
 	public boolean isExibeMenuTipos() {
 		return permissoesDeTiposUnidades.stream().anyMatch(externalContext::isUserInRole);
 	}
@@ -114,11 +111,11 @@ public class Seguranca implements Serializable {
 	public boolean isExibeMenuHospitais() {
 		return permissoesDeHospital.stream().anyMatch(externalContext::isUserInRole);
 	}
-	
+
 	public boolean isExibeMenuAdministracao() {
 		return permissoesDeConfiguracoes.stream().anyMatch(externalContext::isUserInRole);
 	}
-	
+
 	public boolean isGerenciaSistema() {
 		return externalContext.isUserInRole(gerenciarSistema);
 	}
@@ -169,18 +166,6 @@ public class Seguranca implements Serializable {
 
 	public String getWsName() {
 		return SistemaConst.wsName;
-	}
-
-	public boolean isPodeVisualizarDadosSaudeDoPaciente() {
-		return externalContext.isUserInRole(visualizarDadosSaudePaciente);
-	}
-
-	public boolean isNaoPodeVisualizarDadosSaudeDoPaciente() {
-		return !externalContext.isUserInRole(visualizarDadosSaudePaciente);
-	}
-
-	public boolean isNaoPodeEditarDadosSaudeDoPaciente() {
-		return !externalContext.isUserInRole(editarDadosSaudePaciente);
 	}
 
 	public String getSessionId() {

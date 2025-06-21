@@ -16,6 +16,10 @@ public class FacesUtil {
 	public static boolean isPostback() {
 		return FacesContext.getCurrentInstance().isPostback();
 	}
+	
+	public static String getParametro(String nomeParametro) {
+		return FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get(nomeParametro);
+	}
 
 	public static boolean isNotPostback() {
 		return !isPostback();

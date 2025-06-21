@@ -2,114 +2,90 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui"
 	template="/WEB-INF/layout/template.xhtml">
 
-	<ui:define name="title">Incluir Paciente</ui:define>
-	
-	<ui:define name="head">
-	
-	<style type="text/css">
-    
-    .ui-wizard-nav-next {
-    background-color: #3F51B5!important;	
-	</style>
-	
-	</ui:define>
+	<ui:define name="title">Incluir Pacientes</ui:define>
 
 	<ui:define name="breadcrumb">
 		<f:metadata>
-			<f:viewParam name="paginaAnterior" value="/paginas/paciente/listarPacientes.xhtml" />
+			<f:viewParam name="paginaAnterior"
+				value="/paginas/paciente/listarPacientes.xhtml" />
 			<f:viewParam name="homeOutcome" value="/paginas/principal.xhtml" />
-			<f:viewParam name="value" value="Pacientes,Incluir" />
+			<f:viewParam name="value" value="Paciente,Cadastro" />
 			<f:viewParam name="outcome"
 				value="/paginas/paciente/incluirPaciente.xhtml" />
 		</f:metadata>
 	</ui:define>
 
+
 	<ui:define name="content">
-		<div class="grid panel-demo">
 
+		<h:form>
+			<div class="grid">
+				<div class="col-12">
+					<div class="card">
+						<h5>Cadastro de Paciente</h5>
+						<div class="ui-fluid formgrid grid">
 
-			<div class="col-12 md:col-12">
+							<div class="field col-12 md:col-6">
+								<p:outputLabel for="@next" value="Nome" />
+								<p:inputText id="nome"
+									value="#{incluirPacienteBean.paciente.pessoa.nome}" />
+							</div>
 
+							<div class="field col-12 md:col-6">
+								<p:outputLabel for="@next" value="CPF" />
+								<p:inputMask value="#{incluirPacienteBean.paciente.pessoa.cpf}"
+									slotChar="" mask="999.999.999-99" type="text" required="true" />
+							</div>
 
-				<div class="card">
-					<h:form id="frmPrincipal">
+							<div class="field col-12">
+								<p:outputLabel for="email" value="Email" />
+								<p:inputText
+									value="#{incluirPacienteBean.paciente.pessoa.email}"
+									maxlength="50" style="text-transform:lowercase" id="email"
+									type="text" required="true"
+									requiredMessage="O email é obrigatório!" />
+							</div>
 
-						<p:wizard backLabel="Voltar" nextLabel="Avançar" id="wizard"
-							flowListener="#{incluirPacienteBean.onFlowProcess}">
+							<div class="field col-12 md:col-6">
+								<p:outputLabel for="@next" value="Data de Nascimento" />
+								<p:calendar pattern="dd/MM/yyyy"
+									value="#{incluirPacienteBean.paciente.pessoa.dataNascimento}"
+									id="city" />
+							</div>
 
-							<p:tab id="tabDados">
+							<div class="field col-12 md:col-3">
+								<p:outputLabel for="@next" value="Prontuario" />
+								<p:inputText value="#{incluirPacienteBean.paciente.prontuario}" />
+							</div>
 
-								<f:facet name="title">
-									<div align="center">
-										<i class="pi pi-id-card"></i>
-										<h:outputText value=" INFORMAÇÕES PESSOAIS" />
-									</div>
-								</f:facet>
+							<div class="field col-12 md:col-3">
+								<p:outputLabel for="@next" value="Cartao SUS" />
+								<p:inputText value="#{incluirPacienteBean.paciente.cartaoSus}" />
+							</div>
 
-								<ui:include src="tabs/informacoesPessoais.xhtml" />
+							<div class="col-12 md:col-6">
+								<p:commandButton value="Salvar" procces="@form"
+									icon="pi pi-save" action="#{incluirPacienteBean.cadastrar}"
+									styleClass="mr-2 mb-2 ui-button-success" update="@form">
+									<p:confirm header="Confirmação"
+										message="Confirma a gravação com os dados informados?"
+										icon="pi pi-exclamation-triangle" />
+								</p:commandButton>
+							</div>
 
-							</p:tab>
-
-							<p:tab id="tabResponsaveis">
-
-								<f:facet name="title">
-									<div align="center">
-										<i class="pi pi-users"></i>
-										<h:outputText value=" RESPONSÁVEIS PARA RETIRADA" />
-									</div>
-								</f:facet>
-
-								<ui:include src="tabs/resposaveisRetirada.xhtml" />
-								
-								<div align="right">
-
-									<p:commandButton value="Finalizar" icon="pi pi-save"
-										rendered="#{seguranca.naoPodeVisualizarDadosSaudeDoPaciente}"									    
-										action="#{incluirPacienteBean.finalizarCadastro}"
-										style="margin-top: 10px;" update="@form"
-										styleClass="ui-button-success mr-2 mb-2" />
-								
-								</div>
-
-							</p:tab>
-
-							<p:tab id="tabDadosDeSaude" rendered="#{seguranca.podeVisualizarDadosSaudeDoPaciente}">								
-
-								<f:facet name="title">
-									<div align="center">
-										<i class="pi pi-heart-fill"></i> DADOS DE SAÚDE
-									</div>
-								</f:facet>
-
-								<ui:include src="tabs/dadosDeSaude.xhtml" />
-
-								<div align="right">
-
-									<p:commandButton value="Finalizar" icon="pi pi-save"
-										action="#{incluirPacienteBean.finalizarCadastro}"
-										style="margin-top: 10px;" update="@form"
-										styleClass="ui-button-success mr-2 mb-2" />
-								</div>
-
-							</p:tab>
-
-						</p:wizard>
-					</h:form>
-
-
+							<div class="col-12 md:col-6">
+								<p:commandButton value="Limpar" styleClass="ui-button-info"
+									update="@form" process="@this"
+									action="#{incluirPacienteBean.inicializar}" icon="pi pi-trash" />
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
-
-		</div>
-
-		<style>
-.without-selectall .ui-selectcheckboxmenu-header .ui-chkbox {
-	display: none;
-}
-</style>
+		</h:form>
 	</ui:define>
 
 </ui:composition>
