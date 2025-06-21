@@ -3,11 +3,11 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:o="http://omnifaces.org/ui"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui"
 	xmlns:of="http://omnifaces.org/functions">
 
 <h:head>
+
 	<f:facet name="first">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -21,129 +21,99 @@
 			type="image/png" sizes="16x16" />
 
 	</f:facet>
-	<title>SASPO-PE</title>
+
+	<title>#{dadosSistemaBean.dadosSistema.sigla}</title>
+
 	<h:outputScript name="ripple/ripple.js" library="layout"
 		rendered="#{app.ripple}" />
-		
-		
-	<script type="text/javascript">
-		//<![CDATA[		
-		function checkCapsLock(event) {
-	        var capsLockOn = event.getModifierState && event.getModifierState('CapsLock');
-	        var messageElement = document.getElementById('capsLockMessage');
 
-	        if (capsLockOn) {
-	            messageElement.style.display = 'block';
-	        } else {
-	            messageElement.style.display = 'none';
-	        }
-	    }
-				
-		//]]>
-	</script>
-	
-	<style>
-    
-     @keyframes blink {
-        0%, 100% {
-            opacity: 1;
-        }
-        50% {
-            opacity: 0;
-        }
-    }
 
-    #capsLockMessage {
-        color: red;
-        font-weight: bold;
-        animation: blink 0.4s 3;
-    }
-    
-    </style>
-    
-    <f:metadata>
-	<o:viewParam id="reset_token" name="reset_token"
-		value="#{definirSenhaBean.token}" />
-	<f:viewAction action="#{definirSenhaBean.chamadaDaPagina}" />
+	<f:metadata>
+		<o:viewParam id="reset_token" name="reset_token"
+			value="#{definirSenhaBean.token}" />
+		<f:viewAction action="#{definirSenhaBean.chamadaDaPagina}" />
 	</f:metadata>
-		
+
 </h:head>
 
 <h:body styleClass="pages-body login-page flex flex-column">
 
 	<div class="align-self-center mt-auto mb-auto">
 		<div class="pages-panel card flex flex-column">
+
 			<div class="pages-header px-3 py-1">
-				<p:graphicImage id="app-logo" name="images/logo-light.svg" library="layout" />
+				<p:graphicImage id="app-logo" cache="false"
+					value="#{dadosSistemaBean.logoPrincipal}" />
 			</div>
 
-			<h4>
-				Sistema de Atenção à Saúde da Pessoa<br />Ostomizada de Pernambuco
-			</h4>
+			<h4>#{dadosSistemaBean.dadosSistema.nome}</h4>
 
 			<h:form id="recsenha" prependId="false">
-				
-			<p:growl id="msg" showDetail="false" life="5000">
-				<p:autoUpdate />
-			</p:growl>
-			
-			<h5>Definição de Senha</h5>
+
+				<p:growl id="msg" showDetail="false" life="5000">
+					<p:autoUpdate />
+				</p:growl>
+
+				<h5>Definição de Senha</h5>
 
 				<div class="input-panel flex flex-column px-3">
 
-					<div class="ui-inputgroup mt-4 mb-3">					
-					
-						<span class="ui-inputgroup-addon">
-                            <i class="pi pi-envelope"></i>
-                        </span>
-                        <span class="ui-float-label flex align-items-stretch w-full">
-                            <p:inputText id="email" value="#{definirSenhaBean.usuario.email}" required="true"
-							maxlength="40" style="text-transform:lowercase" autocomplete="false" requiredMessage="Informe o email cadastrado!"/>
-                            <p:outputLabel for="@previous" value="Informe o email cadastrado:" />
-                        </span>
+					<div class="ui-inputgroup mt-4 mb-3">
+
+						<span class="ui-inputgroup-addon"> <i
+							class="pi pi-envelope"></i>
+						</span> <span class="ui-float-label flex align-items-stretch w-full">
+							<p:inputText id="email"
+								value="#{definirSenhaBean.usuario.pessoa.email}" required="true"
+								maxlength="40" style="text-transform:lowercase"
+								autocomplete="false"
+								requiredMessage="Informe o email cadastrado!" /> <p:outputLabel
+								for="@previous" value="Informe o email cadastrado:" />
+						</span>
 					</div>
 
 
 					<div class="ui-inputgroup mt-3 mb-3">
-						<span class="ui-inputgroup-addon"> 
-							<i class="pi pi-lock"></i>
-						</span>
-						<span class="ui-float-label flex align-items-stretch w-full">
+						<span class="ui-inputgroup-addon"> <i class="pi pi-lock"></i>
+						</span> <span class="ui-float-label flex align-items-stretch w-full">
 							<p:password styleClass="w-full" title="Informe a Senha" id="pwd"
 								redisplay="true" onkeyup="checkCapsLock(event)" maxlength="50"
-								value="#{definirSenhaBean.novaSenhaRedefinir}" 
-								feedback="true" required="true" autocomplete="false"
+								value="#{definirSenhaBean.novaSenhaRedefinir}" feedback="true"
+								required="true" autocomplete="false"
 								requiredMessage="A Senha é Obrigatória"
 								promptLabel="Digite a Senha" weakLabel="Fraca"
-								goodLabel="Regular" strongLabel="Ótima" /> 
-								<p:outputLabel for="@previous" value="Senha:" />
+								goodLabel="Regular" strongLabel="Ótima" /> <p:outputLabel
+								for="@previous" value="Senha:" />
 						</span>
 					</div>
 					<p style="color: red; display: none; font-size: 15px !important;"
 						id="capsLockMessage">Caps Lock Ativado!</p>
 
 					<div class="ui-inputgroup mt-3 mb-3">
-						<span class="ui-inputgroup-addon"> 
-							<i class="pi pi-lock"></i>
-						</span>
-						<span class="ui-float-label flex align-items-stretch w-full">
-							<p:outputLabel for="@next" value="Confirmar Senha:" />
-							<p:password styleClass="w-full" title="Informe a Senha" id="cfpwd" 
-								redisplay="true" maxlength="50" value="#{definirSenhaBean.confNovaSenhaRedefinir}" 
-								match="cfpwd" required="true" autocomplete="false"
+						<span class="ui-inputgroup-addon"> <i class="pi pi-lock"></i>
+						</span> <span class="ui-float-label flex align-items-stretch w-full">
+							<p:outputLabel for="@next" value="Confirmar Senha:" /> <p:password
+								styleClass="w-full" title="Informe a Senha" id="cfpwd"
+								redisplay="true" maxlength="50"
+								value="#{definirSenhaBean.confNovaSenhaRedefinir}" match="cfpwd"
+								required="true" autocomplete="false"
 								requiredMessage="A Confirmação de Senha é Obrigatória">
-								<p:ajax listener="#{definirSenhaBean.validaSenhas()}" global="false" process=":pwd,@this" update="cfpwd" />
-								</p:password> 
-								<p:outputLabel for="@previous" value="Confirmar Senha:" />
+								<p:ajax listener="#{definirSenhaBean.validaSenhas()}"
+									global="false" process=":pwd,@this" update="cfpwd" />
+							</p:password> <p:outputLabel for="@previous" value="Confirmar Senha:" />
 						</span>
 					</div>
-										
+
 				</div>
 
-				<p:commandButton icon="pi pi-send" value="Enviar" action="#{definirSenhaBean.alterarSenha}"
-					styleClass="login-button mb-3 px-4" style="width:65%;margin-top:15px" />
-					
-				<p:button outcome="login.xhtml" value="Retornar ao Login" icon="pi pi-arrow-left" styleClass="login-button px-4" style="width:65%;background-color:green"/>
+				<p:commandButton icon="pi pi-send" value="Enviar"
+					action="#{definirSenhaBean.alterarSenha}"
+					styleClass="login-button mb-3 px-4"
+					style="width:65%;margin-top:15px" />
+
+				<p:button outcome="login.xhtml" value="Retornar ao Login"
+					icon="pi pi-arrow-left" styleClass="login-button px-4"
+					style="width:65%;background-color:green" />
 
 			</h:form>
 		</div>

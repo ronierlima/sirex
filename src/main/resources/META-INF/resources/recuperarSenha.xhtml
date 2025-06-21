@@ -19,7 +19,7 @@
 			type="image/png" sizes="16x16" />
 
 	</f:facet>
-	<title>SASPO-PE</title>
+	<title>#{dadosSistemaBean.dadosSistema.sigla}</title>
 	<h:outputScript name="ripple/ripple.js" library="layout"
 		rendered="#{app.ripple}" />
 
@@ -50,9 +50,8 @@
 						<span class="ui-inputgroup-addon"> <i
 							class="pi pi-envelope"></i>
 						</span> <span class="ui-float-label flex align-items-stretch w-full">
-							<p:inputText id="email"
-								value="#{recuperarSenhaBean.usuario.email}" required="true"
-								maxlength="40" style="text-transform:lowercase"
+							<p:inputText id="email" value="#{recuperarSenhaBean.email}"
+								required="true" maxlength="40" style="text-transform:lowercase"
 								autocomplete="false"
 								requiredMessage="Informe o email cadastrado!" /> <p:outputLabel
 								for="@previous" value="Informe o email cadastrado" />
@@ -62,12 +61,11 @@
 
 				<p:commandButton icon="pi pi-send" value="Enviar"
 					process="@this email" action="#{recuperarSenhaBean.enviar}"
-					styleClass="login-button mb-3 px-4"
-					style="width:65%;margin-top:15px" />
+					styleClass="login-button mb-3 px-4 w-full" style="margin-top:15px" />
 
 				<p:button outcome="login.xhtml" value="Retornar ao Login"
-					icon="pi pi-arrow-left" styleClass="login-button px-4"
-					style="width:65%;background-color:green" />
+					icon="pi pi-arrow-left"
+					styleClass="login-button px-4 w-full ui-button-success" />
 
 			</h:form>
 		</div>

@@ -16,10 +16,7 @@ import br.gov.pe.ses.starter.util.jsf.UtilMensagens;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.view.ViewScoped;
-import lombok.AccessLevel;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 @Component
 @ViewScoped
@@ -39,9 +36,7 @@ public class DefinirSenhaBean implements Serializable {
 	@Autowired
 	private UsuarioService usuarioService;
 
-	@Getter(value = AccessLevel.PROTECTED)
-	@Setter(value = AccessLevel.PROTECTED)
-	Optional<Usuario> usuarioEncontrado;
+	private Optional<Usuario> usuarioEncontrado;
 
 	@PostConstruct
 	private void inicializar() {
@@ -123,9 +118,8 @@ public class DefinirSenhaBean implements Serializable {
 		try {
 
 			boolean senhasNaoConferem = !novaSenhaRedefinir.contentEquals(confNovaSenhaRedefinir);
-			boolean dadosInformadosNaoConferem = usuarioEncontrado.get().getPessoa().getEmail() == null
-					|| usuarioEncontrado.get().getPessoa().getEmail().isEmpty() || !usuarioEncontrado.get().getPessoa()
-							.getEmail().contentEquals(usuario.getPessoa().getEmail().trim());
+			boolean emailInvalido = !usuarioEncontrado.get().getPessoa().getEmail()
+					.equalsIgnoreCase(usuario.getPessoa().getEmail().trim());
 
 			if (senhasNaoConferem) {
 
@@ -134,8 +128,7 @@ public class DefinirSenhaBean implements Serializable {
 
 			}
 
-			if (dadosInformadosNaoConferem) {
-
+			if (emailInvalido) {
 				UtilMensagens.mensagemAposRequest(
 						"Os Dados Informados não Conferem! Link de Redefinição de Senha Inválido!",
 						FacesMessage.SEVERITY_WARN);
@@ -143,16 +136,6 @@ public class DefinirSenhaBean implements Serializable {
 				return;
 
 			}
-
-			/*
-			 * if (!new PasswordValidator().isSenhaForte(novaSenhaRedefinir)) {
-			 * 
-			 * UtilMensagens.
-			 * mensagemWarn("A senha informada não preeenche os requisitos mínimos de segurança!"
-			 * );
-			 * 
-			 * }
-			 */
 
 			Usuario usuario = new Usuario();
 			usuario.setId(usuarioEncontrado.get().getId());
