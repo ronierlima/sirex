@@ -19,7 +19,7 @@
     
         <ul class="layout-inline-menu-action-panel hidden">
 
-			<p:selectOneMenu id="hospitalUsuario" rendered="#{utilSessionBean.renderizaSeletorHospitais}" style="width:100%;" converter="omnifaces.SelectItemsConverter" value="#{seguranca.usuarioLogado.usuario.hospital}">
+			<p:selectOneMenu id="hospitalUsuario"  style="width:100%;" converter="omnifaces.SelectItemsConverter" value="#{seguranca.usuarioLogado.usuario.unidade}">
 				<p:ajax listener="#{utilSessionBean.onHospitalChange}"/>
 				<f:selectItems rendered="#{not empty utilSessionBean.hospitaisVinculadosUsuario}" value="#{utilSessionBean.hospitaisVinculadosUsuario}"
 					var="hospital" itemValue="#{hospital}"
