@@ -67,7 +67,7 @@ public class RedefinirSenhaBean implements Serializable {
 				
 			}
 			
-			Optional<Usuario> usuarioDados = getDadosUsuarioLogado();
+			Optional<Usuario> usuarioDados = null;
 			
 			boolean senhaEConfirmarNaoConferem = !novaSenhaRedefinir.contentEquals(confNovaSenhaRedefinir);
 			boolean senhaAtualNaoCorresponde = !BCrypt.checkpw(senhaAtualRedefinir, usuarioDados.get().getSenha());
@@ -152,11 +152,6 @@ public class RedefinirSenhaBean implements Serializable {
 
 	}
 	
-	public Optional<Usuario> getDadosUsuarioLogado() {
-
-		return usuarioService.porId(UtilUserDetails.getUsuarioLogado().getId());
-
-	}
 	
 	public void limparParametros() {
 		

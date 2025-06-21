@@ -18,7 +18,6 @@ import br.gov.pe.ses.starter.data.repository.UsuarioRepository;
 import br.gov.pe.ses.starter.data.specifications.OrdenacaoUtil;
 import br.gov.pe.ses.starter.data.specifications.UsuarioEspecification;
 import br.gov.pe.ses.starter.dto.UsuarioFiltroDTO;
-import br.gov.pe.ses.starter.dto.UsuarioSimplesDTO;
 import br.gov.pe.ses.starter.entidades.publico.Perfil;
 import br.gov.pe.ses.starter.entidades.publico.Unidade;
 import br.gov.pe.ses.starter.entidades.publico.Usuario;
@@ -130,21 +129,15 @@ public class UsuarioServiceImpl implements UsuarioService {
 	}
 
 	@Override
-	public Usuario porCpf(String cpf) {
-		return usuarioRepository.porCpf(cpf);
-	}
+	public Usuario porEmail(String email) throws NegocioException {
 
-	@Override
-	public Optional<Usuario> porEmail(String email) throws NegocioException {
+		Optional<Usuario> optUsuario = usuarioRepository.porEmail(email);
 
-		try {
-
-			return usuarioRepository.porEmail(email);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new NegocioException("Erro ao Buscar Usuário por Email!");
+		if (optUsuario.isEmpty()) {
+			throw new NegocioException("Usuário Nao Encontrado com o Email!");
 		}
+
+		return optUsuario.get();
 
 	}
 
@@ -167,16 +160,15 @@ public class UsuarioServiceImpl implements UsuarioService {
 	}
 
 	@Override
-	public Optional<Usuario> usuarioPorResetToken(String resetToken) throws NegocioException {
+	public Usuario usuarioPorResetToken(String resetToken) throws NegocioException {
 
-		try {
+		Optional<Usuario> optUsuario = usuarioRepository.usuarioAtivoPorResetToken(resetToken);
 
-			return usuarioRepository.usuarioPorResetToken(resetToken);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new NegocioException("Erro ao Buscar Dados do Usuário!");
+		if (optUsuario.isEmpty()) {
+			throw new NegocioException("Token Invalido ou Expirado!");
 		}
+
+		return optUsuario.get();
 
 	}
 
@@ -197,23 +189,6 @@ public class UsuarioServiceImpl implements UsuarioService {
 	}
 
 	@Override
-	public Optional<Usuario> porId(Long id) {
-		return usuarioRepository.porId(id);
-
-	}
-
-	@Override
-	public List<UsuarioSimplesDTO> usuariosSimplesPorHospital(Unidade hospital) throws NegocioException {
-
-		try {
-			return usuarioRepository.usuariosSimplesPorHospital(hospital);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new NegocioException("Erro ao Listar Usuários do Hospital!");
-		}
-	}
-
-	@Override
 	public int alterarHospitalPadrao(Usuario u) throws NegocioException {
 
 		try {
@@ -227,17 +202,6 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 		}
 
-	}
-
-	@Override
-	public Set<Usuario> usuariosCompletosPorHospital(Unidade hospital) throws NegocioException {
-
-		try {
-			return usuarioRepository.usuariosCompletosAtivosPorHospital(hospital);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new NegocioException("Erro ao Listar Usuários do Hospital!");
-		}
 	}
 
 }

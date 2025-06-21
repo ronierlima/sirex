@@ -47,12 +47,12 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 	int definirResetToken(@Param("resetToken") String resetToken, @Param("dataExpToken") LocalDateTime datatExpToken,
 			@Param("idUsuario") Long id);
 
-	@Query("from Usuario u where u.resetToken=:resetToken")
-	Optional<Usuario> usuarioPorResetToken(String resetToken);
+	@Query("from Usuario u where u.resetToken=:resetToken AND u.dataHoraExpToken >= current_timestamp and u.ativo is true")
+	Optional<Usuario> usuarioAtivoPorResetToken(String resetToken);
 
 	@Modifying
 	@Transactional
-	@Query("update Usuario u set u.senha=:#{#usuario.senha},u.dataHoraResetSenha=current_timestamp where u.id=:#{#usuario.id}")
+	@Query("update Usuario u set u.senha=:#{#usuario.senha},u.dataHoraResetSenha=current_timestamp, u.resetToken='' WHERE u.id=:#{#usuario.id}")
 	int atualizarSenha(Usuario usuario);
 
 	@Query("SELECT new br.gov.pe.ses.starter.dto.UsuarioSimplesDTO(u.id,u.pessoa.nome) FROM Usuario u where u.unidade = :unidade order by u.pessoa.nome")

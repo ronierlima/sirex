@@ -1,8 +1,6 @@
 package br.gov.pe.ses.starter.controladores;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -13,7 +11,6 @@ import br.gov.pe.ses.starter.exception.NegocioException;
 import br.gov.pe.ses.starter.service.interfaces.UsuarioService;
 import br.gov.pe.ses.starter.util.jsf.FacesUtil;
 import br.gov.pe.ses.starter.util.jsf.UtilMensagens;
-import jakarta.annotation.PostConstruct;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.view.ViewScoped;
 import lombok.Data;
@@ -25,8 +22,6 @@ public class DefinirSenhaBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private Usuario usuario;
-
 	private String novaSenhaRedefinir;
 
 	private String confNovaSenhaRedefinir;
@@ -36,81 +31,24 @@ public class DefinirSenhaBean implements Serializable {
 	@Autowired
 	private UsuarioService usuarioService;
 
-	private Optional<Usuario> usuarioEncontrado;
-
-	@PostConstruct
-	private void inicializar() {
-
-		usuario = new Usuario();
-
-	}
+	private Usuario usuarioEncontrado;
 
 	public void chamadaDaPagina() {
 
 		try {
 
-			buscarUsuarioPorToken();
-
-			boolean usuarioExiste = usuarioEncontrado.isPresent();
-			boolean usuarioInexiste = usuarioEncontrado.isEmpty();
-			boolean usuarioInativo = usuarioExiste && !usuarioEncontrado.get().getAtivo();
-			boolean tokenDataHoraInvalida = usuarioExiste
-					&& LocalDateTime.now().isAfter(usuarioEncontrado.get().getDataHoraExpToken());
-			boolean tokenRedefinicaoSenhaInvalido = (token == null || token.trim().contentEquals(""));
-
-			if (usuarioInexiste || tokenRedefinicaoSenhaInvalido) {
-
-				UtilMensagens.mensagemAposRequest(
-						"Link de Redefinição de Senha Inválido! Procure o Administrador do Sistema!",
-						FacesMessage.SEVERITY_WARN);
-				FacesUtil.redirect("login.xhtml");
-				return;
-
-			}
-
-			if (usuarioInativo) {
-
-				UtilMensagens.mensagemAposRequest(
-						"Usuário com Pendência Cadastral! Procedimento de Definição/Redefinição de Senha não Autorizado! Procure o Administrador do Sistema!",
-						FacesMessage.SEVERITY_WARN);
-				FacesUtil.redirect("login.xhtml");
-				return;
-
-			}
-
-			if (tokenDataHoraInvalida) {
-
-				UtilMensagens.mensagemAposRequest("Seu Link de Redefinição de Senha Perdeu a Validade (2 horas)",
-						FacesMessage.SEVERITY_WARN);
-				FacesUtil.redirect("login.xhtml");
-				return;
-
-			}
+			usuarioEncontrado = usuarioService.usuarioPorResetToken(token);
 
 			UtilMensagens.mensagemInfo("Informe os Dados para Redefinição da Senha!");
 
-		} catch (Exception e) {
-
-			e.printStackTrace();
-			UtilMensagens.mensagemError("Erro ao Recuperar os Dados para Redefinição de Senha!");
-
-		}
-
-	}
-
-	protected void buscarUsuarioPorToken() {
-
-		usuarioEncontrado = Optional.empty();
-
-		try {
-
-			usuarioEncontrado = usuarioService.usuarioPorResetToken(token);
-
 		} catch (NegocioException e) {
+			UtilMensagens.mensagemAposRequest(
+					"Link de Redefinição de Senha Inválido! Procure o Administrador do Sistema!",
+					FacesMessage.SEVERITY_WARN);
+			FacesUtil.redirect("login.xhtml");
 
-			e.printStackTrace();
-			UtilMensagens.mensagemError("Erro ao Buscar Dados do Usuário!");
 		}
+
 	}
 
 	public void alterarSenha() {
@@ -118,30 +56,15 @@ public class DefinirSenhaBean implements Serializable {
 		try {
 
 			boolean senhasNaoConferem = !novaSenhaRedefinir.contentEquals(confNovaSenhaRedefinir);
-			boolean emailInvalido = !usuarioEncontrado.get().getPessoa().getEmail()
-					.equalsIgnoreCase(usuario.getPessoa().getEmail().trim());
 
 			if (senhasNaoConferem) {
-
 				UtilMensagens.mensagemWarn("Os Campos Senha e Confirmar Senha não Correspondem!");
 				return;
-
 			}
 
-			if (emailInvalido) {
-				UtilMensagens.mensagemAposRequest(
-						"Os Dados Informados não Conferem! Link de Redefinição de Senha Inválido!",
-						FacesMessage.SEVERITY_WARN);
-				FacesUtil.redirect("login.xhtml");
-				return;
+			usuarioEncontrado.setSenha(BCrypt.hashpw(confNovaSenhaRedefinir, BCrypt.gensalt()));
 
-			}
-
-			Usuario usuario = new Usuario();
-			usuario.setId(usuarioEncontrado.get().getId());
-			usuario.setSenha(BCrypt.hashpw(confNovaSenhaRedefinir, BCrypt.gensalt()));
-
-			if (usuarioService.alterarSenha(usuario) > 0) {
+			if (usuarioService.alterarSenha(usuarioEncontrado) > 0) {
 
 				UtilMensagens.mensagemAposRequest("Senha Alterada com Sucesso!", FacesMessage.SEVERITY_WARN);
 				FacesUtil.redirect("login.xhtml");
@@ -151,27 +74,18 @@ public class DefinirSenhaBean implements Serializable {
 			}
 
 		} catch (Exception e) {
-
 			e.printStackTrace();
 			UtilMensagens.mensagemError("Erro ao Realizar Uma ou Mais Validações!");
-
-		} finally {
-
-			usuario = new Usuario();
-			novaSenhaRedefinir = null;
-			confNovaSenhaRedefinir = null;
 
 		}
 
 	}
 
 	public void validaSenhas() {
-
-		if (!confNovaSenhaRedefinir.contentEquals(novaSenhaRedefinir)) {
-
+		boolean senhasDivergente = !confNovaSenhaRedefinir.contentEquals(novaSenhaRedefinir);
+		if (senhasDivergente) {
 			UtilMensagens.mensagemWarn("As Senhas Informadas não Conferem!");
 			confNovaSenhaRedefinir = null;
-
 		}
 
 	}
