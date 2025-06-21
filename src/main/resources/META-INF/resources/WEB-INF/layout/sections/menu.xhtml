@@ -15,7 +15,7 @@
             <div class="layout-menu-container">
 
                 <pu:menu widgetVar="layoutMenuWidget">
-                	<p:submenu label="STARTER JSF - #{geralBean.versao}"/>                
+                	<p:submenu label="#{dadosSistemaBean.dadosSistema.sigla} - #{geralBean.versao}"/>                
                    
                     <p:submenu id="m_principal" label="Principal" icon="pi pi-fw pi-home">
                         <p:menuitem id="m_dashboardsales" value="Home" icon="fa fa-fw fa-chart-pie" url="/paginas/principal.xhtml" /> 
