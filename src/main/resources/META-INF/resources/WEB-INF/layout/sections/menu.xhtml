@@ -31,8 +31,8 @@
                         </p:submenu>
                     </p:submenu> 
                     
-                    <p:submenu id="m_rel" label="Relatórios" >
-                   		<p:submenu id="m_rel_1" label="Usuários" icon="pi pi-file-pdf">
+                    <p:submenu id="m_rel" label="Relatórios" rendered="#{seguranca.exibeMenuRelatorios}">
+                   		<p:submenu id="m_rel_1" label="Usuários" icon="pi pi-file-pdf" rendered="#{seguranca.exportaUsuariosCadastrados}" >
 	                        <p:menuitem id="m_rel_2" value="Cadastrados" icon="fa fa-fw fa-group" url="/paginas/relatorios/usuarios/exportarUsuariosCadastrados.xhtml" />
                         </p:submenu>
                     </p:submenu> 

@@ -278,6 +278,10 @@ INSERT INTO public.funcionalidade
 (id, nome, "label", exibir, id_funcionalidade)
 VALUES(48, 'ROLE_CONFIGURACAO_SISTEMA', 'Configurar Sistema', true, 1);
 
+INSERT INTO public.funcionalidade
+(id, nome, "label", exibir, id_funcionalidade)
+VALUES(49, 'RELATORIO_USUARIOS_CADASTRADOS', 'Usuarios Cadastrados', true, 14);
+
 INSERT INTO public.macroregional
 (id, nome)
 VALUES(1, 'I');

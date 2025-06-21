@@ -29,6 +29,8 @@ import static br.gov.pe.ses.starter.util.Funcionalidades.gerenciarSistema;
 import static br.gov.pe.ses.starter.util.Funcionalidades.visualizarPaciente;
 import static br.gov.pe.ses.starter.util.Funcionalidades.incluirPaciente;
 import static br.gov.pe.ses.starter.util.Funcionalidades.alterarPaciente;
+import static br.gov.pe.ses.starter.util.Funcionalidades.exportarUsuariosCadastrados;
+
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -100,6 +102,7 @@ public class SecurityConfig {
 			.requestMatchers("/paginas/configuracao/configurar.xhtml").hasAnyRole(gerenciarSistema)	
 			.requestMatchers("/paginas/paciente/listarPacientes.xhtml").hasAnyRole(visualizarPaciente)	
 			.requestMatchers("/paginas/paciente/incluirPaciente.xhtml").hasAnyRole(incluirPaciente, alterarPaciente)	
+			.requestMatchers("/paginas/relatorios/usuarios/exportarUsuariosCadastrados.xhtml").hasRole(exportarUsuariosCadastrados)	
 			
 			.anyRequest().authenticated())							
 			.formLogin((formLogin) -> formLogin

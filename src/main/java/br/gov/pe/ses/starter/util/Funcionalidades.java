@@ -69,4 +69,11 @@ public class Funcionalidades {
 	public static Set<String> permissoesDePacientes = Set.of(incluirPaciente, alterarPaciente, excluirPaciente,
 			visualizarPaciente);
 
+	// RELATORIO
+	public static final String emissaoRelatorios = "RELATORIO";
+
+	public static final String exportarUsuariosCadastrados = "RELATORIO_USUARIOS_CADASTRADOS";
+
+	public static Set<String> permissoesDeRelatorios = Set.of(emissaoRelatorios, exportarUsuariosCadastrados);
+
 }
