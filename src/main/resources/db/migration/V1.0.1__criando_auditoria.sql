@@ -1,6 +1,6 @@
 -- DROP SCHEMA auditoria;
 
-CREATE SCHEMA auditoria AUTHORIZATION postgres;
+CREATE SCHEMA auditoria;
 
 -- auditoria.revinfo definição
 
