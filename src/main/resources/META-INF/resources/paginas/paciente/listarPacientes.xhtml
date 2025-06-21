@@ -1,183 +1,182 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui"
-	template="/WEB-INF/layout/template.xhtml">
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/layout/template.xhtml">
 
-	<ui:define name="title">Listar Pacientes</ui:define>
+    <ui:define name="title">Listar Pacientes</ui:define>
 
-	<ui:define name="breadcrumb">
-		<f:metadata>
-			<f:viewParam name="homeOutcome" value="/paginas/principal.xhtml" />
-			<f:viewParam name="value" value="Cadastros,Listar Pacientes" />
-			<f:viewParam name="outcome"
-				value="/paginas/paciente/listarPacientes.xhtml" />
-		</f:metadata>
-	</ui:define>
+    <ui:define name="breadcrumb">
+        <f:metadata>
+            <f:viewParam name="homeOutcome" value="/paginas/principal.xhtml"/>
+            <f:viewParam name="value" value="Cadastros,Listar Pacientes"/>
+            <f:viewParam name="outcome"
+                         value="/paginas/paciente/listarPacientes.xhtml"/>
+        </f:metadata>
+    </ui:define>
 
-	<ui:define name="content">
-		<h:form id="frmPacientes">
-			<div class="grid panel-demo">
-				<div class="col-12">
+    <ui:define name="content">
+        <h:form id="frmPacientes">
+            <div class="grid panel-demo">
+                <div class="col-12">
 
-					<p:panel id="custom">
+                    <p:panel id="custom">
 
-						<f:facet name="header">
-							<i class="fa fa-hospital-user"></i>
-							<h:outputText value=" Paciente" />
-						</f:facet>
+                        <f:facet name="header">
+                            <i class="fa fa-hospital-user"></i>
+                            <h:outputText value=" Paciente"/>
+                        </f:facet>
 
-						<f:facet name="actions">
+                        <f:facet name="actions">
 
-							<p:button value="Novo" icon="pi pi-plus"
-								outcome="/paginas/paciente/incluirPaciente.xhtml"
-								process="@this" rendered="#{seguranca.podeIncluirPaciente}"
-								styleClass="ui-button-success mr-2 mb-2" />
+                            <p:button value="Novo" icon="pi pi-plus"
+                                      outcome="/paginas/paciente/incluirPaciente.xhtml"
+                                      process="@this" rendered="#{seguranca.podeIncluirPaciente}"
+                                      styleClass="ui-button-success mr-2 mb-2"/>
 
-						</f:facet>
+                        </f:facet>
 
-						<h5>Parâmetros de Pesquisa</h5>
-						<div class="formgroup-inline">
+                        <h5>Parâmetros de Pesquisa</h5>
+                        <div class="formgroup-inline">
 
-							<div class="field ui-lg-3 ui-sm-12 ui-g-nopad">
-								<p:inputText id="nome" type="text" placeholder="Nome"
-									value="#{listarPacientesBean.filtro.nome}"
-									style="text-transform: uppercase;width:100%"
-									onkeypress="if(event.keyCode==13){document.getElementById('frmPacientes:btnBusca').click();return false;}" />
-							</div>
+                            <div class="field ui-lg-3 ui-sm-12 ui-g-nopad">
+                                <p:inputText id="nome" type="text" placeholder="Nome"
+                                             value="#{listarPacientesBean.filtro.nome}"
+                                             style="text-transform: uppercase;width:100%"
+                                             onkeypress="if(event.keyCode==13){document.getElementById('frmPacientes:btnBusca').click();return false;}"/>
+                            </div>
 
-							<div class="field ui-lg-1 ui-sm-12 ui-g-nopad">
-								<p:inputText id="pront" type="text" placeholder="Prontuário"
-									style="text-transform: uppercase;;width:100%"
-									onkeypress="if(event.keyCode==13){document.getElementById('frmPacientes:btnBusca').click();return false;}"
-									value="#{listarPacientesBean.filtro.prontuario}" />
-							</div>
+                            <div class="field ui-lg-1 ui-sm-12 ui-g-nopad">
+                                <p:inputText id="pront" type="text" placeholder="Prontuário"
+                                             style="text-transform: uppercase;;width:100%"
+                                             onkeypress="if(event.keyCode==13){document.getElementById('frmPacientes:btnBusca').click();return false;}"
+                                             value="#{listarPacientesBean.filtro.prontuario}"/>
+                            </div>
 
-							<div class="field ui-lg-3 ui-sm-12 ui-g-nopad">
-								<p:inputText id="mae" type="text" placeholder="Cartao do Sus"
-									style="text-transform: uppercase;width:100%"
-									onkeypress="if(event.keyCode==13){document.getElementById('frmPacientes:btnBusca').click();return false;}"
-									value="#{listarPacientesBean.filtro.cartaoSus}" />
-							</div>
-
-
-							<div class="ui-lg-4 ui-sm-12 ">
-
-								<p:commandButton value="Pesquisar" styleClass="mr-2 mb-2"
-									id="btnBusca" process="nome pront mae select jud @this"
-									update="@form" action="#{listarPacientesBean.pesquisar}"
-									icon="pi pi-search" />
-
-								<p:commandButton value="Limpar" styleClass="ui-button-danger"
-									process="@this" update="@form"
-									action="#{listarPacientesBean.inicializar}"
-									icon="pi pi-refresh" />
-							</div>
-
-						</div>
-
-					</p:panel>
-				</div>
-			</div>
-
-			<div class="grid table-demo">
-				<div class="col-12">
-					<div class="card">
-
-						<p:dataTable widgetVar="pacienteDT" var="paciente" lazy="true"
-							value="#{listarPacientesBean.model}" reflow="true"
-							id="tabelaDados" rowKey="#{paciente.id}" paginator="true"
-							rows="10" paginatorPosition="bottom" selectionMode="single"
-							rowsPerPageTemplate="10,20,30,40,50,60,80,90,100"
-							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-							currentPageReportTemplate="Exibindo de {startRecord} a {endRecord} no total de {totalRecords} registros - Página: {currentPage}/{totalPages}">
-
-							<f:facet name="header">
-								<div class="customers-table-header">
-									<span style="font-weight: bold">Pacientes Cadastrados</span>
-
-									<div>
-
-										<p:commandButton id="toggler" type="button"
-											styleClass="mr-2 mb-2" value="Colunas para Exibição"
-											icon="pi pi-align-justify" />
-										<p:columnToggler datasource="tabelaDados" trigger="toggler" />
-
-										<p:commandButton immediate="true" icon="fa fa-file-excel-o"
-											id="btnxls" value="Excel"
-											styleClass="ui-button-success mr-1 mb-1">
-
-											<p:dataExporter type="xls" target="tabelaDados"
-												bufferSize="1" fileName="pacientes_encontrados"
-												visibleOnly="true" encoding="utf-8" />
-
-										</p:commandButton>
-
-									
-									</div>
-
-								</div>
-							</f:facet>
-
-							<p:column headerText="Status"
-								style="width: 8rem; text-align: center;"
-								sortBy="#{paciente.ativo}">
-
-								<p:outputLabel style="color:black"
-									value="#{paciente.ativo
-									? 'Ativo' : 'Inativo'}" />
-
-							</p:column>
-
-							<p:column headerText="Código" sortBy="#{paciente.id}"
-								style="width: 8rem; text-align: center;">
-
-								<p:outputLabel style="color:black" value="#{paciente.id}" />
-
-							</p:column>
-
-							<p:column headerText="Nome" sortBy="#{paciente.pessoa.nome}"
-								width="150">
-
-								<p:outputLabel style="color:black"
-									value="#{paciente.pessoa.nome}" />
-
-							</p:column>
-
-							<p:column headerText="Prontuario" sortBy="#{paciente.prontuario}">
-								<h:outputText value="#{paciente.prontuario}" />
-							</p:column>
-
-							<p:column headerText="CPF" sortBy="#{paciente.pessoa.cpf}">
-								<h:outputText value="#{paciente.pessoa.cpf}" />
-							</p:column>
+                            <div class="field ui-lg-3 ui-sm-12 ui-g-nopad">
+                                <p:inputText id="mae" type="text" placeholder="Cartao do Sus"
+                                             style="text-transform: uppercase;width:100%"
+                                             onkeypress="if(event.keyCode==13){document.getElementById('frmPacientes:btnBusca').click();return false;}"
+                                             value="#{listarPacientesBean.filtro.cartaoSus}"/>
+                            </div>
 
 
-							<p:column headerText="Unidade"
-								sortBy="#{paciente.unidadeCadastro.nome}">
-								<h:outputText value="#{paciente.unidadeCadastro.nome}" />
-							</p:column>
+                            <div class="ui-lg-4 ui-sm-12 ">
 
-							<p:column headerText="Opções" exportable="false"
-								style="width: 8rem; text-align: center;">
+                                <p:commandButton value="Pesquisar" styleClass="mr-2 mb-2"
+                                                 id="btnBusca" process="nome pront mae select jud @this"
+                                                 update="@form" action="#{listarPacientesBean.pesquisar}"
+                                                 icon="pi pi-search"/>
 
-								<p:button icon="pi pi-file-edit" value="Editar"
-									outcome="/paginas/paciente/incluirPaciente.xhtml">
-									<f:param name="paciente" value="#{paciente.id}" />
-								</p:button>
+                                <p:commandButton value="Limpar" styleClass="ui-button-danger"
+                                                 process="@this" update="@form"
+                                                 action="#{listarPacientesBean.inicializar}"
+                                                 icon="pi pi-refresh"/>
+                            </div>
+
+                        </div>
+
+                    </p:panel>
+                </div>
+            </div>
+
+            <div class="grid table-demo">
+                <div class="col-12">
+                    <div class="card">
+
+                        <p:dataTable widgetVar="pacienteDT" var="paciente" lazy="true"
+                                     value="#{listarPacientesBean.model}" reflow="true"
+                                     id="tabelaDados" rowKey="#{paciente.id}" paginator="true"
+                                     rows="10" paginatorPosition="bottom" selectionMode="single"
+                                     rowsPerPageTemplate="10,20,30,40,50,60,80,90,100"
+                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     currentPageReportTemplate="Exibindo de {startRecord} a {endRecord} no total de {totalRecords} registros - Página: {currentPage}/{totalPages}">
+
+                            <f:facet name="header">
+                                <p:outputPanel styleClass="customers-table-header"
+                                               rendered="#{listarPacientesBean.model.rowCount > 0}">
+                                    <span style="font-weight: bold">Pacientes Cadastrados</span>
+
+                                    <div>
+
+                                        <p:commandButton id="toggler" type="button"
+                                                         styleClass="mr-2 mb-2" value="Colunas para Exibição"
+                                                         icon="pi pi-align-justify"/>
+                                        <p:columnToggler datasource="tabelaDados" trigger="toggler"/>
+
+                                        <p:commandButton immediate="true" icon="fa fa-file-excel-o"
+                                                         id="btnxls" value="Excel"
+                                                         styleClass="ui-button-success mr-1 mb-1">
+
+                                            <p:dataExporter type="xls" target="tabelaDados"
+                                                            bufferSize="1" fileName="pacientes_encontrados"
+                                                            visibleOnly="true" encoding="utf-8"/>
+
+                                        </p:commandButton>
 
 
+                                    </div>
+
+                                </p:outputPanel>
+                            </f:facet>
+
+                            <p:column headerText="Status"
+                                      style="width: 8rem; text-align: center;"
+                                      sortBy="#{paciente.ativo}">
+
+                                <p:outputLabel style="color:black"
+                                               value="#{paciente.ativo
+									? 'Ativo' : 'Inativo'}"/>
+
+                            </p:column>
+
+                            <p:column headerText="Código" sortBy="#{paciente.id}"
+                                      style="width: 8rem; text-align: center;">
+
+                                <p:outputLabel style="color:black" value="#{paciente.id}"/>
+
+                            </p:column>
+
+                            <p:column headerText="Nome" sortBy="#{paciente.pessoa.nome}"
+                                      width="150">
+
+                                <p:outputLabel style="color:black"
+                                               value="#{paciente.pessoa.nome}"/>
+
+                            </p:column>
+
+                            <p:column headerText="Prontuario" sortBy="#{paciente.prontuario}">
+                                <h:outputText value="#{paciente.prontuario}"/>
+                            </p:column>
+
+                            <p:column headerText="CPF" sortBy="#{paciente.pessoa.cpf}">
+                                <h:outputText value="#{paciente.pessoa.cpf}"/>
+                            </p:column>
 
 
-							</p:column>
+                            <p:column headerText="Unidade"
+                                      sortBy="#{paciente.unidadeCadastro.nome}">
+                                <h:outputText value="#{paciente.unidadeCadastro.nome}"/>
+                            </p:column>
 
-						</p:dataTable>
-					</div>
-				</div>
-			</div>
+                            <p:column headerText="Opções" exportable="false"
+                                      style="width: 8rem; text-align: center;">
 
-		</h:form>
-	</ui:define>
+                                <p:button icon="pi pi-file-edit" value="Editar"
+                                          outcome="/paginas/paciente/incluirPaciente.xhtml">
+                                    <f:param name="paciente" value="#{paciente.id}"/>
+                                </p:button>
+
+
+                            </p:column>
+
+                        </p:dataTable>
+                    </div>
+                </div>
+            </div>
+
+        </h:form>
+    </ui:define>
 
 </ui:composition>
