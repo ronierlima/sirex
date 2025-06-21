@@ -87,8 +87,8 @@
 
 						<p:dataTable widgetVar="pacienteDT" var="paciente" lazy="true"
 							value="#{listarPacientesBean.model}" reflow="true"
-							rowKey="#{paciente.id}" paginator="true" rows="10"
-							paginatorPosition="bottom" selectionMode="single"
+							id="tabelaDados" rowKey="#{paciente.id}" paginator="true"
+							rows="10" paginatorPosition="bottom" selectionMode="single"
 							rowsPerPageTemplate="10,20,30,40,50,60,80,90,100"
 							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 							currentPageReportTemplate="Exibindo de {startRecord} a {endRecord} no total de {totalRecords} registros - Página: {currentPage}/{totalPages}">
@@ -96,6 +96,26 @@
 							<f:facet name="header">
 								<div class="customers-table-header">
 									<span style="font-weight: bold">Pacientes Cadastrados</span>
+
+									<div>
+
+										<p:commandButton id="toggler" type="button"
+											styleClass="mr-2 mb-2" value="Colunas para Exibição"
+											icon="pi pi-align-justify" />
+										<p:columnToggler datasource="tabelaDados" trigger="toggler" />
+
+										<p:commandButton immediate="true" icon="fa fa-file-excel-o"
+											id="btnxls" value="Excel"
+											styleClass="ui-button-success mr-1 mb-1">
+
+											<p:dataExporter type="xls" target="tabelaDados"
+												bufferSize="1" fileName="pacientes_encontrados"
+												visibleOnly="true" encoding="utf-8" />
+
+										</p:commandButton>
+
+									</div>
+
 								</div>
 							</f:facet>
 
@@ -138,7 +158,7 @@
 								<h:outputText value="#{paciente.unidadeCadastro.nome}" />
 							</p:column>
 
-							<p:column headerText="Opções"
+							<p:column headerText="Opções" exportable="false"
 								style="width: 8rem; text-align: center;">
 
 								<p:button icon="pi pi-file-edit" value="Editar"
