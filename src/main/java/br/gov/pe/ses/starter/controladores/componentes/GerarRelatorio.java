@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
+import br.gov.pe.ses.starter.dto.ImpressaoRelatorioDTO;
 import br.gov.pe.ses.starter.exception.NegocioException;
 import br.gov.pe.ses.starter.security.UtilUserDetails;
 import net.sf.jasperreports.engine.JRParameter;
@@ -47,8 +47,7 @@ public class GerarRelatorio implements Serializable {
 
 	}
 
-	@SuppressWarnings("rawtypes")
-	public byte[] gerar(String relatorio, HashMap<String, Object> parametros, List lista) throws NegocioException {
+	public byte[] gerar(ImpressaoRelatorioDTO dto) throws NegocioException {
 
 		JRAbstractLRUVirtualizer fileVirtualizer = null;
 		try {
@@ -58,9 +57,9 @@ public class GerarRelatorio implements Serializable {
 			JRSwapFile arquivoSwap = new JRSwapFile(FOLDER_TMP, BLOCK_SIZE, MIN_GROW_COUNT);
 			fileVirtualizer = new JRSwapFileVirtualizer(MAX_SIZE, arquivoSwap, true);
 
-			JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(lista);
+			JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(dto.getLista());
 
-			String caminhoRelatorioJrxml = caminhoRelatorios + relatorio + ".jrxml";
+			String caminhoRelatorioJrxml = caminhoRelatorios + dto.getArquivoJrxml() + ".jrxml";
 			String pathLogos = caminhoRelatorios + "logos/";
 
 			Resource recursoJrxml = resourceLoader.getResource(caminhoRelatorioJrxml);
@@ -69,12 +68,14 @@ public class GerarRelatorio implements Serializable {
 
 			InputStream inputStream = recursoJrxml.getInputStream();
 			JasperReport jasperReport = JasperCompileManager.compileReport(inputStream);
-
+			HashMap<String, Object> parametros = dto.getParametros();
 			parametros.put(JRParameter.REPORT_VIRTUALIZER, fileVirtualizer);
 			parametros.put("SUBREPORT_DIR", pastaPrincipal.getURL().toString());
 			parametros.put("MATRICULA", UtilUserDetails.getUsuarioLogado().getLogin());
 			parametros.put("IMPRESSO_POR", UtilUserDetails.getUsuarioLogado().getPessoa().getNome());
 			parametros.put("LOGO_PATH", pastaLogos.getURL().toString());
+			parametros.put("NOME_SISTEMA", dto.getNomeSistema());
+			
 			parametros.put("REPORT_LOCALE", Locale.of("pt", "BR"));
 			parametros.put("HOSPITAL", UtilUserDetails.getUsuarioLogado().getUnidade().getNome());
 

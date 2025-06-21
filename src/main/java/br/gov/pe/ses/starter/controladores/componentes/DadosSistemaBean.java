@@ -8,24 +8,25 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.annotation.ApplicationScope;
 
 import br.gov.pe.ses.starter.entidades.publico.DadosSistema;
 import br.gov.pe.ses.starter.exception.NegocioException;
 import br.gov.pe.ses.starter.service.interfaces.DadosSistemaService;
 import br.gov.pe.ses.starter.util.jsf.UtilMensagens;
 import jakarta.annotation.PostConstruct;
-import jakarta.enterprise.context.ApplicationScoped;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.event.PhaseId;
+import lombok.Data;
 
 @Component
-@ApplicationScoped
+@ApplicationScope
+@Data
 public class DadosSistemaBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@Getter
-	@Setter
+
 	private DadosSistema dadosSistema;
 
 	@Autowired
@@ -37,16 +38,27 @@ public class DadosSistemaBean implements Serializable {
 
 	@PostConstruct
 	public void inicializar() {
-		System.out.println("CRIOU O BEAN E FAZ O SELECT");
 		dadosSistema = dadosSistemaService.getConfigPadrao();
 	}
 
 	public StreamedContent getLogoPrincipal() {
+
+		FacesContext context = FacesContext.getCurrentInstance();
+		if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {
+			return new DefaultStreamedContent();
+		}
+
 		return DefaultStreamedContent.builder().stream(() -> new ByteArrayInputStream(dadosSistema.getLogoPrincipal()))
 				.contentType("image/svg+xml").build();
 	}
 
 	public StreamedContent getRodape() {
+
+		FacesContext context = FacesContext.getCurrentInstance();
+		if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {
+			return new DefaultStreamedContent();
+		}
+
 		return DefaultStreamedContent.builder().stream(() -> new ByteArrayInputStream(dadosSistema.getLogoRodape()))
 				.contentType("image/svg+xml").build();
 	}
