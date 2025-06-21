@@ -14,11 +14,13 @@ import static br.gov.pe.ses.starter.util.Funcionalidades.permissoesDePacientes;
 import static br.gov.pe.ses.starter.util.Funcionalidades.permissoesDePerfis;
 import static br.gov.pe.ses.starter.util.Funcionalidades.permissoesDeTiposUnidades;
 import static br.gov.pe.ses.starter.util.Funcionalidades.permissoesDeUsuarios;
+import static br.gov.pe.ses.starter.util.Funcionalidades.permissoesDeConfiguracoes;
 import static br.gov.pe.ses.starter.util.Funcionalidades.visualizarDadosSaudePaciente;
 import static br.gov.pe.ses.starter.util.Funcionalidades.visualizarPaciente;
 import static br.gov.pe.ses.starter.util.Funcionalidades.visualizarPerfil;
 import static br.gov.pe.ses.starter.util.Funcionalidades.visualizarUnidade;
 import static br.gov.pe.ses.starter.util.Funcionalidades.visualizarUsuario;
+import static br.gov.pe.ses.starter.util.Funcionalidades.gerenciarSistema;
 
 import java.io.Serializable;
 
@@ -111,6 +113,14 @@ public class Seguranca implements Serializable {
 
 	public boolean isExibeMenuHospitais() {
 		return permissoesDeHospital.stream().anyMatch(externalContext::isUserInRole);
+	}
+	
+	public boolean isExibeMenuAdministracao() {
+		return permissoesDeConfiguracoes.stream().anyMatch(externalContext::isUserInRole);
+	}
+	
+	public boolean isGerenciaSistema() {
+		return externalContext.isUserInRole(gerenciarSistema);
 	}
 
 	public boolean isIncluiUsuario() {

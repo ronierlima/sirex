@@ -10,7 +10,7 @@
         <div class="layout-topbar shadow-4">
             <div class="layout-topbar-left">
                 <a href="/paginas/principal.xhtml" class="layout-topbar-logo">
-                    <p:graphicImage id="app-logo" name="images/logo-#{app.isLogoLight() ? 'light' : 'dark'}.svg" library="layout" style="height: 2.25rem" />
+                    <p:graphicImage id="app-logo" cache="false" value="#{dadosSistemaBean.logoPrincipal}" style="height: 2.25rem" />
                 </a>
         
                 <a class="layout-menu-button shadow-6" data-p-ripple="true">

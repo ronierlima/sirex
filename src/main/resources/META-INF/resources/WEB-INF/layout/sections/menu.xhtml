@@ -27,6 +27,10 @@
                         <p:menuitem id="m_floatlabel" value="Unidades" icon="fa fa-fw fa-hospital" url="/paginas/hospital/listarHospitais.xhtml" rendered="#{seguranca.exibeMenuHospitais}"/>
                         <p:menuitem id="m_tp_1" value="Tipos de Unidades" icon="pi pi-flag-fill" url="/paginas/tipos/listarTipos.xhtml" rendered="#{seguranca.exibeMenuTipos}" />
                     </p:submenu> 
+                    
+                     <p:submenu id="adm" label="Administração" rendered="#{seguranca.exibeMenuAdministracao}">
+                        <p:menuitem id="adm_1" value="Sistema" icon="pi pi-cog" url="/paginas/configuracao/configurar.xhtml" rendered="#{seguranca.gerenciaSistema}" />
+                    </p:submenu> 
                    
                    
                     

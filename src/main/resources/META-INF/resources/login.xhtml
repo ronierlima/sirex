@@ -19,7 +19,7 @@
 			type="image/png" sizes="16x16" />
 
 	</f:facet>
-	<title>STARTER-PE</title>
+	<title>#{dadosSistemaBean.dadosSistema.sigla}</title>
 
 	<!-- **JS** -->
 	<!-- OPTIONAL DEPENDENCIES -->
@@ -72,11 +72,11 @@
 	<div class="align-self-center mt-auto mb-auto">
 		<div class="pages-panel card flex flex-column">
 			<div class="pages-header px-3 py-1">
-				<p:graphicImage id="app-logo" name="images/logo-light.svg" library="layout" />
+				<p:graphicImage id="app-logo" cache="false" value="#{dadosSistemaBean.logoPrincipal}" />
 			</div>
 
 			<h4>
-				Sistema de Atenção à Saúde da Pessoa<br />Ostomizada de Pernambuco
+				#{dadosSistemaBean.dadosSistema.nome}
 			</h4>
 
 			<div class="pages-detail mb-6 px-6">

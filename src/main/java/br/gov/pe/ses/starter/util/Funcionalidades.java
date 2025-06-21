@@ -4,6 +4,11 @@ import java.util.Set;
 
 public class Funcionalidades {
 
+	// CONFIGURACOES
+	public static final String gerenciarSistema = "CONFIGURACAO_SISTEMA";
+
+	public static Set<String> permissoesDeConfiguracoes = Set.of(gerenciarSistema);
+
 	// USUARIOS
 	public static final String incluirUsuario = "USUARIO_INCLUIR";
 

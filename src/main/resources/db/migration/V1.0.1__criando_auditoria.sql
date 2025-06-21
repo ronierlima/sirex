@@ -238,3 +238,35 @@ CREATE TABLE auditoria.pessoa_aud (
 	CONSTRAINT pessoa_aud_pkey PRIMARY KEY (rev, id),
 	CONSTRAINT fk2p4i11bp3x1ag2btxetrkagmh FOREIGN KEY (rev) REFERENCES auditoria.revinfo(id)
 );
+
+-- auditoria.dados_sistema_aud definição
+
+-- Drop table
+
+-- DROP TABLE auditoria.dados_sistema_aud;
+
+CREATE TABLE auditoria.dados_sistema_aud (
+	id int8 NOT NULL,
+	rev int4 NOT NULL,
+	revtype int2 NULL,
+	ativo bool NULL,
+	ativo_mod bool NULL,
+	data_alteracao timestamp(6) NULL,
+	data_alteracao_mod bool NULL,
+	data_inclusao timestamp(6) NULL,
+	data_inclusao_mod bool NULL,
+	logo_principal bytea NULL,
+	logo_principal_mod bool NULL,
+	logo_rodape bytea NULL,
+	logo_rodape_mod bool NULL,
+	nome varchar(255) NULL,
+	nome_mod bool NULL,
+	sigla varchar(255) NULL,
+	sigla_mod bool NULL,
+	usuario_alteracao int8 NULL,
+	usuario_alteracao_mod bool NULL,
+	usuario_inclusao int8 NULL,
+	usuario_inclusao_mod bool NULL,
+	CONSTRAINT dados_sistema_aud_pkey PRIMARY KEY (rev, id),
+	CONSTRAINT fk1yds0a1g4xf61kpj44epp4wpg FOREIGN KEY (rev) REFERENCES auditoria.revinfo(id)
+);
