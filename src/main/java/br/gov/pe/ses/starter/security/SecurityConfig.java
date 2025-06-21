@@ -97,10 +97,7 @@ public class SecurityConfig {
 			.requestMatchers("/paginas/perfil/incluirPerfil.xhtml").hasAnyRole("PERFIL_INCLUIR", "PERFIL_ALTERAR")	
 			.requestMatchers("/paginas/configuracao/configurar.xhtml").hasAnyRole("CONFIGURACAO_SISTEMA")	
 			
-			.requestMatchers("/paginas/manutencao/atendimentos/reverterAtendimentos.xhtml").hasRole(gerenciarSistema)
-			
-			
-					
+			.requestMatchers("/paginas/manutencao/atendimentos/reverterAtendimentos.xhtml").hasRole(gerenciarSistema)	
 			
 			.anyRequest().authenticated())							
 			.formLogin((formLogin) -> formLogin
