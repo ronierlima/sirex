@@ -33,13 +33,7 @@
                         <p:menuitem id="adm_1" value="Sistema" icon="pi pi-cog" url="/paginas/configuracao/configurar.xhtml" rendered="#{seguranca.gerenciaSistema}" />
                     </p:submenu> 
                     
-                     <p:submenu id="m_relatorios" label="Relatórios"  >
-                  	  <p:submenu id="m_relatorios_1" label="Paciente" icon="fa fa-fw fa-hospital-user ">
-                    	<p:menuitem id="m_relatorios_2" value="Exportar"  icon="fa fa-fw fa-file-pdf" url="/paginas/atendimento/relatorios/pesquisarAtendimentos.xhtml" />                        
-                   	  </p:submenu>
-                   </p:submenu>
-                   
-                    
+             
                     
                     <p:submenu id="im_sair" label="Opções" >                    	
                     	<p:menuitem id="im_sair_2"  onclick="window.location.href = '#{request.contextPath}/logout'" value="Sair" icon="fa fa-fw fa fa-sign-out" url="#" />
