@@ -1,10 +1,12 @@
 package br.gov.pe.ses.starter.service.interfaces;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 
 import br.gov.pe.ses.starter.dto.UsuarioFiltroDTO;
+import br.gov.pe.ses.starter.entidades.publico.Unidade;
 import br.gov.pe.ses.starter.entidades.publico.Usuario;
 import br.gov.pe.ses.starter.exception.NegocioException;
 
@@ -13,6 +15,8 @@ public interface UsuarioService {
 	public Optional<Usuario> login(String username);
 
 	public Page<Usuario> buscaPaginada(UsuarioFiltroDTO filtro);
+	
+	public List<Usuario> ativos(Unidade unidade);
 
 	public Usuario alterarStatus(Usuario usuario);
 

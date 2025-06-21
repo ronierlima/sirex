@@ -4,7 +4,7 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
-	xmlns:pe="http://primefaces.org/ui/extensions" >
+	xmlns:pe="http://primefaces.org/ui/extensions">
 
 <h:head>
 	<f:facet name="first">
@@ -20,7 +20,7 @@
 			type="image/png" sizes="16x16" />
 
 	</f:facet>
-	<title>SASPO-PE</title>
+	<title>#{dadosSistemaBean.dadosSistema.sigla}</title>
 
 	<!-- **JS** -->
 	<!-- OPTIONAL DEPENDENCIES -->
@@ -34,9 +34,8 @@
 		class="topbar p-3 flex justify-content-between flex-row align-items-center">
 		<div class="topbar-left ml-3 flex">
 			<div class="logo">
-				<p:graphicImage id="app-logo"
-					name="images/logo-#{app.isLogoLight() ? 'light' : 'dark'}.svg"
-					library="layout" style="height: 3.5rem;margin-left:80px;" />
+				<p:graphicImage id="app-logo" cache="false"
+					value="#{dadosSistemaBean.logoPrincipal}" />
 			</div>
 		</div>
 		<div class="topbar-right mr-3 flex">
@@ -50,8 +49,9 @@
 			<div class="pages-header px-3 py-1">
 				<h2>OCORREU UM ERRO!</h2>
 				<h:panelGrid columns="3">
-					<p:inputTextarea rows="15" cols="50" autoResize="false" id="txtCopy"
-						value="#{flash.keep.type} - #{flash.keep.exception} - #{flash.keep.message}" />					
+					<p:inputTextarea rows="15" cols="50" autoResize="false"
+						id="txtCopy"
+						value="#{flash.keep.type} - #{flash.keep.exception} - #{flash.keep.message}" />
 				</h:panelGrid>
 				<h2>#{flash.keep.type}</h2>
 			</div>

@@ -1,0 +1,40 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/layout/template.xhtml">
+
+	<ui:define name="title">Exportar Usuários</ui:define>
+
+	<ui:define name="breadcrumb">
+		<f:metadata>
+			<f:viewParam name="homeOutcome" value="/paginas/principal" />
+			<f:viewParam name="value" value="Principal" />
+			<f:viewParam name="outcome" value="/paginas/principal" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="content">
+		<h:form>
+			<div class="grid">
+
+
+				<div class="col-12">
+					<div class="card">
+						<h5>Exportar Usuários</h5>
+
+						<div class="field col-12 md:col-3">
+							<p:commandButton value="Exportar" icon="pi pi-file-pdf"
+								title="Exporta Utilizando o Jasper Reports"
+								actionListener="#{exportarUsuariosBean.exportar}">
+								<p:fileDownload value="#{exportarUsuariosBean.documento}" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

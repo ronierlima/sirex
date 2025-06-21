@@ -204,4 +204,9 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	}
 
+	@Override
+	public List<Usuario> ativos(Unidade unidade) {
+		return usuarioRepository.findByUnidadeAndAtivoTrue(unidade);
+	}
+
 }

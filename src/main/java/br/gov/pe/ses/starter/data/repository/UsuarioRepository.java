@@ -65,5 +65,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
 	@Query("SELECT u FROM Usuario u where u.unidade = :unidade and u.ativo is true order by u.pessoa.nome")
 	Set<Usuario> usuariosCompletosAtivosPorHospital(Unidade unidade);
+	
+	List<Usuario> findByUnidadeAndAtivoTrue(Unidade unidade);
 
 }

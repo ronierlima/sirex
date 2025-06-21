@@ -17,9 +17,11 @@ import org.springframework.stereotype.Component;
 import br.gov.pe.ses.starter.exception.NegocioException;
 import br.gov.pe.ses.starter.security.UtilUserDetails;
 import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.fill.JRAbstractLRUVirtualizer;
 import net.sf.jasperreports.engine.fill.JRSwapFileVirtualizer;
@@ -45,9 +47,8 @@ public class GerarRelatorio implements Serializable {
 
 	}
 
-	
 	@SuppressWarnings("rawtypes")
-	public byte[] gerar(String relatorio, HashMap<String, Object> parametros, List lista) throws NegocioException{
+	public byte[] gerar(String relatorio, HashMap<String, Object> parametros, List lista) throws NegocioException {
 
 		JRAbstractLRUVirtualizer fileVirtualizer = null;
 		try {
@@ -55,25 +56,19 @@ public class GerarRelatorio implements Serializable {
 			criarDiretorio();
 
 			JRSwapFile arquivoSwap = new JRSwapFile(FOLDER_TMP, BLOCK_SIZE, MIN_GROW_COUNT);
-
 			fileVirtualizer = new JRSwapFileVirtualizer(MAX_SIZE, arquivoSwap, true);
 
 			JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(lista);
 
-			String caminhoRelatorioJasper = caminhoRelatorios + relatorio + ".jasper";
-	        //String caminhoRelatorioJrxml = caminhoRelatorios + relatorio + ".jrxml";
-
+			String caminhoRelatorioJrxml = caminhoRelatorios + relatorio + ".jrxml";
 			String pathLogos = caminhoRelatorios + "logos/";
 
-			Resource recursoJasper = resourceLoader.getResource(caminhoRelatorioJasper);
-			//Resource recursoJrxml = resourceLoader.getResource(caminhoRelatorioJrxml);
-
+			Resource recursoJrxml = resourceLoader.getResource(caminhoRelatorioJrxml);
 			Resource pastaPrincipal = resourceLoader.getResource(caminhoRelatorios);
 			Resource pastaLogos = resourceLoader.getResource(pathLogos);
 
-			InputStream inputStream = recursoJasper.getInputStream();
-			
-			//JasperReport jasperReport = JasperCompileManager.compileReport(inputStream);
+			InputStream inputStream = recursoJrxml.getInputStream();
+			JasperReport jasperReport = JasperCompileManager.compileReport(inputStream);
 
 			parametros.put(JRParameter.REPORT_VIRTUALIZER, fileVirtualizer);
 			parametros.put("SUBREPORT_DIR", pastaPrincipal.getURL().toString());
@@ -83,9 +78,7 @@ public class GerarRelatorio implements Serializable {
 			parametros.put("REPORT_LOCALE", Locale.of("pt", "BR"));
 			parametros.put("HOSPITAL", UtilUserDetails.getUsuarioLogado().getUnidade().getNome());
 
-			JasperPrint jasperPrint = JasperFillManager.fillReport(inputStream, parametros, dataSource);
-			//JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, dataSource);
-
+			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, dataSource);
 			byte[] bytes = JasperExportManager.exportReportToPdf(jasperPrint);
 
 			return bytes;
