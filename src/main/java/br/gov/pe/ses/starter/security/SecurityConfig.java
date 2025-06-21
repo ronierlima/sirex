@@ -24,6 +24,8 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 import org.springframework.security.web.context.RequestAttributeSecurityContextRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+
+import static br.gov.pe.ses.starter.util.Funcionalidades.gerenciarSistema;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -93,11 +95,12 @@ public class SecurityConfig {
 			.requestMatchers("/paginas/perfil/incluirPerfil.xhtml").hasAnyRole("PACIENTE_INCLUIR", "PACIENTE_ALTERAR")
 			.requestMatchers("/paginas/perfil/listarHospitais.xhtml").hasAnyRole("UNIDADE_VISUALIZAR")
 			.requestMatchers("/paginas/perfil/incluirPerfil.xhtml").hasAnyRole("PERFIL_INCLUIR", "PERFIL_ALTERAR")	
+			.requestMatchers("/paginas/configuracao/configurar.xhtml").hasAnyRole("CONFIGURACAO_SISTEMA")	
+			
+			.requestMatchers("/paginas/manutencao/atendimentos/reverterAtendimentos.xhtml").hasRole(gerenciarSistema)
 			
 			
-						
-		
-			
+					
 			
 			.anyRequest().authenticated())							
 			.formLogin((formLogin) -> formLogin
