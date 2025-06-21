@@ -105,6 +105,9 @@ Senha: Tasemsenha2017
 ```
 
 ---
+### 🧩 Modelagem
+
+![Diagrama de Modelagem](./modelagem.png)
 
 ### 📦 Geração do Artefato para Produção  
 
