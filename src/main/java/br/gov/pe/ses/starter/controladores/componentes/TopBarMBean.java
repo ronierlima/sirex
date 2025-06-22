@@ -2,6 +2,8 @@ package br.gov.pe.ses.starter.controladores.componentes;
 
 import java.io.Serializable;
 
+import br.gov.pe.ses.starter.util.jsf.UtilMensagens;
+import jakarta.annotation.PostConstruct;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,16 +31,17 @@ public class TopBarMBean implements Serializable {
 	@Autowired
 	private UsuarioService usuarioService;
 
-	@Autowired
-	@Getter(value = AccessLevel.PROTECTED)
-	@Setter(value = AccessLevel.PROTECTED)
-	HttpSession session;
 
 	@Autowired
 	private UtilSessionBean utilSessionBean;
 
 	public TopBarMBean() {
 
+	}
+
+	@PostConstruct
+	public void inicializar() {
+		UtilMensagens.addInfoMessageGrowl("Atencao", "Msg Disparada Para Todos");
 	}
 
 }

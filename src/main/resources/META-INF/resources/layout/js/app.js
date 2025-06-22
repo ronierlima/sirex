@@ -25,10 +25,6 @@ function connect() {
 			showGreeting(JSON.parse(greeting.body).content);
 		});
 
-		//Stomp de mensagens privadas do chat
-		stompClient.subscribe('/user/queue/chat', function(greeting) {
-			showGreetingChat(JSON.parse(greeting.body).content);
-		});
 
 	});
 	
@@ -50,12 +46,6 @@ function showGreeting(message) {
 	console.log('Mensagem recebida 1: ' + message);
 	$("#userinfo").append("<tr><td>" + message + "</td></tr>");		
 	rc();
-}
-
-function showGreetingChat(message) {
-	console.log('Mensagem recebida: ' + message);	
-	$("#userinfo").append("<tr><td>" + message + "</td></tr>");	
-	rcChat();
 }
 
 $(function() {

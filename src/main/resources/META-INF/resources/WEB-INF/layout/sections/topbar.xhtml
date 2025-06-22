@@ -22,6 +22,10 @@
     </h:head>
 
     <h:form id="layoutTopbarForm">
+
+        <p:remoteCommand name="rc" action="#{topBarMBean.inicializar}"
+                         update="@form" process="@this" />
+
         <div class="layout-topbar shadow-4">
             <div class="layout-topbar-left">
                 <a href="/paginas/principal.xhtml" class="layout-topbar-logo">

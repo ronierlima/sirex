@@ -1,422 +1,424 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui"
-	template="/WEB-INF/layout/template.xhtml">
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/layout/template.xhtml">
 
-	<ui:define name="title">Dashboard Sales</ui:define>
+    <ui:define name="title">Dashboard Sales</ui:define>
 
-	<ui:define name="head">
-	
-	</ui:define>
+    <ui:define name="head">
 
-	<ui:define name="breadcrumb">
-		<f:metadata>
-			<f:viewParam name="homeOutcome" value="/paginas/principal" />
-			<f:viewParam name="value" value="Principal" />
-			<f:viewParam name="outcome" value="/paginas/principal" />
-		</f:metadata>
-	</ui:define>
+    </ui:define>
 
-
-	<ui:define name="content">
-		<h:form id="dashboardForm">
+    <ui:define name="breadcrumb">
+        <f:metadata>
+            <f:viewParam name="homeOutcome" value="/paginas/principal"/>
+            <f:viewParam name="value" value="Principal"/>
+            <f:viewParam name="outcome" value="/paginas/principal"/>
+        </f:metadata>
+    </ui:define>
 
 
-			<div class="grid dashboard">
-				<div class="col-12 md:col-6 lg:col-3">
-					<div class="card overview-box flex flex-column pt-2">
-						<div class="flex align-items-center muted-text">
-							<i class="pi pi-shopping-cart"></i>
-							<h6 class="m-0 #{app.rtl ? 'pr-2' : 'pl-2'}">Orders</h6>
-							<div class="#{app.rtl ? 'mr-auto' : 'ml-auto'}">
-								<p:commandButton type="button" icon="pi pi-ellipsis-h"
-									styleClass="rounded-button ui-button-flat ui-button-plain" />
-								<p:menu overlay="true" trigger="@previous" my="left top"
-									at="left bottom">
-									<p:menuitem value="Update" icon="pi pi-fw pi-refresh" />
-									<p:menuitem value="Edit" icon="pi pi-fw pi-pencil" />
-								</p:menu>
-							</div>
-						</div>
-						<div class="flex justify-content-between mt-3 flex-wrap">
-							<div class="flex flex-column" style="width: 80px">
-								<span class="mb-1 fs-xlarge">640</span> <span
-									class="overview-status p-1 teal-bgcolor fs-small">1420
+    <ui:define name="content">
+        <h:form id="dashboardForm">
+
+
+            <div class="grid dashboard">
+                <div class="col-12 md:col-6 lg:col-3">
+                    <div class="card overview-box flex flex-column pt-2">
+                        <div class="flex align-items-center muted-text">
+                            <i class="pi pi-shopping-cart"></i>
+                            <h6 class="m-0 #{app.rtl ? 'pr-2' : 'pl-2'}">Orders</h6>
+                            <div class="#{app.rtl ? 'mr-auto' : 'ml-auto'}">
+                                <p:commandButton type="button" icon="pi pi-ellipsis-h"
+                                                 styleClass="rounded-button ui-button-flat ui-button-plain"/>
+                                <p:menu overlay="true" trigger="@previous" my="left top"
+                                        at="left bottom">
+                                    <p:menuitem value="Update" icon="pi pi-fw pi-refresh"/>
+                                    <p:menuitem value="Edit" icon="pi pi-fw pi-pencil"/>
+                                </p:menu>
+                            </div>
+                        </div>
+                        <div class="flex justify-content-between mt-3 flex-wrap">
+                            <div class="flex flex-column" style="width: 80px">
+                                <span class="mb-1 fs-xlarge">640</span> <span
+                                    class="overview-status p-1 teal-bgcolor fs-small">1420
 									Completed</span>
-							</div>
-							<div class="flex align-items-end"></div>
-						</div>
-					</div>
-				</div>
+                            </div>
+                            <div class="flex align-items-end"></div>
+                        </div>
+                    </div>
+                </div>
 
-				<div class="col-12 md:col-6 lg:col-3">
-					<div class="card overview-box flex flex-column pt-2">
-						<div class="flex align-items-center muted-text">
-							<i class="pi pi-dollar"></i>
-							<h6 class="m-0 #{app.rtl ? 'pr-2' : 'pl-2'}">Revenue</h6>
-							<div class="#{app.rtl ? 'mr-auto' : 'ml-auto'}">
-								<p:commandButton type="button" icon="pi pi-ellipsis-h"
-									styleClass="rounded-button ui-button-flat ui-button-plain" />
-								<p:menu overlay="true" trigger="@previous" my="left top"
-									at="left bottom">
-									<p:menuitem value="Update" icon="pi pi-fw pi-refresh" />
-									<p:menuitem value="Edit" icon="pi pi-fw pi-pencil" />
-								</p:menu>
-							</div>
-						</div>
-						<div class="flex justify-content-between mt-3 flex-wrap">
-							<div class="flex flex-column" style="width: 80px">
-								<span class="mb-1 fs-xlarge">$57K</span> <span
-									class="overview-status p-1 teal-bgcolor fs-small">$9,640
+                <div class="col-12 md:col-6 lg:col-3">
+                    <div class="card overview-box flex flex-column pt-2">
+                        <div class="flex align-items-center muted-text">
+                            <i class="pi pi-dollar"></i>
+                            <h6 class="m-0 #{app.rtl ? 'pr-2' : 'pl-2'}">Revenue</h6>
+                            <div class="#{app.rtl ? 'mr-auto' : 'ml-auto'}">
+                                <p:commandButton type="button" icon="pi pi-ellipsis-h"
+                                                 styleClass="rounded-button ui-button-flat ui-button-plain"/>
+                                <p:menu overlay="true" trigger="@previous" my="left top"
+                                        at="left bottom">
+                                    <p:menuitem value="Update" icon="pi pi-fw pi-refresh"/>
+                                    <p:menuitem value="Edit" icon="pi pi-fw pi-pencil"/>
+                                </p:menu>
+                            </div>
+                        </div>
+                        <div class="flex justify-content-between mt-3 flex-wrap">
+                            <div class="flex flex-column" style="width: 80px">
+                                <span class="mb-1 fs-xlarge">$57K</span> <span
+                                    class="overview-status p-1 teal-bgcolor fs-small">$9,640
 									Income</span>
-							</div>
-							<div class="flex align-items-end"></div>
-						</div>
-					</div>
-				</div>
+                            </div>
+                            <div class="flex align-items-end"></div>
+                        </div>
+                    </div>
+                </div>
 
-				<div class="col-12 md:col-6 lg:col-3">
-					<div class="card overview-box flex flex-column pt-2">
-						<div class="flex align-items-center muted-text">
-							<i class="pi pi-users"></i>
-							<h6 class="m-0 #{app.rtl ? 'pr-2' : 'pl-2'}">Customers</h6>
-							<div class="#{app.rtl ? 'mr-auto' : 'ml-auto'}">
-								<p:commandButton type="button" icon="pi pi-ellipsis-h"
-									styleClass="rounded-button ui-button-flat ui-button-plain" />
-								<p:menu overlay="true" trigger="@previous" my="left top"
-									at="left bottom">
-									<p:menuitem value="Update" icon="pi pi-fw pi-refresh" />
-									<p:menuitem value="Edit" icon="pi pi-fw pi-pencil" />
-								</p:menu>
-							</div>
-						</div>
-						<div class="flex justify-content-between mt-3 flex-wrap">
-							<div class="flex flex-column" style="width: 80px">
-								<span class="mb-1 fs-xlarge">8572</span> <span
-									class="overview-status p-1 pink-bgcolor fs-small">25402
+                <div class="col-12 md:col-6 lg:col-3">
+                    <div class="card overview-box flex flex-column pt-2">
+                        <div class="flex align-items-center muted-text">
+                            <i class="pi pi-users"></i>
+                            <h6 class="m-0 #{app.rtl ? 'pr-2' : 'pl-2'}">Customers</h6>
+                            <div class="#{app.rtl ? 'mr-auto' : 'ml-auto'}">
+                                <p:commandButton type="button" icon="pi pi-ellipsis-h"
+                                                 styleClass="rounded-button ui-button-flat ui-button-plain"/>
+                                <p:menu overlay="true" trigger="@previous" my="left top"
+                                        at="left bottom">
+                                    <p:menuitem value="Update" icon="pi pi-fw pi-refresh"/>
+                                    <p:menuitem value="Edit" icon="pi pi-fw pi-pencil"/>
+                                </p:menu>
+                            </div>
+                        </div>
+                        <div class="flex justify-content-between mt-3 flex-wrap">
+                            <div class="flex flex-column" style="width: 80px">
+                                <span class="mb-1 fs-xlarge">8572</span> <span
+                                    class="overview-status p-1 pink-bgcolor fs-small">25402
 									Registered</span>
-							</div>
-							<div class="flex align-items-end"></div>
-						</div>
-					</div>
-				</div>
+                            </div>
+                            <div class="flex align-items-end"></div>
+                        </div>
+                    </div>
+                </div>
 
-				<div class="col-12 md:col-6 lg:col-3">
-					<div class="card overview-box flex flex-column pt-2">
-						<div class="flex align-items-center muted-text">
-							<i class="pi pi-comments"></i>
-							<h6 class="m-0 #{app.rtl ? 'pr-2' : 'pl-2'}">Comments</h6>
-							<div class="#{app.rtl ? 'mr-auto' : 'ml-auto'}">
-								<p:commandButton type="button" icon="pi pi-ellipsis-h"
-									styleClass="rounded-button ui-button-flat ui-button-plain" />
-								<p:menu overlay="true" trigger="@previous" my="left top"
-									at="left bottom">
-									<p:menuitem value="Update" icon="pi pi-fw pi-refresh" />
-									<p:menuitem value="Edit" icon="pi pi-fw pi-pencil" />
-								</p:menu>
-							</div>
-						</div>
-						<div class="flex justify-content-between mt-3 flex-wrap">
-							<div class="flex flex-column" style="width: 80px">
-								<span class="mb-1 fs-xlarge">805</span> <span
-									class="overview-status p-1 teal-bgcolor fs-small">85
+                <div class="col-12 md:col-6 lg:col-3">
+                    <div class="card overview-box flex flex-column pt-2">
+                        <div class="flex align-items-center muted-text">
+                            <i class="pi pi-comments"></i>
+                            <h6 class="m-0 #{app.rtl ? 'pr-2' : 'pl-2'}">Comments</h6>
+                            <div class="#{app.rtl ? 'mr-auto' : 'ml-auto'}">
+                                <p:commandButton type="button" icon="pi pi-ellipsis-h"
+                                                 styleClass="rounded-button ui-button-flat ui-button-plain"/>
+                                <p:menu overlay="true" trigger="@previous" my="left top"
+                                        at="left bottom">
+                                    <p:menuitem value="Update" icon="pi pi-fw pi-refresh"/>
+                                    <p:menuitem value="Edit" icon="pi pi-fw pi-pencil"/>
+                                </p:menu>
+                            </div>
+                        </div>
+                        <div class="flex justify-content-between mt-3 flex-wrap">
+                            <div class="flex flex-column" style="width: 80px">
+                                <span class="mb-1 fs-xlarge">805</span> <span
+                                    class="overview-status p-1 teal-bgcolor fs-small">85
 									Responded</span>
-							</div>
-							<div class="flex align-items-end"></div>
-						</div>
-					</div>
-				</div>
+                            </div>
+                            <div class="flex align-items-end"></div>
+                        </div>
+                    </div>
+                </div>
 
-				<div class="col-12 lg:col-6">
-					<div class="card height-100">
-						<div class="card-header">
-							<h5>Contact</h5>
-							<div>
-								<p:commandButton type="button" icon="pi pi-ellipsis-h"
-									styleClass="rounded-button ui-button-flat ui-button-plain" />
-								<p:menu overlay="true" trigger="@previous" my="left top"
-									at="left bottom">
-									<p:menuitem value="Update" icon="pi pi-fw pi-refresh" />
-									<p:menuitem value="Edit" icon="pi pi-fw pi-pencil" />
-									<p:menuitem value="Delete" icon="pi pi-fw pi-trash" />
-								</p:menu>
-							</div>
-						</div>
+                <div class="col-12 lg:col-6">
+                    <div class="card height-100">
+                        <div class="card-header">
+                            <h5>Contact</h5>
+                            <div>
+                                <p:commandButton type="button" icon="pi pi-ellipsis-h"
+                                                 styleClass="rounded-button ui-button-flat ui-button-plain"/>
+                                <p:menu overlay="true" trigger="@previous" my="left top"
+                                        at="left bottom">
+                                    <p:menuitem value="Update" icon="pi pi-fw pi-refresh"/>
+                                    <p:menuitem value="Edit" icon="pi pi-fw pi-pencil"/>
+                                    <p:menuitem value="Delete" icon="pi pi-fw pi-trash"/>
+                                </p:menu>
+                            </div>
+                        </div>
 
-						<ul class="widget-list">
-							<li class="flex align-items-center py-3">
-								<div class="person-item flex align-items-center">
-									<p:graphicImage name="images/avatar/xuxuefeng.png"
-										library="demo" />
-									<div class="#{app.rtl ? 'mr-2' : 'ml-2'}">
-										<div>Xuxue Feng</div>
-										<small class="muted-text">feng@ultima.org</small>
-									</div>
-								</div> <span
-								class="person-tag indigo-bgcolor p-1 fs-small #{app.rtl ? 'mr-auto' : 'ml-auto'}">Accounting</span>
-								<span
-								class="person-tag orange-bgcolor p-1 fs-small #{app.rtl ? 'mr-2' : 'ml-2'}">Sales</span>
-							</li>
+                        <ul class="widget-list">
+                            <li class="flex align-items-center py-3">
+                                <div class="person-item flex align-items-center">
+                                    <p:graphicImage name="images/avatar/xuxuefeng.png"
+                                                    library="demo"/>
+                                    <div class="#{app.rtl ? 'mr-2' : 'ml-2'}">
+                                        <div>Xuxue Feng</div>
+                                        <small class="muted-text">feng@ultima.org</small>
+                                    </div>
+                                </div>
+                                <span
+                                        class="person-tag indigo-bgcolor p-1 fs-small #{app.rtl ? 'mr-auto' : 'ml-auto'}">Accounting</span>
+                                <span
+                                        class="person-tag orange-bgcolor p-1 fs-small #{app.rtl ? 'mr-2' : 'ml-2'}">Sales</span>
+                            </li>
 
-							<li class="flex align-items-center py-3">
-								<div class="person-item flex align-items-center">
-									<p:graphicImage name="images/avatar/elwinsharvill.png"
-										library="demo" />
-									<div class="#{app.rtl ? 'mr-2' : 'ml-2'}">
-										<div>Elwin Sharvill</div>
-										<small class="muted-text">sharvill@ultima.org</small>
-									</div>
-								</div> <span
-								class="person-tag teal-bgcolor p-1 fs-small #{app.rtl ? 'mr-auto' : 'ml-auto'}">Finance</span>
-								<span
-								class="person-tag orange-bgcolor p-1 fs-small #{app.rtl ? 'mr-2' : 'ml-2'}">Sales</span>
-							</li>
+                            <li class="flex align-items-center py-3">
+                                <div class="person-item flex align-items-center">
+                                    <p:graphicImage name="images/avatar/elwinsharvill.png"
+                                                    library="demo"/>
+                                    <div class="#{app.rtl ? 'mr-2' : 'ml-2'}">
+                                        <div>Elwin Sharvill</div>
+                                        <small class="muted-text">sharvill@ultima.org</small>
+                                    </div>
+                                </div>
+                                <span
+                                        class="person-tag teal-bgcolor p-1 fs-small #{app.rtl ? 'mr-auto' : 'ml-auto'}">Finance</span>
+                                <span
+                                        class="person-tag orange-bgcolor p-1 fs-small #{app.rtl ? 'mr-2' : 'ml-2'}">Sales</span>
+                            </li>
 
-							<li class="flex align-items-center py-3">
-								<div class="person-item flex align-items-center">
-									<p:graphicImage name="images/avatar/avatar-1.png"
-										library="demo" />
-									<div class="#{app.rtl ? 'mr-2' : 'ml-2'}">
-										<div>Anna Fali</div>
-										<small class="muted-text">fali@ultima.org</small>
-									</div>
-								</div> <span
-								class="person-tag pink-bgcolor p-1 fs-small #{app.rtl ? 'mr-auto' : 'ml-auto'}">Management</span>
-							</li>
+                            <li class="flex align-items-center py-3">
+                                <div class="person-item flex align-items-center">
+                                    <p:graphicImage name="images/avatar/avatar-1.png"
+                                                    library="demo"/>
+                                    <div class="#{app.rtl ? 'mr-2' : 'ml-2'}">
+                                        <div>Anna Fali</div>
+                                        <small class="muted-text">fali@ultima.org</small>
+                                    </div>
+                                </div>
+                                <span
+                                        class="person-tag pink-bgcolor p-1 fs-small #{app.rtl ? 'mr-auto' : 'ml-auto'}">Management</span>
+                            </li>
 
-							<li class="flex align-items-center py-3">
-								<div class="person-item flex align-items-center">
-									<p:graphicImage name="images/avatar/avatar-2.png"
-										library="demo" />
-									<div class="#{app.rtl ? 'mr-2' : 'ml-2'}">
-										<div>Jon Stone</div>
-										<small class="muted-text">stone@ultima.org</small>
-									</div>
-								</div> <span
-								class="person-tag pink-bgcolor p-1 fs-small #{app.rtl ? 'mr-auto' : 'ml-auto'}">Management</span>
-								<span
-								class="person-tag teal-bgcolor p-1 fs-small #{app.rtl ? 'mr-2' : 'ml-2'}">Finance</span>
-							</li>
+                            <li class="flex align-items-center py-3">
+                                <div class="person-item flex align-items-center">
+                                    <p:graphicImage name="images/avatar/avatar-2.png"
+                                                    library="demo"/>
+                                    <div class="#{app.rtl ? 'mr-2' : 'ml-2'}">
+                                        <div>Jon Stone</div>
+                                        <small class="muted-text">stone@ultima.org</small>
+                                    </div>
+                                </div>
+                                <span
+                                        class="person-tag pink-bgcolor p-1 fs-small #{app.rtl ? 'mr-auto' : 'ml-auto'}">Management</span>
+                                <span
+                                        class="person-tag teal-bgcolor p-1 fs-small #{app.rtl ? 'mr-2' : 'ml-2'}">Finance</span>
+                            </li>
 
-							<li class="flex align-items-center py-3">
-								<div class="person-item flex align-items-center">
-									<p:graphicImage name="images/avatar/avatar-3.png"
-										library="demo" />
-									<div class="#{app.rtl ? 'mr-2' : 'ml-2'}">
-										<div>Stephen Shaw</div>
-										<small class="muted-text">shaw@ultima.org</small>
-									</div>
-								</div> <span
-								class="person-tag teal-bgcolor p-1 fs-small #{app.rtl ? 'mr-auto' : 'ml-auto'}">Finance</span>
-							</li>
-						</ul>
-					</div>
-				</div>
+                            <li class="flex align-items-center py-3">
+                                <div class="person-item flex align-items-center">
+                                    <p:graphicImage name="images/avatar/avatar-3.png"
+                                                    library="demo"/>
+                                    <div class="#{app.rtl ? 'mr-2' : 'ml-2'}">
+                                        <div>Stephen Shaw</div>
+                                        <small class="muted-text">shaw@ultima.org</small>
+                                    </div>
+                                </div>
+                                <span
+                                        class="person-tag teal-bgcolor p-1 fs-small #{app.rtl ? 'mr-auto' : 'ml-auto'}">Finance</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
 
-				<div class="col-12 lg:col-6">
-					<div class="card height-100">
-						<div class="card-header">
-							<h5>Order Graph</h5>
-							<div>
-								<p:commandButton type="button" icon="pi pi-ellipsis-h"
-									styleClass="rounded-button ui-button-flat ui-button-plain" />
-								<p:menu overlay="true" trigger="@previous" my="left top"
-									at="left bottom">
-									<p:menuitem value="Update" icon="pi pi-fw pi-refresh" />
-									<p:menuitem value="Edit" icon="pi pi-fw pi-pencil" />
-								</p:menu>
-							</div>
-						</div>
+                <div class="col-12 lg:col-6">
+                    <div class="card height-100">
+                        <div class="card-header">
+                            <h5>Order Graph</h5>
+                            <div>
+                                <p:commandButton type="button" icon="pi pi-ellipsis-h"
+                                                 styleClass="rounded-button ui-button-flat ui-button-plain"/>
+                                <p:menu overlay="true" trigger="@previous" my="left top"
+                                        at="left bottom">
+                                    <p:menuitem value="Update" icon="pi pi-fw pi-refresh"/>
+                                    <p:menuitem value="Edit" icon="pi pi-fw pi-pencil"/>
+                                </p:menu>
+                            </div>
+                        </div>
 
-					</div>
-				</div>
+                    </div>
+                </div>
 
-				<div class="col-12 lg:col-6">
-					<div class="card height-100 widget-timeline">
-						<div class="card-header">
-							<h5>Timeline</h5>
-							<div>
-								<p:commandButton type="button" icon="pi pi-ellipsis-h"
-									styleClass="rounded-button ui-button-flat ui-button-plain" />
-								<p:menu overlay="true" trigger="@previous" my="left top"
-									at="left bottom">
-									<p:menuitem value="Update" icon="pi pi-fw pi-refresh" />
-									<p:menuitem value="Edit" icon="pi pi-fw pi-pencil" />
-								</p:menu>
-							</div>
-						</div>
+                <div class="col-12 lg:col-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Timeline</h5>
 
-
-					</div>
-				</div>
-
-				<div class="col-12 md:col-12 lg:col-6">
-					<div class="card height-100"></div>
-				</div>
-
-				<div class="col-12 lg:col-6">
-					<div class="card height-100">
+                            <p:commandButton action="#{notificacoesBean.notificar()}" process="@this" value="Testar Msg p/ Todos Usuarios Conectados"
+                                             icon="fa fa-bullhorn"
+                            />
 
 
-						<div class="card-header">
-							<h5>Chat</h5>
-							<div>
-								<p:commandButton type="button" icon="pi pi-ellipsis-h"
-									styleClass="rounded-button ui-button-flat ui-button-plain" />
-								<p:menu overlay="true" trigger="@previous" my="left top"
-									at="left bottom">
-									<p:menuitem value="View Media" icon="pi pi-fw pi-images" />
-									<p:menuitem value="Starred Messages" icon="pi pi-fw pi-star" />
-									<p:menuitem value="Search" icon="pi pi-fw pi-search" />
-								</p:menu>
-							</div>
-						</div>
+                        </div>
 
-					</div>
-				</div>
 
-				<div class="col-12 lg:col-3">
-					<div class="card height-100">
-						<div class="card-header">
-							<h5>Activity</h5>
-							<div>
-								<p:commandButton type="button" icon="pi pi-ellipsis-h"
-									styleClass="rounded-button ui-button-flat ui-button-plain" />
-								<p:menu overlay="true" trigger="@previous" my="left top"
-									at="left bottom">
-									<p:menuitem value="Update" icon="pi pi-fw pi-refresh" />
-									<p:menuitem value="Edit" icon="pi pi-fw pi-pencil" />
-								</p:menu>
-							</div>
-						</div>
+                    </div>
+                </div>
 
-						<ul class="widget-activity">
-							<li>
-								<div class="activity-item flex flex-column">
-									<div class="activity-title mb-1">Income</div>
-									<div class="activity-subtext mb-2">30 November, 16.20</div>
-									<p:progressBar value="50" />
-								</div>
-							</li>
-							<li>
-								<div class="activity-item flex flex-column">
-									<div class="activity-title mb-1">Tax</div>
-									<div class="activity-subtext mb-2">1 December, 15.27</div>
-									<p:progressBar value="15" />
-								</div>
-							</li>
-							<li>
-								<div class="activity-item flex flex-column">
-									<div class="activity-title mb-1">Invoices</div>
-									<div class="activity-subtext mb-2">1 December, 15.28</div>
-									<p:progressBar value="78" />
-								</div>
-							</li>
-							<li>
-								<div class="activity-item flex flex-column">
-									<div class="activity-title mb-1">Expanses</div>
-									<div class="activity-subtext mb-2">3 December, 09.15</div>
-									<p:progressBar value="66" />
-								</div>
-							</li>
-							<li>
-								<div class="activity-item flex flex-column">
-									<div class="activity-title mb-1">Bonus</div>
-									<div class="activity-subtext mb-2">1 December, 23.55</div>
-									<p:progressBar value="85" />
-								</div>
-							</li>
-							<li>
-								<div class="activity-item flex flex-column">
-									<div class="activity-title mb-1">Revenue</div>
-									<div class="activity-subtext mb-2">30 November, 16.20</div>
-									<p:progressBar value="54" />
-								</div>
-							</li>
-						</ul>
-					</div>
-				</div>
+                <div class="col-12 md:col-12 lg:col-6">
+                    <div class="card height-100"></div>
+                </div>
 
-				<div class="col-12 lg:col-3">
-					<div class="card height-100">
-						<div class="card-header">
-							<h5>Best Sellers</h5>
-							<div>
-								<p:commandButton type="button" icon="pi pi-ellipsis-h"
-									styleClass="rounded-button ui-button-flat ui-button-plain" />
-								<p:menu overlay="true" trigger="@previous" my="left top"
-									at="left bottom">
-									<p:menuitem value="Update" icon="pi pi-fw pi-refresh" />
-									<p:menuitem value="Edit" icon="pi pi-fw pi-pencil" />
-									<p:menuitem value="Delete" icon="pi pi-fw pi-trash" />
-								</p:menu>
-							</div>
-						</div>
-						<ul class="widget-bestsellers">
-							<li>
-								<div class="bestseller-item flex align-items-center p-3 mb-2">
-									<p:graphicImage name="images/product/blue-band.jpg"
-										library="demo" styleClass="#{app.rtl ? 'ml-3' : 'mr-3'}" />
-									<span>Blue Band</span> <span class="item-button"><a
-										href="#"><i class="pi pi-chevron-right"></i></a></span>
-								</div>
+                <div class="col-12 lg:col-6">
+                    <div class="card height-100">
 
-								<div class="bestseller-item flex align-items-center p-3 mb-2">
-									<p:graphicImage name="images/product/bracelet.jpg"
-										library="demo" styleClass="#{app.rtl ? 'ml-3' : 'mr-3'}" />
-									<span>Bracelet</span> <span class="item-button"><a
-										href="#"><i class="pi pi-chevron-right"></i></a></span>
-								</div>
 
-								<div class="bestseller-item flex align-items-center p-3 mb-2">
-									<p:graphicImage name="images/product/black-watch.jpg"
-										library="demo" styleClass="#{app.rtl ? 'ml-3' : 'mr-3'}" />
-									<span>Black Watch</span> <span class="item-button"><a
-										href="#"><i class="pi pi-chevron-right"></i></a></span>
-								</div>
+                        <div class="card-header">
+                            <h5>Chat</h5>
+                            <div>
+                                <p:commandButton type="button" icon="pi pi-ellipsis-h"
+                                                 styleClass="rounded-button ui-button-flat ui-button-plain"/>
+                                <p:menu overlay="true" trigger="@previous" my="left top"
+                                        at="left bottom">
+                                    <p:menuitem value="View Media" icon="pi pi-fw pi-images"/>
+                                    <p:menuitem value="Starred Messages" icon="pi pi-fw pi-star"/>
+                                    <p:menuitem value="Search" icon="pi pi-fw pi-search"/>
+                                </p:menu>
+                            </div>
+                        </div>
 
-								<div class="bestseller-item flex align-items-center p-3 mb-2">
-									<p:graphicImage name="images/product/bamboo-watch.jpg"
-										library="demo" styleClass="#{app.rtl ? 'ml-3' : 'mr-3'}" />
-									<span>Bamboo Watch</span> <span class="item-button"><a
-										href="#"><i class="pi pi-chevron-right"></i></a></span>
-								</div>
+                    </div>
+                </div>
 
-								<div class="bestseller-item flex align-items-center p-3 mb-2">
-									<p:graphicImage name="images/product/blue-t-shirt.jpg"
-										library="demo" styleClass="#{app.rtl ? 'ml-3' : 'mr-3'}" />
-									<span>Blue T-Shirt</span> <span class="item-button"><a
-										href="#"><i class="pi pi-chevron-right"></i></a></span>
-								</div>
+                <div class="col-12 lg:col-3">
+                    <div class="card height-100">
+                        <div class="card-header">
+                            <h5>Activity</h5>
+                            <div>
+                                <p:commandButton type="button" icon="pi pi-ellipsis-h"
+                                                 styleClass="rounded-button ui-button-flat ui-button-plain"/>
+                                <p:menu overlay="true" trigger="@previous" my="left top"
+                                        at="left bottom">
+                                    <p:menuitem value="Update" icon="pi pi-fw pi-refresh"/>
+                                    <p:menuitem value="Edit" icon="pi pi-fw pi-pencil"/>
+                                </p:menu>
+                            </div>
+                        </div>
 
-								<div class="bestseller-item flex align-items-center p-3 mb-2">
-									<p:graphicImage name="images/product/game-controller.jpg"
-										library="demo" styleClass="#{app.rtl ? 'ml-3' : 'mr-3'}" />
-									<span>Game Controller</span> <span class="item-button"><a
-										href="#"><i class="pi pi-chevron-right"></i></a></span>
-								</div>
+                        <ul class="widget-activity">
+                            <li>
+                                <div class="activity-item flex flex-column">
+                                    <div class="activity-title mb-1">Income</div>
+                                    <div class="activity-subtext mb-2">30 November, 16.20</div>
+                                    <p:progressBar value="50"/>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="activity-item flex flex-column">
+                                    <div class="activity-title mb-1">Tax</div>
+                                    <div class="activity-subtext mb-2">1 December, 15.27</div>
+                                    <p:progressBar value="15"/>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="activity-item flex flex-column">
+                                    <div class="activity-title mb-1">Invoices</div>
+                                    <div class="activity-subtext mb-2">1 December, 15.28</div>
+                                    <p:progressBar value="78"/>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="activity-item flex flex-column">
+                                    <div class="activity-title mb-1">Expanses</div>
+                                    <div class="activity-subtext mb-2">3 December, 09.15</div>
+                                    <p:progressBar value="66"/>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="activity-item flex flex-column">
+                                    <div class="activity-title mb-1">Bonus</div>
+                                    <div class="activity-subtext mb-2">1 December, 23.55</div>
+                                    <p:progressBar value="85"/>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="activity-item flex flex-column">
+                                    <div class="activity-title mb-1">Revenue</div>
+                                    <div class="activity-subtext mb-2">30 November, 16.20</div>
+                                    <p:progressBar value="54"/>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
 
-								<div class="bestseller-item flex align-items-center p-3 mb-2">
-									<p:graphicImage name="images/product/gold-phone-case.jpg"
-										library="demo" styleClass="#{app.rtl ? 'ml-3' : 'mr-3'}" />
-									<span>Phone Case</span> <span class="item-button"><a
-										href="#"><i class="pi pi-chevron-right"></i></a></span>
-								</div>
+                <div class="col-12 lg:col-3">
+                    <div class="card height-100">
+                        <div class="card-header">
+                            <h5>Best Sellers</h5>
+                            <div>
+                                <p:commandButton type="button" icon="pi pi-ellipsis-h"
+                                                 styleClass="rounded-button ui-button-flat ui-button-plain"/>
+                                <p:menu overlay="true" trigger="@previous" my="left top"
+                                        at="left bottom">
+                                    <p:menuitem value="Update" icon="pi pi-fw pi-refresh"/>
+                                    <p:menuitem value="Edit" icon="pi pi-fw pi-pencil"/>
+                                    <p:menuitem value="Delete" icon="pi pi-fw pi-trash"/>
+                                </p:menu>
+                            </div>
+                        </div>
+                        <ul class="widget-bestsellers">
+                            <li>
+                                <div class="bestseller-item flex align-items-center p-3 mb-2">
+                                    <p:graphicImage name="images/product/blue-band.jpg"
+                                                    library="demo" styleClass="#{app.rtl ? 'ml-3' : 'mr-3'}"/>
+                                    <span>Blue Band</span> <span class="item-button"><a
+                                        href="#"><i class="pi pi-chevron-right"></i></a></span>
+                                </div>
 
-								<div class="bestseller-item flex align-items-center p-3 mb-2">
-									<p:graphicImage name="images/product/purple-t-shirt.jpg"
-										library="demo" styleClass="#{app.rtl ? 'ml-3' : 'mr-3'}" />
-									<span>Purple T-Shirt</span> <span class="item-button"><a
-										href="#"><i class="pi pi-chevron-right"></i></a></span>
-								</div>
-							</li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</h:form>
-	</ui:define>
+                                <div class="bestseller-item flex align-items-center p-3 mb-2">
+                                    <p:graphicImage name="images/product/bracelet.jpg"
+                                                    library="demo" styleClass="#{app.rtl ? 'ml-3' : 'mr-3'}"/>
+                                    <span>Bracelet</span> <span class="item-button"><a
+                                        href="#"><i class="pi pi-chevron-right"></i></a></span>
+                                </div>
+
+                                <div class="bestseller-item flex align-items-center p-3 mb-2">
+                                    <p:graphicImage name="images/product/black-watch.jpg"
+                                                    library="demo" styleClass="#{app.rtl ? 'ml-3' : 'mr-3'}"/>
+                                    <span>Black Watch</span> <span class="item-button"><a
+                                        href="#"><i class="pi pi-chevron-right"></i></a></span>
+                                </div>
+
+                                <div class="bestseller-item flex align-items-center p-3 mb-2">
+                                    <p:graphicImage name="images/product/bamboo-watch.jpg"
+                                                    library="demo" styleClass="#{app.rtl ? 'ml-3' : 'mr-3'}"/>
+                                    <span>Bamboo Watch</span> <span class="item-button"><a
+                                        href="#"><i class="pi pi-chevron-right"></i></a></span>
+                                </div>
+
+                                <div class="bestseller-item flex align-items-center p-3 mb-2">
+                                    <p:graphicImage name="images/product/blue-t-shirt.jpg"
+                                                    library="demo" styleClass="#{app.rtl ? 'ml-3' : 'mr-3'}"/>
+                                    <span>Blue T-Shirt</span> <span class="item-button"><a
+                                        href="#"><i class="pi pi-chevron-right"></i></a></span>
+                                </div>
+
+                                <div class="bestseller-item flex align-items-center p-3 mb-2">
+                                    <p:graphicImage name="images/product/game-controller.jpg"
+                                                    library="demo" styleClass="#{app.rtl ? 'ml-3' : 'mr-3'}"/>
+                                    <span>Game Controller</span> <span class="item-button"><a
+                                        href="#"><i class="pi pi-chevron-right"></i></a></span>
+                                </div>
+
+                                <div class="bestseller-item flex align-items-center p-3 mb-2">
+                                    <p:graphicImage name="images/product/gold-phone-case.jpg"
+                                                    library="demo" styleClass="#{app.rtl ? 'ml-3' : 'mr-3'}"/>
+                                    <span>Phone Case</span> <span class="item-button"><a
+                                        href="#"><i class="pi pi-chevron-right"></i></a></span>
+                                </div>
+
+                                <div class="bestseller-item flex align-items-center p-3 mb-2">
+                                    <p:graphicImage name="images/product/purple-t-shirt.jpg"
+                                                    library="demo" styleClass="#{app.rtl ? 'ml-3' : 'mr-3'}"/>
+                                    <span>Purple T-Shirt</span> <span class="item-button"><a
+                                        href="#"><i class="pi pi-chevron-right"></i></a></span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
 
 </ui:composition>
