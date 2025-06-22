@@ -25,8 +25,8 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import br.gov.pe.ses.starter.entidades.publico.Unidade;
-import br.gov.pe.ses.starter.security.Seguranca;
 import br.gov.pe.ses.starter.security.UtilUserDetails;
+import br.gov.pe.ses.starter.security.checkerView.UsuarioContext;
 import br.gov.pe.ses.starter.service.interfaces.UsuarioService;
 import br.gov.pe.ses.starter.util.jsf.FacesUtil;
 import br.gov.pe.ses.starter.util.jsf.UtilMensagens;
@@ -49,7 +49,7 @@ public class UtilSessionBean implements Serializable {
 	private List<Unidade> hospitaisVinculadosUsuario = new ArrayList<Unidade>();
 
 	@Autowired
-	private Seguranca seguranca;
+	private UsuarioContext seguranca;
 
 	@Lazy
 	@Autowired
@@ -171,7 +171,7 @@ public class UtilSessionBean implements Serializable {
 
 		try {
 
-			seguranca.atualizarPermissoes();
+			//seguranca.atualizarPermissoes();
 			limparParametros();
 
 			usuarioService.alterarHospitalPadrao(FacesUtil.getUsuarioLogado());

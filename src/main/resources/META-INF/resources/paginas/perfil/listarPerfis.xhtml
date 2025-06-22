@@ -34,7 +34,7 @@
 						
 							<p:commandButton value="Novo" icon="pi pi-plus"
 								action="#{listarPerfisBean.incluirPerfil}" process="@this"
-								rendered="#{seguranca.podeIncluirPerfil}"
+								rendered="#{perfilChecker.podeIncluir}"
 								styleClass="ui-button-success mr-2 mb-2" />	
 							
 						</f:facet>
@@ -94,7 +94,7 @@
 
 								<p:menuButton value="Ações">
 
-									<p:menuitem rendered="#{seguranca.podeVisualizarPerfil}"
+									<p:menuitem rendered="#{perfilChecker.podeVisualizar}"
 										value="Visualizar" action="#{listarPerfisBean.visualizar}"
 										icon="pi pi-eye" process="@this">
 
@@ -104,7 +104,7 @@
 									</p:menuitem>
 
 									<p:menuitem value="Alterar" icon="pi pi-file-edit"
-										rendered="#{seguranca.podeAlterarPerfil}" process="@this"
+										rendered="#{perfilChecker.podeAlterar}" process="@this"
 										action="#{listarPerfisBean.alterar}">
 										<f:setPropertyActionListener value="#{perfil}"
 											target="#{listarPerfisBean.perfilSelecionado}" />
@@ -113,7 +113,7 @@
 									<p:separator />
 
 									<p:menuitem value="#{perfil.ativo ? 'Desativar' : 'Ativar'}"
-										rendered="#{seguranca.podeAlterarPerfil}"
+										rendered="#{perfilChecker.podeAlterar}"
 										icon="pi pi-thumbs-down-fill" process="@this" update="@form"
 										action="#{listarPerfisBean.alterarStatus}">
 

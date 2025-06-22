@@ -32,7 +32,7 @@
 
 							<p:commandButton value="Novo" icon="pi pi-plus"
 								action="#{listarHospitaisBean.incluirHospital}" process="@this"
-								rendered="#{seguranca.podeIncluirHospital}"
+								rendered="#{unidadeChecker.podeIncluir}"
 								styleClass="ui-button-success mr-2 mb-2" />
 
 						</f:facet>
@@ -119,7 +119,7 @@
 								<p:menuButton value="Ações">
 
 									<p:menuitem value="Visualizar" icon="pi pi-eye"
-										rendered="#{seguranca.podeVisualizarHospital}" process="@this"
+										rendered="#{unidadeChecker.podeVisualizar}" process="@this"
 										action="#{listarHospitaisBean.visualizar}">
 
 										<f:setPropertyActionListener value="#{hospital}"
@@ -128,7 +128,7 @@
 									</p:menuitem>
 
 									<p:menuitem value="Alterar" icon="pi pi-file-edit"
-										rendered="#{seguranca.podeAlterarHospital}" process="@this"
+										rendered="#{unidadeChecker.podeAlterar}" process="@this"
 										action="#{listarHospitaisBean.alterar}">
 
 										<f:setPropertyActionListener value="#{hospital}"

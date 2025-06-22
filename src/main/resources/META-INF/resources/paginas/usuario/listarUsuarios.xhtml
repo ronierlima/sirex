@@ -32,7 +32,7 @@
 
 							<p:commandButton value="Novo" icon="pi pi-plus"
 								action="#{listarUsuariosBean.incluirUsuario}" process="@this"
-								rendered="#{seguranca.incluiUsuario}"
+								rendered="#{usuarioChecker.podeIncluir}"
 								styleClass="ui-button-success mr-2 mb-2" />
 
 						</f:facet>
@@ -122,21 +122,21 @@
 								<p:menuButton value="Ações">
 
 									<p:menuitem value="Visualizar" icon="pi pi-eye"
-										rendered="#{seguranca.podeVisualizaUsuario}" process="@this"
+										rendered="#{usuarioChecker.podeVisualizar}" process="@this"
 										action="#{listarUsuariosBean.visualizar}">
 										<f:setPropertyActionListener value="#{usuario}"
 											target="#{listarUsuariosBean.usuarioSelecionado}" />
 									</p:menuitem>
 
 									<p:menuitem value="Alterar" icon="pi pi-file-edit"
-										rendered="#{seguranca.podeAlterarUsuario}" process="@this"
+										rendered="#{usuarioChecker.podeAlterar}" process="@this"
 										action="#{listarUsuariosBean.alterar}">
 										<f:setPropertyActionListener value="#{usuario}"
 											target="#{listarUsuariosBean.usuarioSelecionado}" />
 									</p:menuitem>
 
 									<p:menuitem value="#{usuario.ativo ? 'Desativar' : 'Ativar'}"
-										rendered="#{seguranca.podeAlterarUsuario}"
+										rendered="#{usuarioChecker.podeAlterar}"
 										icon="pi pi-thumbs-#{usuario.ativo ? 'down':'up'}-fill"
 										process="@this" update="@form"
 										action="#{listarUsuariosBean.alterarStatus}">

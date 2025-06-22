@@ -24,13 +24,7 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 import org.springframework.security.web.context.RequestAttributeSecurityContextRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-
-import static br.gov.pe.ses.starter.util.Funcionalidades.gerenciarSistema;
-import static br.gov.pe.ses.starter.util.Funcionalidades.visualizarPaciente;
-import static br.gov.pe.ses.starter.util.Funcionalidades.incluirPaciente;
-import static br.gov.pe.ses.starter.util.Funcionalidades.alterarPaciente;
-import static br.gov.pe.ses.starter.util.Funcionalidades.exportarUsuariosCadastrados;
-
+import br.gov.pe.ses.starter.enums.Permissao;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -70,70 +64,105 @@ public class SecurityConfig {
 	
 	@Bean
 	@SuppressWarnings("removal")
-    SecurityFilterChain configure(HttpSecurity http) throws Exception {
-		
-		JsfLoginUrlAuthenticationEntryPoint jsfLoginEntry = new JsfLoginUrlAuthenticationEntryPoint();
-		jsfLoginEntry.setLoginFormUrl("/login.xhtml");
-		jsfLoginEntry.setRedirectStrategy(new JsfRedirectStrategy());
+	SecurityFilterChain configure(HttpSecurity http) throws Exception {
 
-		JsfAccessDeniedHandler jsfDeniedEntry = new JsfAccessDeniedHandler();
-		jsfDeniedEntry.setLoginPath("/acessoNegado.xhtml");
-		jsfDeniedEntry.setContextRelative(true);
-    	
-		http.csrf().disable().headers().frameOptions().sameOrigin();
-		http.csrf((csrf) -> csrf.disable());
-		
-		http.sessionManagement(sessionManagement -> sessionManagement
-                .sessionFixation(sessionFixation -> sessionFixation.migrateSession())
-                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                .maximumSessions(1)
-                .sessionRegistry(sessionRegistry())
-                .expiredUrl("/login.xhtml?sessionExpired=true"));
-		
-		http.authorizeHttpRequests((authorize) -> authorize.requestMatchers(ENDPOINTS_WHITELIST).permitAll()
-			.requestMatchers("/paginas/principal.xhtml").authenticated()			
-			.requestMatchers("/paginas/usuario/listarUsuarios.xhtml","/paginas/usuario/visualizarUsuario.xhtml").hasAnyRole("USUARIO_VISUALIZAR")
-			.requestMatchers("/paginas/usuario/cadastrarUsuario.xhtml").hasAnyRole("USUARIO_INCLUIR", "USUARIO_ALTERAR")
-			.requestMatchers("/paginas/perfil/listarPerfis.xhtml").hasAnyRole("PERFIL_VISUALIZAR")
-			.requestMatchers("/paginas/perfil/incluirPerfil.xhtml").hasAnyRole("PERFIL_INCLUIR", "PERFIL_ALTERAR")	
-			
-			.requestMatchers("/paginas/perfil/listarHospitais.xhtml").hasAnyRole("UNIDADE_VISUALIZAR")
-			
-			.requestMatchers("/paginas/configuracao/configurar.xhtml").hasAnyRole(gerenciarSistema)	
-			.requestMatchers("/paginas/paciente/listarPacientes.xhtml").hasAnyRole(visualizarPaciente)	
-			.requestMatchers("/paginas/paciente/incluirPaciente.xhtml").hasAnyRole(incluirPaciente, alterarPaciente)	
-			.requestMatchers("/paginas/relatorios/usuarios/exportarUsuariosCadastrados.xhtml").hasRole(exportarUsuariosCadastrados)	
-			
-			.anyRequest().authenticated())							
-			.formLogin((formLogin) -> formLogin
-					.usernameParameter("usuario")
-					.passwordParameter("senha")	
-					.loginPage("/login.xhtml")
-					.loginProcessingUrl("/login.xhtml")
-					.failureUrl("/login.xhtml?invalid=true")
-					.defaultSuccessUrl("/paginas/principal.xhtml", true))
-				
-		.logout((logout) -> logout					
-					.logoutUrl("/logout").logoutSuccessUrl("/login.xhtml").deleteCookies("remember-me")
-					.deleteCookies("JSESSIONID").invalidateHttpSession(true)
-					.logoutRequestMatcher(new AntPathRequestMatcher("/logout")))
-		
-		.exceptionHandling(exceptionHandling -> exceptionHandling
-                .accessDeniedPage("/acessoNegado.xhtml")
-                .authenticationEntryPoint(jsfLoginEntry)
-                .accessDeniedHandler(jsfDeniedEntry))
-		
-		.securityContext((securityContext) -> securityContext
-				.securityContextRepository(new DelegatingSecurityContextRepository(
-					new RequestAttributeSecurityContextRepository(),
-					new HttpSessionSecurityContextRepository()
-				))
-			)
-			.authenticationManager(authenticationManager());
-		
-		return http.build();
-	
-    }
+	    JsfLoginUrlAuthenticationEntryPoint jsfLoginEntry = new JsfLoginUrlAuthenticationEntryPoint();
+	    jsfLoginEntry.setLoginFormUrl("/login.xhtml");
+	    jsfLoginEntry.setRedirectStrategy(new JsfRedirectStrategy());
+
+	    JsfAccessDeniedHandler jsfDeniedEntry = new JsfAccessDeniedHandler();
+	    jsfDeniedEntry.setLoginPath("/acessoNegado.xhtml");
+	    jsfDeniedEntry.setContextRelative(true);
+
+	    http.csrf().disable()
+	        .headers().frameOptions().sameOrigin();
+	    http.csrf(csrf -> csrf.disable());
+
+	    http.sessionManagement(sessionManagement -> sessionManagement
+	            .sessionFixation(sessionFixation -> sessionFixation.migrateSession())
+	            .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+	            .maximumSessions(1)
+	            .sessionRegistry(sessionRegistry())
+	            .expiredUrl("/login.xhtml?sessionExpired=true"));
+
+	    http.authorizeHttpRequests(authorize -> authorize
+	        .requestMatchers(ENDPOINTS_WHITELIST).permitAll()
+
+	        .requestMatchers("/paginas/principal.xhtml").authenticated()
+
+	        .requestMatchers("/paginas/usuario/listarUsuarios.xhtml", "/paginas/usuario/visualizarUsuario.xhtml")
+	            .hasAnyRole(Permissao.VISUALIZAR_USUARIO.getRole())
+
+	        .requestMatchers("/paginas/usuario/cadastrarUsuario.xhtml")
+	            .hasAnyRole(
+	                Permissao.INCLUIR_USUARIO.getRole(),
+	                Permissao.ALTERAR_USUARIO.getRole()
+	            )
+
+	        .requestMatchers("/paginas/perfil/listarPerfis.xhtml")
+	            .hasAnyRole(Permissao.VISUALIZAR_PERFIL.getRole())
+
+	        .requestMatchers("/paginas/perfil/incluirPerfil.xhtml")
+	            .hasAnyRole(
+	                Permissao.INCLUIR_PERFIL.getRole(),
+	                Permissao.ALTERAR_PERFIL.getRole()
+	            )
+
+	        .requestMatchers("/paginas/perfil/listarHospitais.xhtml")
+	            .hasAnyRole(Permissao.VISUALIZAR_UNIDADE.getRole())
+
+	        .requestMatchers("/paginas/configuracao/configurar.xhtml")
+	            .hasAnyRole(Permissao.GERENCIAR_SISTEMA.getRole())
+
+	        .requestMatchers("/paginas/paciente/listarPacientes.xhtml")
+	            .hasAnyRole(Permissao.VISUALIZAR_PACIENTE.getRole())
+
+	        .requestMatchers("/paginas/paciente/incluirPaciente.xhtml")
+	            .hasAnyRole(
+	                Permissao.INCLUIR_PACIENTE.getRole(),
+	                Permissao.ALTERAR_PACIENTE.getRole()
+	            )
+
+	        .requestMatchers("/paginas/relatorios/usuarios/exportarUsuariosCadastrados.xhtml")
+	            .hasRole(Permissao.EXPORTAR_USUARIOS_CADASTRADOS.getRole())
+
+	        .anyRequest().authenticated()
+	    )
+
+	    .formLogin(formLogin -> formLogin
+	        .usernameParameter("usuario")
+	        .passwordParameter("senha")
+	        .loginPage("/login.xhtml")
+	        .loginProcessingUrl("/login.xhtml")
+	        .failureUrl("/login.xhtml?invalid=true")
+	        .defaultSuccessUrl("/paginas/principal.xhtml", true))
+
+	    .logout(logout -> logout
+	        .logoutUrl("/logout")
+	        .logoutSuccessUrl("/login.xhtml")
+	        .deleteCookies("remember-me", "JSESSIONID")
+	        .invalidateHttpSession(true)
+	        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+	    )
+
+	    .exceptionHandling(exceptionHandling -> exceptionHandling
+	        .accessDeniedPage("/acessoNegado.xhtml")
+	        .authenticationEntryPoint(jsfLoginEntry)
+	        .accessDeniedHandler(jsfDeniedEntry)
+	    )
+
+	    .securityContext(securityContext -> securityContext
+	        .securityContextRepository(new DelegatingSecurityContextRepository(
+	            new RequestAttributeSecurityContextRepository(),
+	            new HttpSessionSecurityContextRepository()
+	        ))
+	    )
+
+	    .authenticationManager(authenticationManager());
+
+	    return http.build();
+	}
+
 
 	@Bean
 	AuthenticationManager authenticationManager() {

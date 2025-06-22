@@ -5,7 +5,7 @@
 	xmlns:p="http://primefaces.org/ui"
 	template="/WEB-INF/layout/template.xhtml">
 
-	<ui:define name="title">Listar Hospitais</ui:define>
+	<ui:define name="title">Listar Tipos</ui:define>
 
 	<ui:define name="breadcrumb">
 		<f:metadata>
@@ -31,7 +31,7 @@
 
 							<p:button outcome="/paginas/tipos/incluirTipos.xhtml" value="Novo"
 								icon="pi pi-plus" process="@this"
-								rendered="#{seguranca.podeIncluirHospital}"
+								rendered="#{tipoUnidadeChecker.podeIncluir}"
 								styleClass="ui-button-success mr-2 mb-2" />
 
 						</f:facet>

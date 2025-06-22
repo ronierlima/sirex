@@ -23,22 +23,22 @@
                     </p:submenu>
                     <p:submenu id="m_uikit" label="Cadastros" icon="pi pi-fw pi-star">
                    		<p:submenu id="m_uikit_2" label="Básicos" icon="pi pi-fw pi-star">
-	                        <p:menuitem id="m_formlayout_1" value="Pacientes" icon="fa fa-fw fa-hospital-user" url="/paginas/paciente/listarPacientes.xhtml" rendered="#{seguranca.exibeMenuPacientes}" />
-	                        <p:menuitem id="m_formlayout" value="Usuários" icon="fa fa-fw fa-users" url="/paginas/usuario/listarUsuarios.xhtml" rendered="#{seguranca.exibeMenuUsuarios}" />
-	                        <p:menuitem id="m_input" value="Perfis" icon="fa fa-fw fa-user-edit" url="/paginas/perfil/listarPerfis.xhtml" rendered="#{seguranca.exibeMenuPerfis}"/> 
-	                        <p:menuitem id="m_floatlabel" value="Unidades" icon="fa fa-fw fa-hospital" url="/paginas/hospital/listarHospitais.xhtml" rendered="#{seguranca.exibeMenuHospitais}"/>
-	                        <p:menuitem id="m_tp_1" value="Tipos de Unidades" icon="pi pi-flag-fill" url="/paginas/tipos/listarTipos.xhtml" rendered="#{seguranca.exibeMenuTipos}" />
+	                        <p:menuitem id="m_formlayout_1" value="Pacientes" icon="fa fa-fw fa-hospital-user" url="/paginas/paciente/listarPacientes.xhtml" rendered="#{menuChecker.exibirPacientes}" />
+	                        <p:menuitem id="m_formlayout" value="Usuários" icon="fa fa-fw fa-users" url="/paginas/usuario/listarUsuarios.xhtml" rendered="#{menuChecker.exibirUsuarios}" />
+	                        <p:menuitem id="m_input" value="Perfis" icon="fa fa-fw fa-user-edit" url="/paginas/perfil/listarPerfis.xhtml" rendered="#{menuChecker.exibirPerfis}"/>
+	                        <p:menuitem id="m_floatlabel" value="Unidades" icon="fa fa-fw fa-hospital" url="/paginas/hospital/listarHospitais.xhtml" rendered="#{menuChecker.exibirUnidades}"/>
+	                        <p:menuitem id="m_tp_1" value="Tipos de Unidades" icon="pi pi-flag-fill" url="/paginas/tipos/listarTipos.xhtml" rendered="#{menuChecker.exibirTiposUnidade}" />
                         </p:submenu>
                     </p:submenu> 
                     
-                    <p:submenu id="m_rel" label="Relatórios" rendered="#{seguranca.exibeMenuRelatorios}">
-                   		<p:submenu id="m_rel_1" label="Usuários" icon="pi pi-file-pdf" rendered="#{seguranca.exportaUsuariosCadastrados}" >
+                    <p:submenu id="m_rel" label="Relatórios" rendered="#{menuChecker.exibirRelatorios}">
+                   		<p:submenu id="m_rel_1" label="Usuários" icon="pi pi-file-pdf" rendered="#{menuChecker.exportarUsuariosCadastrados}" >
 	                        <p:menuitem id="m_rel_2" value="Cadastrados" icon="fa fa-fw fa-group" url="/paginas/relatorios/usuarios/exportarUsuariosCadastrados.xhtml" />
                         </p:submenu>
                     </p:submenu> 
                     
-                     <p:submenu id="adm" label="Administração" rendered="#{seguranca.exibeMenuAdministracao}">
-                        <p:menuitem id="adm_1" value="Sistema" icon="pi pi-cog" url="/paginas/configuracao/configurar.xhtml" rendered="#{seguranca.gerenciaSistema}" />
+                     <p:submenu id="adm" label="Administração" rendered="#{menuChecker.exibirConfiguracoes}">
+                        <p:menuitem id="adm_1" value="Sistema" icon="pi pi-cog" url="/paginas/configuracao/configurar.xhtml" rendered="#{menuChecker.gerenciarSistema}" />
                     </p:submenu> 
                     
              

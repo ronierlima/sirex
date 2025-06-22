@@ -32,7 +32,7 @@
 
                             <p:button value="Novo" icon="pi pi-plus"
                                       outcome="/paginas/paciente/incluirPaciente.xhtml"
-                                      process="@this" rendered="#{seguranca.podeIncluirPaciente}"
+                                      process="@this" rendered="#{pacienteChecker.podeIncluir}"
                                       styleClass="ui-button-success mr-2 mb-2"/>
 
                         </f:facet>

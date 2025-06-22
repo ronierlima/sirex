@@ -6,7 +6,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import br.gov.pe.ses.starter.security.Seguranca;
 import br.gov.pe.ses.starter.service.interfaces.UsuarioService;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.servlet.http.HttpSession;
@@ -23,9 +22,6 @@ public class TopBarMBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Integer totalGeralNotificacoes = 0;
-
-	@Autowired
-	private Seguranca seguranca;
 
 	@Autowired
 	private ModelMapper modelMapper;
