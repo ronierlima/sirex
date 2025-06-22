@@ -47,12 +47,11 @@ public class HospitalLazyDataModel extends LazyDataModel<Unidade> {
 
 			Page<Unidade> buscaPaginada = hospitalService.buscaPaginada(filtro);
 
+			this.datasource.clear();
 			if (buscaPaginada != null) {
 				this.setRowCount((int) buscaPaginada.getTotalElements());
+				this.datasource.addAll(buscaPaginada.getContent());
 			}
-
-			this.datasource.clear();
-			this.datasource.addAll(buscaPaginada.getContent());
 
 			if (this.datasource.isEmpty()) {
 				UtilMensagens.mensagemError("Sem Resultados");
