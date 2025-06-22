@@ -32,7 +32,7 @@
 									</span>										
 									<p:commandButton value="Cadastrar Paciente" icon="pi pi-plus"
 								action="#{pesquisarPacientesMBean.incluirPaciente}"
-								process="@this" rendered="#{seguranca.podeIncluirPaciente}"
+								process="@this" rendered="#{pacienteChecker.podeIncluir}"
 								styleClass="ui-button-success mr-2 mb-2" />
 										
 								</div>
