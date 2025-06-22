@@ -143,8 +143,6 @@ public class UtilSessionBean implements Serializable {
 
 		try {
 
-			disparadorDeEventos.publishEvent(new UnidadeAlteradaEvent(FacesUtil.getUnidadeSelecionado()));
-
 			limparParametros();
 
 			usuarioService.alterarHospitalPadrao(FacesUtil.getUsuarioLogado());
@@ -155,6 +153,7 @@ public class UtilSessionBean implements Serializable {
 					.append(FacesUtil.getUnidadeSelecionado().getSigla())
 					.append(". Certas funcionalidades podem não estar disponíveis.");
 
+			disparadorDeEventos.publishEvent(new UnidadeAlteradaEvent(FacesUtil.getUnidadeSelecionado()));
 			UtilMensagens.msgInfoAposRequest(texto.toString());
 			FacesUtil.redirect("/paginas/principal.xhtml?faces-redirect=true");
 
