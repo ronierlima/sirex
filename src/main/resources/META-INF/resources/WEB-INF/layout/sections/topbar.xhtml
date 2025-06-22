@@ -6,6 +6,21 @@
     xmlns:p="http://primefaces.org/ui"
     xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
 
+
+    <h:head>
+
+        <script src="/layout/js/sockjs.min.js" />
+        <script src="/layout/js/stomp.min.js" />
+        <script src="/layout/js/app.js" />
+
+        <h:outputScript>
+
+            connect();
+
+        </h:outputScript>
+
+    </h:head>
+
     <h:form id="layoutTopbarForm">
         <div class="layout-topbar shadow-4">
             <div class="layout-topbar-left">
@@ -65,6 +80,11 @@
                         </p:submenu>
                     </p:megaMenu>
                 </div>
+
+                <div class="col-3" style="text-align:center">
+                    <ui:include src="/includes/banner_ambiente.xhtml" />
+                </div>
+
                 <div class="layout-topbar-actions-right">
                     <ul class="layout-topbar-items">
                         <li class="layout-topbar-item layout-search-item">
