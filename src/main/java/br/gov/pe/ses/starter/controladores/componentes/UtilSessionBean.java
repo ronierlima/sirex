@@ -8,7 +8,6 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,10 +20,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 import br.gov.pe.ses.starter.entidades.publico.Unidade;
+import br.gov.pe.ses.starter.events.UnidadeAlteradaEvent;
 import br.gov.pe.ses.starter.security.UtilUserDetails;
 import br.gov.pe.ses.starter.security.checkerView.UsuarioContext;
 import br.gov.pe.ses.starter.service.interfaces.UsuarioService;
@@ -33,9 +33,11 @@ import br.gov.pe.ses.starter.util.jsf.UtilMensagens;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import jakarta.enterprise.context.SessionScoped;
+import lombok.Data;
 
 @Component
 @SessionScoped
+@Data
 public class UtilSessionBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -51,9 +53,8 @@ public class UtilSessionBean implements Serializable {
 	@Autowired
 	private UsuarioContext seguranca;
 
-	@Lazy
 	@Autowired
-	private TopBarMBean topBarMBean;
+	private ApplicationEventPublisher disparadorDeEventos;
 
 	@Autowired
 	private UsuarioService usuarioService;
@@ -72,15 +73,15 @@ public class UtilSessionBean implements Serializable {
 		return objeto;
 	}
 
-	@PreDestroy
-	public void limparParametros() {
-		parametros.clear();
-	}
-
 	@PostConstruct
 	public void inicializar() {
 		imagemUsuario = getImagemIniciaisUsuario();
 		listarHospitaisVinculadosUsuario();
+	}
+
+	@PreDestroy
+	public void limparParametros() {
+		parametros.clear();
 	}
 
 	public StreamedContent getImagemIniciaisUsuario() {
@@ -111,7 +112,7 @@ public class UtilSessionBean implements Serializable {
 			return DefaultStreamedContent.builder().stream(() -> new ByteArrayInputStream(baos.toByteArray()))
 					.contentType("image/png").build();
 
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -134,44 +135,16 @@ public class UtilSessionBean implements Serializable {
 
 	}
 
-	public StreamedContent getImagemUsuario() {
-		return imagemUsuario;
-	}
-
-	public void setImagemUsuario(StreamedContent imagemUsuario) {
-		this.imagemUsuario = imagemUsuario;
-	}
-
-	public List<Unidade> getHospitaisVinculadosUsuario() {
-		return hospitaisVinculadosUsuario;
-	}
-
-	public void setHospitaisVinculadosUsuario(List<Unidade> hospitaisVinculadosUsuario) {
-		this.hospitaisVinculadosUsuario = hospitaisVinculadosUsuario;
-	}
-
 	protected void listarHospitaisVinculadosUsuario() {
-
-		hospitaisVinculadosUsuario = new ArrayList<Unidade>();
-
-		try {
-
-			hospitaisVinculadosUsuario = seguranca.getUsuarioLogado().getUsuario().getHospitaisAssociados();
-
-		} catch (Exception e) {
-
-			UtilMensagens.mensagemError("Erro ao buscar os hospitais vinculados ao usuário!");
-			e.printStackTrace();
-
-		}
-
+		hospitaisVinculadosUsuario = seguranca.getUsuarioLogado().getUsuario().getHospitaisAssociados();
 	}
 
 	public void onHospitalChange() {
 
 		try {
 
-			//seguranca.atualizarPermissoes();
+			disparadorDeEventos.publishEvent(new UnidadeAlteradaEvent(FacesUtil.getUnidadeSelecionado()));
+
 			limparParametros();
 
 			usuarioService.alterarHospitalPadrao(FacesUtil.getUsuarioLogado());
@@ -188,12 +161,6 @@ public class UtilSessionBean implements Serializable {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-	}
-
-	public boolean isRenderizaSeletorHospitais() {
-
-		return !hospitaisVinculadosUsuario.isEmpty() && hospitaisVinculadosUsuario.size() > 1;
 
 	}
 

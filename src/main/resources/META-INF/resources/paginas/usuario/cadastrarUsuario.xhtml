@@ -112,7 +112,7 @@
 										value="Selecione a Unidade para Vinculação dos Perfis" />
 									<div class="ui-inputgroup" style="margin-bottom: 10px">
 										<p:selectOneMenu converter="omnifaces.SelectItemsConverter"
-											disabled="#{!seguranca.incluiUsuario}" filter="true"
+											disabled="#{!usuarioChecker.podeIncluir}" filter="true"
 											filterMatchMode="contains" id="hospital"
 											value="#{cadastroUsuarioBean.hospitalSelecionado}">
 											<p:ajax listener="#{cadastroUsuarioBean.onHospitalChange}"
