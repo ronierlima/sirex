@@ -69,19 +69,28 @@
 
 <h:body styleClass="pages-body login-page flex flex-column">
 
+	<div class="topbar p-3 flex justify-content-between flex-row align-items-center">
+		<div class="topbar-left ml-3 flex">
+			<div class="logo">
+				<p:graphicImage id="app-logo3" cache="false" value="#{dadosSistemaBean.logoPrincipal}" />
+			</div>
+		</div>
+		<div class="topbar-right mr-3 flex">
+			<p:button value="SES/PE" styleClass="ui-button-flat ui-button-plain topbar-button" />
+		</div>
+	</div>
+
 	<div class="align-self-center mt-auto mb-auto">
 		<div class="pages-panel card flex flex-column">
 			<div class="pages-header px-3 py-1">
-				<p:graphicImage id="app-logo" cache="false" value="#{dadosSistemaBean.logoPrincipal}" />
+				<h2>#{dadosSistemaBean.dadosSistema.sigla}</h2>
 			</div>
 
-			<h4>
-				#{dadosSistemaBean.dadosSistema.nome}
-			</h4>
+			<h4>#{dadosSistemaBean.dadosSistema.nome}</h4>
 
 			<div class="pages-detail mb-6 px-6">
 				<h:outputText value="#{msg['login.bemvindo']}" />
-				<ui:include src="/includes/banner_ambiente.xhtml"/>				
+				<ui:include src="/includes/banner_ambiente.xhtml"/>
 			</div>
 			<h:form id="login" prependId="false">
 
