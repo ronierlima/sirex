@@ -24,7 +24,7 @@ import lombok.Data;
 @Component
 @ViewScoped
 @Data
-public class IncluirHospitalBean implements Serializable {
+public class IncluirUnidadeBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 

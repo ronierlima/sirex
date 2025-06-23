@@ -16,7 +16,7 @@ import lombok.Data;
 @Component
 @ViewScoped
 @Data
-public class VisualizarHospitalBean implements Serializable {
+public class VisualizarUnidadeBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 

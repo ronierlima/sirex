@@ -30,19 +30,19 @@
 							<div class="field col-12 md:col-4">
 								<p:outputLabel for="name2" value="Nome" />
 								<p:inputText id="name2"
-									value="#{incluirHospitalBean.hospital.nome}" required="true" />
+											 value="#{incluirUnidadeBean.hospital.nome}" required="true" />
 							</div>
 
 							<div class="field col-12 md:col-4">
 								<p:outputLabel for="cnpj" value="CNPJ" />
 								<p:inputMask slotChar="" mask="99.999.999/9999-99" id="cnpj"
-									value="#{incluirHospitalBean.hospital.cnpj}" required="true" />
+											 value="#{incluirUnidadeBean.hospital.cnpj}" required="true" />
 							</div>
 
 							<div class="field col-12 md:col-4">
 								<p:outputLabel value="Sigla" />
 								<p:inputText type="text" required="true"
-									value="#{incluirHospitalBean.hospital.sigla}" />
+									value="#{incluirUnidadeBean.hospital.sigla}" />
 							</div>
 
 							<div class="field col-12 md:col-3">
@@ -50,14 +50,14 @@
 								<p:outputLabel value="Tipo de Unidade" for="@next" />
 								<p:selectOneMenu required="true"
 									requiredMessage="Tipo é obrigatório"
-									value="#{incluirHospitalBean.hospital.tipo}"
+									value="#{incluirUnidadeBean.hospital.tipo}"
 									converter="omnifaces.SelectItemsConverter">
 
 									<f:selectItem itemLabel="Selecione" itemValue="#{null}"
 										noSelectionOption="true" />
 
-									<f:selectItems value="#{incluirHospitalBean.tipos}" var="tipo"
-										itemLabel="#{tipo.descricao}" itemValue="#{tipo}" />
+									<f:selectItems value="#{incluirUnidadeBean.tipos}" var="tipo"
+												   itemLabel="#{tipo.descricao}" itemValue="#{tipo}" />
 
 								</p:selectOneMenu>
 							</div>
@@ -67,17 +67,17 @@
 								<p:outputLabel value="Macro" for="@next" />
 								<p:selectOneMenu required="true"
 									requiredMessage="Macro é obrigatório"
-									value="#{incluirHospitalBean.hospital.municipio.gere.macroRegiao}"
+									value="#{incluirUnidadeBean.hospital.municipio.gere.macroRegiao}"
 									converter="omnifaces.SelectItemsConverter">
 
 									<p:ajax process="@this"
-										listener="#{incluirHospitalBean.aoSelecionarMacro}"
+										listener="#{incluirUnidadeBean.aoSelecionarMacro}"
 										update="geres" />
 
 									<f:selectItem itemLabel="Selecione" itemValue="#{null}"
 										noSelectionOption="true" />
 
-									<f:selectItems value="#{incluirHospitalBean.macros}"
+									<f:selectItems value="#{incluirUnidadeBean.macros}"
 										var="macro" itemLabel="#{macro.nome}" itemValue="#{macro}" />
 
 								</p:selectOneMenu>
@@ -88,19 +88,19 @@
 								<p:outputLabel value="Geres" for="@next" />
 								<p:selectOneMenu id="geres" required="true"
 									requiredMessage="Geres é obrigatório"
-									disabled="#{empty incluirHospitalBean.geres}"
-									value="#{incluirHospitalBean.hospital.municipio.gere}"
+									disabled="#{empty incluirUnidadeBean.geres}"
+									value="#{incluirUnidadeBean.hospital.municipio.gere}"
 									converter="omnifaces.SelectItemsConverter">
 
 									<p:ajax process="@this"
-										listener="#{incluirHospitalBean.aoSelecionarGere}"
+										listener="#{incluirUnidadeBean.aoSelecionarGere}"
 										update="municipios" />
 
 									<f:selectItem itemLabel="Selecione" itemValue="#{null}"
 										noSelectionOption="true" />
 
-									<f:selectItems value="#{incluirHospitalBean.geres}" var="gere"
-										itemLabel="#{gere.nome}" itemValue="#{gere}" />
+									<f:selectItems value="#{incluirUnidadeBean.geres}" var="gere"
+												   itemLabel="#{gere.nome}" itemValue="#{gere}" />
 
 								</p:selectOneMenu>
 							</div>
@@ -109,17 +109,17 @@
 
 								<p:outputLabel value="Municipio" for="@next" />
 								<p:selectOneMenu id="municipios"
-									disabled="#{empty incluirHospitalBean.geres}" required="true"
-									filter="true" filterMatchMode="contains" filterNormalize="true"
-									requiredMessage="Municipio é obrigatório"
-									value="#{incluirHospitalBean.hospital.municipio}"
-									converter="omnifaces.SelectItemsConverter">
+												 disabled="#{empty incluirUnidadeBean.geres}" required="true"
+												 filter="true" filterMatchMode="contains" filterNormalize="true"
+												 requiredMessage="Municipio é obrigatório"
+												 value="#{incluirUnidadeBean.hospital.municipio}"
+												 converter="omnifaces.SelectItemsConverter">
 
 
 									<f:selectItem itemLabel="Selecione" itemValue="#{null}"
 										noSelectionOption="true" />
 
-									<f:selectItems value="#{incluirHospitalBean.municipios}"
+									<f:selectItems value="#{incluirUnidadeBean.municipios}"
 										var="municipio" itemLabel="#{municipio.nome}"
 										itemValue="#{municipio}" />
 
@@ -133,8 +133,8 @@
 
 							<div class="col-2">
 								<p:commandButton value="Salvar" icon="pi pi-save"
-									action="#{incluirHospitalBean.cadastrar}" update="@form"
-									styleClass="mr-2 mb-2" />
+												 action="#{incluirUnidadeBean.cadastrar}" update="@form"
+												 styleClass="mr-2 mb-2" />
 							</div>
 
 							<div class="col-2">
