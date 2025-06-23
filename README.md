@@ -91,7 +91,7 @@ Este projeto utiliza o **PrimeFaces Ultima 7.0**, um moderno e responsivo **temp
 
 1. 🐘 No **PostgreSQL 16**, crie um banco chamado `starter`.  
 2. ✏️ Edite o `application.properties` com suas credenciais.  
-3. ▶️ Inicie a aplicação. Ela estará disponível na **porta 80**.  
+3. ▶️ Inicie a aplicação. Ela estará disponível na **porta 8080**.  
 4. 🛫 **Primeira execução:** ao subir a aplicação pela primeira vez, o **Flyway** será executado automaticamente, **criando e populando todas as tabelas necessárias** para o funcionamento inicial do sistema, inclusive dados essenciais para importações e testes.
 
 
