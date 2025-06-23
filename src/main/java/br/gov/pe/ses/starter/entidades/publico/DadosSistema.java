@@ -44,6 +44,9 @@ public class DadosSistema extends BaseEntity implements Serializable {
 	@NotEmpty(message = "A Logo do Rodapé é obrigatório!")
 	private byte[] logoRodape;
 
+	@NotEmpty(message = "O Manual é obrigatório!")
+	private byte[] manual;
+
 	@Version
 	@NotAudited
 	@Column(name = "versao", columnDefinition = "integer default 0")

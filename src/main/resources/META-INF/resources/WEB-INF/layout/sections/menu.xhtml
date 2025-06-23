@@ -45,10 +45,14 @@
                     
                      <p:submenu id="adm" label="Administração" rendered="#{menuChecker.exibirConfiguracoes}">
                         <p:menuitem id="adm_1" value="Sistema" icon="pi pi-cog" url="/paginas/configuracao/configurar.xhtml" rendered="#{menuChecker.gerenciarSistema}" />
-                    </p:submenu> 
+                    </p:submenu>
+
+
 
                     <p:submenu id="im_sair" label="Opções" >                    	
                     	<p:menuitem id="im_sair_2"  onclick="window.location.href = '#{request.contextPath}/logout'" value="Sair" icon="fa fa-fw fa fa-sign-out" url="#" />
+                        <p:menuitem id="manual" value="Manual do Sistema" icon="pi pi-file-pdf" target="_blank" url="#{request.contextPath}/manual" />
+
                     </p:submenu>
                 </pu:menu>
                                                             

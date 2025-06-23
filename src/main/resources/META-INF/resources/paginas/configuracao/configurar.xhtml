@@ -1,67 +1,75 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui"
-	template="/WEB-INF/layout/template.xhtml">
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/layout/template.xhtml">
 
-	<ui:define name="title">Configurar Sistema</ui:define>
+    <ui:define name="title">Configurar Sistema</ui:define>
 
-	<ui:define name="breadcrumb">
-		<f:metadata>
-			<f:viewParam name="paginaAnterior" value="/paginas/principal.xhtml" />
-			<f:viewParam name="homeOutcome" value="/paginas/principal.xhtml" />
-			<f:viewParam name="value" value="Administração,Sistema" />
-			<f:viewParam name="outcome"
-				value="/paginas/configuracao/configurar.xhtml" />
-		</f:metadata>
-	</ui:define>
-	<ui:define name="content">
-		<h:form>
-			<div class="grid">
-				<div class="col-12">
-					<div class="card">
-						<h5>Configurar Sistema</h5>
-						<div class="ui-fluid formgrid grid">
-							<div class="field col-12 md:col-6">
-								<p:outputLabel for="@next" value="Nome do Sistema" />
-								<p:inputText value="#{dadosSistemaBean.dadosSistema.nome}" />
-							</div>
-							<div class="field col-12 md:col-6">
-								<p:outputLabel for="@next" value="Sigla" />
-								<p:inputText value="#{dadosSistemaBean.dadosSistema.sigla}" />
-							</div>
+    <ui:define name="breadcrumb">
+        <f:metadata>
+            <f:viewParam name="paginaAnterior" value="/paginas/principal.xhtml"/>
+            <f:viewParam name="homeOutcome" value="/paginas/principal.xhtml"/>
+            <f:viewParam name="value" value="Administração,Sistema"/>
+            <f:viewParam name="outcome"
+                         value="/paginas/configuracao/configurar.xhtml"/>
+        </f:metadata>
+    </ui:define>
+    <ui:define name="content">
+        <h:form>
+            <div class="grid">
+                <div class="col-12">
+                    <div class="card">
+                        <h5>Configurar Sistema</h5>
+                        <div class="ui-fluid formgrid grid">
+                            <div class="field col-12 md:col-6">
+                                <p:outputLabel for="@next" value="Nome do Sistema"/>
+                                <p:inputText value="#{dadosSistemaBean.dadosSistema.nome}"/>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <p:outputLabel for="@next" value="Sigla"/>
+                                <p:inputText value="#{dadosSistemaBean.dadosSistema.sigla}"/>
+                            </div>
 
-							<div class="field col-12 md:col-6">
-								<p:fileUpload label="Logo Principal" uploadLabel="Enviar"
-									cancelLabel="Cancelar" required="true"
-									listener="#{dadosSistemaBean.aoAnexarLogoPrincipal}"
-									auto="true" mode="advanced" dragDropSupport="false"
-									multiple="false" sizeLimit="1000000"
-									allowTypes="/(\.|\/)(svg)$/" style="width:100%" />
-							</div>
+                            <div class="field col-12 md:col-6">
+                                <p:fileUpload label="Logo Principal" uploadLabel="Enviar"
+                                              cancelLabel="Cancelar" required="true"
+                                              listener="#{dadosSistemaBean.aoAnexarLogoPrincipal}"
+                                              auto="true" mode="advanced" dragDropSupport="false"
+                                              multiple="false" sizeLimit="1000000"
+                                              allowTypes="/(\.|\/)(svg)$/" style="width:100%"/>
+                            </div>
 
-							<div class="field col-12 md:col-6">
-								<p:fileUpload label="Rodapé" uploadLabel="Enviar" auto="true"
-									cancelLabel="Cancelar" required="true"
-									listener="#{dadosSistemaBean.aoAnexarRodape}" mode="advanced"
-									dragDropSupport="false" multiple="false" sizeLimit="1000000"
-									allowTypes="/(\.|\/)(svg)$/" style="width:100%" />
-							</div>
+                            <div class="field col-12 md:col-6">
+                                <p:fileUpload label="Rodapé" uploadLabel="Enviar" auto="true"
+                                              cancelLabel="Cancelar" required="true"
+                                              listener="#{dadosSistemaBean.aoAnexarRodape}" mode="advanced"
+                                              dragDropSupport="false" multiple="false" sizeLimit="1000000"
+                                              allowTypes="/(\.|\/)(svg)$/" style="width:100%"/>
+                            </div>
 
-							<div class="field col-12">
-								<p:commandButton value="Salvar" icon="pi pi-save"
-									action="#{dadosSistemaBean.atualizar}" update="@form"
-									styleClass="mr-2 mb-2" />
-							</div>
+                            <div class="field col-12 md:col-12">
+                                <p:fileUpload label="Manual" uploadLabel="Enviar" auto="true"
+                                              cancelLabel="Cancelar" required="true"
+                                              listener="#{dadosSistemaBean.aoAnexarManual}" mode="advanced"
+                                              dragDropSupport="false" multiple="false" sizeLimit="3000000"
+                                              allowTypes="/(\.|\/)(pdf)$/" style="width:100%"/>
+                            </div>
 
-						</div>
-					</div>
-				</div>
-			</div>
-		</h:form>
-	</ui:define>
+                            <div class="field col-12">
+                                <p:commandButton value="Salvar" icon="pi pi-save"
+                                                 action="#{dadosSistemaBean.atualizar}" update="@form"
+                                                 styleClass="mr-2 mb-2"/>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
 
 
 </ui:composition>

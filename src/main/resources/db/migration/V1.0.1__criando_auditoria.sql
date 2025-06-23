@@ -255,6 +255,8 @@ CREATE TABLE auditoria.dados_sistema_aud (
 	data_alteracao_mod bool NULL,
 	data_inclusao timestamp(6) NULL,
 	data_inclusao_mod bool NULL,
+    manual bytea NULL,
+    manual_mod bool NULL,
 	logo_principal bytea NULL,
 	logo_principal_mod bool NULL,
 	logo_rodape bytea NULL,

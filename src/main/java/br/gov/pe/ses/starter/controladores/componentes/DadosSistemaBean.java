@@ -1,8 +1,11 @@
 package br.gov.pe.ses.starter.controladores.componentes;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.Serializable;
 
+import jakarta.faces.context.ExternalContext;
+import jakarta.servlet.http.HttpServletResponse;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
@@ -31,6 +34,9 @@ public class DadosSistemaBean implements Serializable {
 
 	@Autowired
 	private DadosSistemaService dadosSistemaService;
+
+	@Autowired
+	private ExternalContext externalContext;
 
 	public DadosSistemaBean() {
 
@@ -63,9 +69,25 @@ public class DadosSistemaBean implements Serializable {
 				.contentType("image/svg+xml").build();
 	}
 
+	public StreamedContent getManual() {
+
+		FacesContext context = FacesContext.getCurrentInstance();
+		if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {
+			return new DefaultStreamedContent();
+		}
+
+		return DefaultStreamedContent.builder().stream(() -> new ByteArrayInputStream(dadosSistema.getManual()))
+				.contentType("application/pdf").build();
+	}
+
 	public void atualizar() throws NegocioException {
 		dadosSistema = dadosSistemaService.atualizar(dadosSistema);
 		UtilMensagens.addInfoMessageGrowl("Sucesso", "Operação Realizada");
+	}
+
+	public void aoAnexarManual(FileUploadEvent event) throws NegocioException {
+		dadosSistema.setManual(event.getFile().getContent());
+		UtilMensagens.addInfoMessageGrowl("Sucesso", "Documento Anexado");
 	}
 
 	public void aoAnexarLogoPrincipal(FileUploadEvent event) throws NegocioException {
@@ -77,5 +99,6 @@ public class DadosSistemaBean implements Serializable {
 		dadosSistema.setLogoRodape(event.getFile().getContent());
 		UtilMensagens.addInfoMessageGrowl("Sucesso", "Documento Anexado");
 	}
+
 
 }
