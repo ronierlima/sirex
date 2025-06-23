@@ -11,7 +11,7 @@ public class PdfController {
     @Autowired
     private DadosSistemaBean dadosSistemaBean;
 
-    @GetMapping("/manual")
+    @GetMapping("/pdf/manual")
     public ResponseEntity<byte[]> getManual() {
         byte[] pdf = dadosSistemaBean.getDadosSistema().getManual();
 
