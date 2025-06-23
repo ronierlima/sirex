@@ -38,7 +38,7 @@
                     </p:submenu>
 
                     <p:submenu id="m_real_time" label="Real Time" >
-                        <p:menuitem id="m_real_time_2" value="Emitir" action="#{notificacoesBean.notificar()}"
+                        <p:menuitem id="m_real_time_2" value="Emitir Mensagem" action="#{notificacoesBean.notificar()}"
                                     title="Ao clicar o sistema emitirá uma msg para todos os usuarios conectados"
                                     process="@this" icon="fa fa-fw fa-signal" />
                     </p:submenu>
@@ -46,9 +46,7 @@
                      <p:submenu id="adm" label="Administração" rendered="#{menuChecker.exibirConfiguracoes}">
                         <p:menuitem id="adm_1" value="Sistema" icon="pi pi-cog" url="/paginas/configuracao/configurar.xhtml" rendered="#{menuChecker.gerenciarSistema}" />
                     </p:submenu> 
-                    
-             
-                    
+
                     <p:submenu id="im_sair" label="Opções" >                    	
                     	<p:menuitem id="im_sair_2"  onclick="window.location.href = '#{request.contextPath}/logout'" value="Sair" icon="fa fa-fw fa fa-sign-out" url="#" />
                     </p:submenu>
