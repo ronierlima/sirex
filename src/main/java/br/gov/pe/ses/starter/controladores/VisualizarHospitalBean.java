@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 import br.gov.pe.ses.starter.controladores.componentes.UtilSessionBean;
 import br.gov.pe.ses.starter.entidades.publico.Unidade;
-import br.gov.pe.ses.starter.service.interfaces.HospitalService;
+import br.gov.pe.ses.starter.service.interfaces.UnidadeService;
 import br.gov.pe.ses.starter.util.jsf.FacesUtil;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
@@ -23,7 +23,7 @@ public class VisualizarHospitalBean implements Serializable {
 	private Unidade hospital;
 
 	@Autowired
-	private HospitalService hospitalService;
+	private UnidadeService hospitalService;
 	
 	@Autowired
 	private UtilSessionBean utilSessionBean;
@@ -34,7 +34,7 @@ public class VisualizarHospitalBean implements Serializable {
 			hospital = (Unidade) utilSessionBean.getParametro("hospitalSelecionado");
 			hospital = hospitalService.porIdComDependencias(hospital.getId());
 		} catch (Exception e) {
-			FacesUtil.redirect("/paginas/hospital/listarHospitais.xhtml?faces-redirect=true");
+			FacesUtil.redirect("/paginas/unidade/listarUnidades.xhtml?faces-redirect=true");
 		}
 	}
 

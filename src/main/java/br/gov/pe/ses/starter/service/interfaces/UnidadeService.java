@@ -4,16 +4,16 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 
-import br.gov.pe.ses.starter.dto.HospitalFiltroDTO;
+import br.gov.pe.ses.starter.dto.UnidadeFiltroDTO;
 import br.gov.pe.ses.starter.entidades.publico.Gere;
 import br.gov.pe.ses.starter.entidades.publico.Unidade;
 import br.gov.pe.ses.starter.entidades.publico.MacroRegiao;
 import br.gov.pe.ses.starter.entidades.publico.Municipio;
 import br.gov.pe.ses.starter.exception.NegocioException;
 
-public interface HospitalService {
+public interface UnidadeService {
 
-	public Page<Unidade> buscaPaginada(HospitalFiltroDTO filtro);
+	public Page<Unidade> buscaPaginada(UnidadeFiltroDTO filtro);
 
 	public Unidade porIdComDependencias(Long id);
 

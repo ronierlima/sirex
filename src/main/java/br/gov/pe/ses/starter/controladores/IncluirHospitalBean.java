@@ -13,7 +13,7 @@ import br.gov.pe.ses.starter.entidades.publico.Municipio;
 import br.gov.pe.ses.starter.entidades.publico.TipoUnidade;
 import br.gov.pe.ses.starter.entidades.publico.Unidade;
 import br.gov.pe.ses.starter.exception.NegocioException;
-import br.gov.pe.ses.starter.service.interfaces.HospitalService;
+import br.gov.pe.ses.starter.service.interfaces.UnidadeService;
 import br.gov.pe.ses.starter.service.interfaces.TipoUnidadeService;
 import br.gov.pe.ses.starter.util.jsf.FacesUtil;
 import br.gov.pe.ses.starter.util.jsf.UtilMensagens;
@@ -42,7 +42,7 @@ public class IncluirHospitalBean implements Serializable {
 	public List<Municipio> municipios;
 
 	@Autowired
-	private HospitalService hospitalService;
+	private UnidadeService hospitalService;
 
 	@Autowired
 	private UtilSessionBean utilSessionBean;
@@ -85,8 +85,8 @@ public class IncluirHospitalBean implements Serializable {
 		try {
 			hospitalService.cadastrar(hospital);
 			inicializar();
-			UtilMensagens.msgInfoAposRequest("Hospital Cadastrado");
-			FacesUtil.redirect("/paginas/hospital/listarHospitais.xhtml?faces-redirect=true");
+			UtilMensagens.msgInfoAposRequest("Unidade Cadastrada");
+			FacesUtil.redirect("/paginas/unidade/listarUnidades.xhtml?faces-redirect=true");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

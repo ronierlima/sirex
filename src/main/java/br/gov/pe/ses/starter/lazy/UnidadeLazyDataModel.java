@@ -10,23 +10,23 @@ import org.primefaces.model.SortMeta;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import br.gov.pe.ses.starter.dto.HospitalFiltroDTO;
+import br.gov.pe.ses.starter.dto.UnidadeFiltroDTO;
 import br.gov.pe.ses.starter.entidades.publico.Unidade;
-import br.gov.pe.ses.starter.service.interfaces.HospitalService;
+import br.gov.pe.ses.starter.service.interfaces.UnidadeService;
 import br.gov.pe.ses.starter.util.jsf.UtilMensagens;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Service
 @RequiredArgsConstructor
-public class HospitalLazyDataModel extends LazyDataModel<Unidade> {
+public class UnidadeLazyDataModel extends LazyDataModel<Unidade> {
 
 	private static final long serialVersionUID = 1L;
 
 	@Setter
-	private HospitalFiltroDTO filtro;
+	private UnidadeFiltroDTO filtro;
 
-	private final HospitalService hospitalService;
+	private final UnidadeService hospitalService;
 
 	private List<Unidade> datasource = new ArrayList<>();
 

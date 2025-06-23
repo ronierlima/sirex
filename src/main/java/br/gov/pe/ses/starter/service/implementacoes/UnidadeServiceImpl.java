@@ -17,7 +17,7 @@ import br.gov.pe.ses.starter.data.repository.MacroRepository;
 import br.gov.pe.ses.starter.data.repository.MunicipioRepository;
 import br.gov.pe.ses.starter.data.specifications.HospitalEspecification;
 import br.gov.pe.ses.starter.data.specifications.OrdenacaoUtil;
-import br.gov.pe.ses.starter.dto.HospitalFiltroDTO;
+import br.gov.pe.ses.starter.dto.UnidadeFiltroDTO;
 import br.gov.pe.ses.starter.entidades.publico.Funcionalidade;
 import br.gov.pe.ses.starter.entidades.publico.Gere;
 import br.gov.pe.ses.starter.entidades.publico.Unidade;
@@ -25,13 +25,13 @@ import br.gov.pe.ses.starter.entidades.publico.MacroRegiao;
 import br.gov.pe.ses.starter.entidades.publico.Municipio;
 import br.gov.pe.ses.starter.exception.NegocioException;
 import br.gov.pe.ses.starter.service.interfaces.FuncionalidadeService;
-import br.gov.pe.ses.starter.service.interfaces.HospitalService;
+import br.gov.pe.ses.starter.service.interfaces.UnidadeService;
 import br.gov.pe.ses.starter.util.jsf.UtilMensagens;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class HospitalServiceImpl implements HospitalService {
+public class UnidadeServiceImpl implements UnidadeService {
 
 	private final UnidadeRepository hospitalRepository;
 
@@ -44,7 +44,7 @@ public class HospitalServiceImpl implements HospitalService {
 	private final FuncionalidadeService funcionalidadeService;
 
 	@Override
-	public Page<Unidade> buscaPaginada(HospitalFiltroDTO filtro) {
+	public Page<Unidade> buscaPaginada(UnidadeFiltroDTO filtro) {
 
 		Sort ordenacao = Sort.by(Sort.Order.desc("id"));
 

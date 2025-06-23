@@ -14,7 +14,7 @@ import br.gov.pe.ses.starter.entidades.publico.Perfil;
 import br.gov.pe.ses.starter.entidades.publico.Unidade;
 import br.gov.pe.ses.starter.entidades.publico.Usuario;
 import br.gov.pe.ses.starter.exception.NegocioException;
-import br.gov.pe.ses.starter.service.interfaces.HospitalService;
+import br.gov.pe.ses.starter.service.interfaces.UnidadeService;
 import br.gov.pe.ses.starter.service.interfaces.PerfilService;
 import br.gov.pe.ses.starter.service.interfaces.UsuarioService;
 import br.gov.pe.ses.starter.util.jsf.FacesUtil;
@@ -43,7 +43,7 @@ public class CadastroUsuarioBean implements Serializable {
 	private UsuarioService usuarioService;
 
 	@Autowired
-	private HospitalService hospitalService;
+	private UnidadeService hospitalService;
 
 	@Autowired
 	private PerfilService perfilService;

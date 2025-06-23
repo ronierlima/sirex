@@ -108,7 +108,7 @@ public class SecurityConfig {
 	                Permissao.ALTERAR_PERFIL.getRole()
 	            )
 
-	        .requestMatchers("/paginas/perfil/listarHospitais.xhtml")
+	        .requestMatchers("/paginas/unidade/listarUnidades.xhtml")
 	            .hasAnyRole(Permissao.VISUALIZAR_UNIDADE.getRole())
 
 	        .requestMatchers("/paginas/configuracao/configurar.xhtml")

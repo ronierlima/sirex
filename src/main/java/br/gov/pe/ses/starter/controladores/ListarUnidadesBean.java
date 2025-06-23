@@ -2,15 +2,15 @@ package br.gov.pe.ses.starter.controladores;
 
 import java.io.Serializable;
 
+import br.gov.pe.ses.starter.lazy.UnidadeLazyDataModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.gov.pe.ses.starter.controladores.componentes.UtilSessionBean;
-import br.gov.pe.ses.starter.dto.HospitalFiltroDTO;
+import br.gov.pe.ses.starter.dto.UnidadeFiltroDTO;
 import br.gov.pe.ses.starter.entidades.publico.Unidade;
 import br.gov.pe.ses.starter.exception.NegocioException;
-import br.gov.pe.ses.starter.lazy.HospitalLazyDataModel;
-import br.gov.pe.ses.starter.service.interfaces.HospitalService;
+import br.gov.pe.ses.starter.service.interfaces.UnidadeService;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import lombok.Data;
@@ -18,31 +18,31 @@ import lombok.Data;
 @Component
 @ViewScoped
 @Data
-public class ListarHospitaisBean implements Serializable {
+public class ListarUnidadesBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private HospitalFiltroDTO filtro;
+	private UnidadeFiltroDTO filtro;
 
-	private Unidade hospitalSelecionado;
-
-	@Autowired
-	private HospitalService hospitalService;
+	private Unidade unidadeSelecionada;
 
 	@Autowired
-	private HospitalLazyDataModel model;
-	
+	private UnidadeService unidadeService;
+
+	@Autowired
+	private UnidadeLazyDataModel model;
+
 	@Autowired
 	private UtilSessionBean utilSessionBean;
 
-	public ListarHospitaisBean() {
+	public ListarUnidadesBean() {
 
 	}
 
 	@PostConstruct
 	public void inicializar() {
-		hospitalSelecionado = new Unidade();
-		filtro = new HospitalFiltroDTO();
+		unidadeSelecionada = new Unidade();
+		filtro = new UnidadeFiltroDTO();
 		pesquisar();
 	}
 
@@ -51,23 +51,23 @@ public class ListarHospitaisBean implements Serializable {
 	}
 
 	public void alterarStatus() throws NegocioException {
-		hospitalService.alterarStatus(hospitalSelecionado);
+		unidadeService.alterarStatus(unidadeSelecionada);
 		inicializar();
 	}
 
 	public String alterar() {
-		utilSessionBean.addParametro("hospitalSelecionado", hospitalSelecionado);
-		return "/paginas/hospital/incluirHospital.xhtml?faces-redirect=true";
+		utilSessionBean.addParametro("hospitalSelecionado", unidadeSelecionada);
+		return "/paginas/unidade/incluirUnidade.xhtml?faces-redirect=true";
 	}
 
 	public String visualizar() {
-		utilSessionBean.addParametro("hospitalSelecionado", hospitalSelecionado);
-		return "/paginas/hospital/visualizarHospital.xhtml?faces-redirect=true";
+		utilSessionBean.addParametro("hospitalSelecionado", unidadeSelecionada);
+		return "/paginas/unidade/visualizarUnidade.xhtml?faces-redirect=true";
 	}
 	
 	public String incluirHospital() {
 		utilSessionBean.limparParametros();
-		return "/paginas/hospital/incluirHospital.xhtml?faces-redirect=true";
+		return "/paginas/unidade/incluirUnidade.xhtml?faces-redirect=true";
 	}
 
 }

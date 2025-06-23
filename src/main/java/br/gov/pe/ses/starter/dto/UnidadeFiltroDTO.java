@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class HospitalFiltroDTO {
+public class UnidadeFiltroDTO {
 	
 	private int first;
 	

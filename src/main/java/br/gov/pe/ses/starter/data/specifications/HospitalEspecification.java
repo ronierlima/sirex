@@ -5,14 +5,14 @@ import java.util.List;
 
 import org.springframework.data.jpa.domain.Specification;
 
-import br.gov.pe.ses.starter.dto.HospitalFiltroDTO;
+import br.gov.pe.ses.starter.dto.UnidadeFiltroDTO;
 import br.gov.pe.ses.starter.entidades.publico.Unidade;
 import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.criteria.Predicate;
 
 public class HospitalEspecification {
 
-	public static Specification<Unidade> build(HospitalFiltroDTO filtro) {
+	public static Specification<Unidade> build(UnidadeFiltroDTO filtro) {
 
 		return (root, query, criteriaBuilder) -> {
 
