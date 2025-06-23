@@ -88,7 +88,7 @@ public class SecurityConfig {
 	    http.authorizeHttpRequests(authorize -> authorize
 	        .requestMatchers(ENDPOINTS_WHITELIST).permitAll()
 
-	        .requestMatchers("/paginas/principal.xhtml", "/pdf/**").authenticated()
+	        .requestMatchers("/paginas/principal.xhtml", "/pdf/**", "/ultima/**").authenticated()
 
 	        .requestMatchers("/paginas/usuario/listarUsuarios.xhtml", "/paginas/usuario/visualizarUsuario.xhtml")
 	            .hasAnyRole(Permissao.VISUALIZAR_USUARIO.getRole())
