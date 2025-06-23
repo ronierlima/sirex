@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes"/>
+        </f:facet>
+        <title>PrimeFaces Ultima</title>
+        
+        <!-- **JS** -->
+        <!-- OPTIONAL DEPENDENCIES -->
+        <!-- When enabled, ripple animation is activated. -->
+        <h:outputScript name="ripple/ripple.js" library="layout" rendered="#{app.ripple}" />
+    </h:head>
+
+    <h:body styleClass="pages-body login-page flex flex-column">
+        <div class="topbar p-3 flex justify-content-between flex-row align-items-center">
+            <div class="topbar-left ml-3 flex">
+                <div class="logo">
+                    <p:graphicImage name="images/logo2x.png" library="layout" />
+                </div>
+            </div>
+            <div class="topbar-right mr-3 flex">
+                <p:button value="DASHBOARD" outcome="/paginas/principal.xhtml" styleClass="ui-button-flat ui-button-plain topbar-button" />
+            </div>
+        </div>
+    
+        <div class="align-self-center mt-auto mb-auto">
+            <div class="pages-panel card flex flex-column">
+                <div class="pages-header px-3 py-1">
+                    <h2>LOGIN</h2>
+                </div>
+    
+                <h4>Welcome</h4>
+    
+                <div class="pages-detail mb-6 px-6">Please use the form to sign-in Ultima network</div>
+    
+                <div class="input-panel flex flex-column px-3">
+                    <div class="ui-inputgroup">
+                        <span class="ui-inputgroup-addon">
+                            <i class="pi pi-envelope"></i>
+                        </span>
+                        <span class="ui-float-label flex align-items-stretch w-full">
+                            <p:inputText />
+                            <p:outputLabel for="@previous" value="Email" />
+                        </span>
+                    </div>
+    
+                    <div class="ui-inputgroup mt-3 mb-6">
+                        <span class="ui-inputgroup-addon">
+                            <i class="pi pi-lock"></i>
+                        </span>
+                        <span class="ui-float-label flex align-items-stretch w-full">
+                            <p:password styleClass="w-full" />
+                            <p:outputLabel for="@previous" value="Password" />
+                        </span>
+                    </div>
+                </div>
+    
+                <p:button value="LOGIN" styleClass="login-button mb-6 px-3" outcome="/paginas/principal.xhtml" />
+            </div>
+        </div>
+
+        <!-- **CSS** -->
+        <!-- LAYOUT DEPENDENCIES -->
+        <h:outputStylesheet name="styles/#{app.layout}.css" library="layout" />
+
+        <!-- OPTIONAL DEPENDENCIES -->
+        <!-- PrimeFlex is a lightweight responsive CSS utility library. This app contains two seperate packages; primeflex.min.css(v3.x) and primeflex-v2.min.css(v2.x) -->
+        <h:outputStylesheet name="primeflex/primeflex.min.css" library="layout"/>
+        <!-- When enabled, ripple animation is activated. -->
+        <h:outputStylesheet name="ripple/ripple.css" library="layout" rendered="#{app.ripple}" />
+
+        <h:outputStylesheet name="styles/demo.css" library="demo" />
+    </h:body>
+
+</html>

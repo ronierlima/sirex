@@ -1,0 +1,118 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    template="/WEB-INF/layout/template.xhtml">
+
+    <ui:define name="breadcrumb">
+        <f:metadata>
+            <f:viewParam name="homeOutcome" value="/paginas/principal.xhtml" />
+            <f:viewParam name="value" value="Pages,Invoice" />
+            <f:viewParam name="outcome" value="/ultima/pages/invoice" />
+        </f:metadata>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="layout-invoice-page">
+            <p:commandButton value="Print" type="button" icon="pi pi-print" styleClass="mb-3" onclick="window.print()" />
+        
+            <div class="grid layout-invoice-content">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="flex justify-content-between">
+                            <h5>INVOICE</h5>
+                            <div class="flex flex-column align-items-end">
+                                <p:graphicImage name="images/pages/prime-logo.svg" library="demo" />
+                                <p class="mt-1">9137 3rd Lane California City, CA 93504.</p>
+                            </div>
+                        </div>
+        
+                        <div class="p-3">
+                            <p:dataTable value="#{invoiceDemoView.billData}" var="bill" styleClass="pb-3">
+                                <p:column headerText="BILL TO">
+                                    <h:outputText value="#{bill.to}" />
+                                </p:column>
+                                <p:column headerText="DATE">
+                                    <h:outputText value="#{bill.date}" />
+                                </p:column>
+                                <p:column headerText="INVOICE NO">
+                                    <h:outputText value="#{bill.no}" />
+                                </p:column>
+                                <p:column headerText="NOTES">
+                                    <h:outputText value="#{bill.notes}" />
+                                </p:column>
+                            </p:dataTable>
+
+                            <p:dataTable value="#{invoiceDemoView.productData}" var="product" styleClass="py-6" size="small">
+                                <p:column headerText="DESCRIPTION">
+                                    <h:outputText value="#{product.description}" />
+                                </p:column>
+                                <p:column headerText="QUANTITY">
+                                    <h:outputText value="#{product.quantity}" />
+                                </p:column>
+                                <p:column headerText="UNIT PRICE">
+                                    <h:outputText value="#{product.price}" />
+                                </p:column>
+                                <p:column headerText="LINE TOTAL">
+                                    <h:outputText value="#{product.total}" />
+                                </p:column>
+                            </p:dataTable>
+        
+                            <div class="grid">
+                                <div class="col-12 md:col-6">
+                                    <p:panel header="BANK">
+                                        <div class="flex align-items-center justify-content-between py-2">
+                                            <span>Bank</span>
+                                            <span class="font-bold">BestBank</span>
+                                        </div>
+                                        <div class="flex align-items-center justify-content-between pt-2 py-2">
+                                            <span>ACCOUNT BENEFICIARY</span>
+                                            <span class="font-bold">Edward Williams</span>
+                                        </div>
+                                        <div class="flex align-items-center justify-content-between pt-2 py-2">
+                                            <span>SWIFT</span>
+                                            <span class="font-bold">PJNWBXND</span>
+                                        </div>
+                                        <div class="flex align-items-center justify-content-between pt-2 py-2">
+                                            <span>IBAN</span>
+                                            <span class="font-bold">GB04420235692263866724650931</span>
+                                        </div>
+                                    </p:panel>
+                                </div>
+                                <div class="col-12 md:col-6">
+                                    <p:panel header="TOTAL">
+                                        <div class="grid text-right">
+                                            <div class="col-10">
+                                                SUBTOTAL
+                                            </div>
+                                            <div class="col-2">
+                                                <span class="pink-color">$1304.00</span>
+                                            </div>
+        
+                                            <div class="col-10">
+                                                <span>VAT</span>
+                                            </div>
+                                            <div class="col-2">
+                                                <span class="pink-color">$234.72</span>
+                                            </div>
+        
+                                            <div class="col-10">
+                                                <span>TOTAL</span>
+                                            </div>
+                                            <div class="col-2">
+                                                <span class="pink-color">$1538.72</span>
+                                            </div>
+                                        </div>
+                                    </p:panel>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+
+</ui:composition>

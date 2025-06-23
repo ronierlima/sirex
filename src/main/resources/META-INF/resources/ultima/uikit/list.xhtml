@@ -1,0 +1,96 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/layout/template.xhtml">
+
+    <ui:define name="title">Lists</ui:define>
+
+    <ui:define name="breadcrumb">
+        <f:metadata>
+            <f:viewParam name="homeOutcome" value="/paginas/principal.xhtml" />
+            <f:viewParam name="value" value="UI Kit,Lists" />
+            <f:viewParam name="outcome" value="/ultima/uikit/list" />
+        </f:metadata>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="grid list-demo">
+            <div class="col-12">
+                <div class="card">
+                    <h5>DataView</h5>
+                    <p:dataView var="product" value="#{listDemoView.products}" gridIcon="pi pi-th-large" listIcon="pi pi-bars"
+                        paginator="true" rows="10" layout="grid" paginatorPosition="bottom">
+                        <p:dataViewGridItem>
+                            <div class="product-grid-item card">
+                                <div class="product-grid-item-top">
+                                    <div>
+                                        <i class="pi pi-tag product-category-icon"></i>
+                                        <span class="product-category">#{product.category}</span>
+                                    </div>
+                                    <span class="product-badge status-#{product.inventoryStatus.name().toLowerCase()}">#{product.inventoryStatus.text}</span>
+                                </div>
+                                <div class="product-grid-item-content">
+                                    <p:graphicImage name="images/product/#{product.image}" library="demo" />
+                                    <div class="product-name">#{product.name}</div>
+                                    <div class="product-description">#{product.description}</div>
+                                    <p:rating readonly="true" value="#{product.rating}" />
+                                </div>
+                                <div class="product-grid-item-bottom">
+                                    <h:outputText value="#{product.price}" styleClass="product-price">
+                                        <f:convertNumber currencySymbol="$" type="currency" />
+                                    </h:outputText>
+                                    <p:commandButton type="button" icon="pi pi-shopping-cart" disabled="#{product.inventoryStatus == 'OUTOFSTOCK'}"/>
+                                </div>
+                            </div>
+                        </p:dataViewGridItem>
+                
+                        <p:dataViewListItem>
+                            <div class="flex flex-column md:flex-row align-items-center p-3 w-full">
+                                <p:graphicImage name="images/product/#{product.image}" library="demo" styleClass="my-4 md:my-0 w-9 md:w-10rem shadow-2 mr-5" />
+                                <div class="flex-1 text-center md:text-left">
+                                    <div class="font-bold text-2xl">#{product.name}</div>
+                                    <div class="mb-3">#{product.description}</div>
+                                    <p:rating readonly="true" value="#{product.rating}" />
+                                    <div class="flex align-items-center mt-2">
+                                        <i class="pi pi-tag mr-2"></i>
+                                        <span class="font-semibold">#{product.category}</span>
+                                    </div>
+                                </div>
+                                <div class="flex flex-row md:flex-column justify-content-between w-full md:w-auto align-items-center md:align-items-end mt-5 md:mt-0">
+                                    <h:outputText value="#{product.price}" styleClass="text-2xl font-semibold mb-2 align-self-center md:align-self-end">
+                                        <f:convertNumber currencySymbol="$" type="currency" />
+                                    </h:outputText>
+                                    <p:commandButton type="button" icon="pi pi-shopping-cart" value="Add to Cart" disabled="#{product.inventoryStatus == 'OUTOFSTOCK'}" styleClass="mb-2" />
+                                    <span class="product-badge status-#{product.inventoryStatus.name().toLowerCase()}">#{product.inventoryStatus.text}</span>
+                                </div>
+                            </div>
+                        </p:dataViewListItem>
+                    </p:dataView>
+                </div>
+            </div>
+
+            <div class="col-12 lg:col-8">
+                <div class="card">
+                    <h5>PickList</h5>
+                    <p:pickList id="pickList" value="#{listDemoView.cities1}" var="cities" itemLabel="#{cities}" itemValue="#{cities}"
+                                showSourceControls="true" showTargetControls="true" responsive="true">
+                        <f:facet name="sourceCaption">From</f:facet>
+                        <f:facet name="targetCaption">To</f:facet>
+                    </p:pickList>
+                </div>
+            </div>
+
+            <div class="col-12 lg:col-4">
+                <div class="card">
+                    <h5>OrderList</h5>
+                    <p:orderList value="#{listDemoView.cities2}" var="city" controlsLocation="left" itemLabel="#{city}" itemValue="#{city}" responsive="true">
+                        <f:facet name="caption">Cities</f:facet>
+                    </p:orderList>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+
+</ui:composition>

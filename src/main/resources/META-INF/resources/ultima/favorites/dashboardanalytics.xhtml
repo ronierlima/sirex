@@ -1,0 +1,649 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/layout/template.xhtml">
+
+    <ui:define name="title">Dashboard Analytics</ui:define>
+
+    <ui:define name="head">
+        <style type="text/css">
+
+        </style>
+
+        <script type="text/javascript">
+        //<![CDATA[
+            function monthlyChartExtender() {
+                var config = this.cfg.config;
+                var colors = getColors();
+
+                config.data.datasets[0].borderColor = colors.blueColor;
+                config.data.datasets[0].backgroundColor = colors.blueColor;
+                config.data.datasets[1].borderColor = colors.lightblueColor;
+                config.data.datasets[1].backgroundColor = colors.lightblueColor;
+                config.data.datasets[2].borderColor = colors.cyanColor;
+                config.data.datasets[2].backgroundColor = colors.cyanColor;
+                config.data.datasets[3].borderColor = colors.tealColor;
+                config.data.datasets[3].backgroundColor = colors.tealColor;
+                config.data.datasets[4].borderColor = colors.greenColor;
+                config.data.datasets[4].backgroundColor = colors.greenColor;
+                config.data.datasets[5].borderColor = colors.lightgreenColor;
+                config.data.datasets[5].backgroundColor = colors.lightgreenColor;
+                config.data.datasets[6].borderColor = colors.limeColor;
+                config.data.datasets[6].backgroundColor = colors.limeColor;
+                config.data.datasets[7].borderColor = colors.amberColor;
+                config.data.datasets[7].backgroundColor = colors.amberColor;
+                config.data.datasets[8].borderColor = colors.orangeColor;
+                config.data.datasets[8].backgroundColor = colors.orangeColor;
+
+                // options
+                var textColor = getComputedStyle(document.body).getPropertyValue('--text-color') || 'rgba(0, 0, 0, 0.87)';
+                var gridLinesColor = getComputedStyle(document.body).getPropertyValue('--divider-color') || 'rgba(160, 167, 181, .3)';
+                var fontFamily = getComputedStyle(document.body).getPropertyValue('--font-family');
+                
+                config.options = {
+                    plugins: {
+                        legend: {
+                            display: true,
+                            labels: {
+                                fontFamily: fontFamily,
+                                color: textColor
+                            }
+                        },
+                    },
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true
+                    },
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            ticks: {
+                                fontFamily: fontFamily,
+                                color: textColor
+                            },
+                            grid: {
+                                color: gridLinesColor
+                            }
+                        },
+                        x: {
+                            categoryPercentage: .9,
+                            barPercentage: .8,
+                            ticks: {
+                                fontFamily: fontFamily,
+                                color: textColor
+                            },
+                            grid: {
+                                color: gridLinesColor
+                            }
+                        }
+                    }
+                };
+            }
+
+            function changeMonthlyDataView(chartWidget) {
+                if (chartWidget) {
+                    var chart = chartWidget.chart;
+
+                    if (chart.options.scales.x.stacked) {
+                        chart.options.scales.x.stacked = false;
+                        chart.options.scales.y.stacked = false;
+                    }
+                    else {
+                        chart.options.scales.x.stacked = true;
+                        chart.options.scales.y.stacked = true;
+                    }
+
+                    chart.update();
+                }
+            }
+
+            function donutChartExtender() {
+                var config = this.cfg.config;
+                var colors = getColors();
+                var borderColor = getComputedStyle(document.body).getPropertyValue('--divider-color') || 'rgba(160, 167, 181, .3)';
+
+                config.data.datasets[0].borderColor = borderColor;
+                config.data.datasets[0].backgroundColor = [colors.blueColor, colors.lightblueColor, colors.cyanColor, colors.tealColor, colors.greenColor, colors.lightgreenColor, colors.orangeColor];
+
+                // options
+                var textColor = getComputedStyle(document.body).getPropertyValue('--text-color') || 'rgba(0, 0, 0, 0.87)';
+                var fontFamily = getComputedStyle(document.body).getPropertyValue('--font-family');
+                config.options = {
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                fontFamily: fontFamily,
+                                color: textColor
+                            }
+                        },
+                    },
+                    circumference: 180,
+                    rotation: -90,
+                    aspectRatio: 2,
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true
+                    }
+                };
+            }
+
+            function changeDoughnutDataView(chartWidget) {
+                if (chartWidget) {
+                    var chart = chartWidget.chart;
+
+                    if (chart.options.circumference === 180) {
+                        chart.options.circumference = 360;
+                        chart.options.rotation = -45;
+                    } else {
+                        chart.options.circumference = 180;
+                        chart.options.rotation = -90;
+                    }
+
+                    chart.update();
+                }
+            }
+
+            function pieChartExtender() {
+                var config = this.cfg.config;
+                var colors = getColors();
+                var borderColor = getComputedStyle(document.body).getPropertyValue('--divider-color') || 'rgba(160, 167, 181, .3)';
+
+                config.data.datasets[0].borderColor = borderColor;
+                config.data.datasets[0].backgroundColor = [colors.blueColor, colors.tealColor, colors.limeColor];
+
+                // options
+                var textColor = getComputedStyle(document.body).getPropertyValue('--text-color') || 'rgba(0, 0, 0, 0.87)';
+                var fontFamily = getComputedStyle(document.body).getPropertyValue('--font-family');
+                config.options = {
+                    responsive: true,
+                    aspectRatio: 1,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                fontFamily: fontFamily,
+                                color: textColor
+                            }
+                        },
+                    },
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true
+                    },
+                    cutout: '0'
+                };
+            }
+
+            function togglePieDoughnut(chartWidget) {
+                if (chartWidget) {
+                    var chart = chartWidget.chart;
+                    chart.options.cutout = chart.options.cutout !== '0' ? '0' : '50%';
+                    chart.update();
+                }
+            }
+
+            function changePieDoughnutDataView(chartWidget) {
+                if (chartWidget) {
+                    var chart = chartWidget.chart;
+
+                    if (chart.options.circumference === 180) {
+                        chart.options.circumference = 360;
+                        chart.options.rotation = -45;
+                    } else {
+                        chart.options.circumference = 180;
+                        chart.options.rotation = -90;
+                    }
+
+                    chart.update();
+                }
+            }
+        
+            function getColors() {
+                var isLight = getComputedStyle(document.body).getPropertyValue('--layout-mode') !== 'dark';
+                return {
+                    pinkColor: isLight ? '#EC407A' : '#F48FB1',
+                    purpleColor: isLight ? '#AB47BC' : '#CE93D8',
+                    deeppurpleColor: isLight ? '#7E57C2' : '#B39DDB',
+                    indigoColor: isLight ? '#5C6BC0' : '#9FA8DA',
+                    blueColor: isLight ? '#42A5F5' : '#90CAF9',
+                    lightblueColor: isLight ? '#29B6F6' : '#81D4FA',
+                    cyanColor: isLight ? '#00ACC1' : '#4DD0E1',
+                    tealColor: isLight ? '#26A69A' : '#80CBC4',
+                    greenColor: isLight ? '#66BB6A' : '#A5D6A7',
+                    lightgreenColor: isLight ? '#9CCC65' : '#C5E1A5',
+                    limeColor: isLight ? '#D4E157' : '#E6EE9C',
+                    yellowColor: isLight ? '#FFEE58' : '#FFF59D',
+                    amberColor: isLight ? '#FFCA28' : '#FFE082',
+                    orangeColor: isLight ? '#FFA726' : '#FFCC80',
+                    deeporangeColor: isLight ? '#FF7043' : '#FFAB91',
+                    brownColor: isLight ? '#8D6E63' : '#BCAAA4'
+                };
+            }
+        
+            function storeChartExtender(config) {
+                config.options = {
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    responsive: true,
+                    aspectRatio: 4,
+                    scales: {
+                        y: {
+                            display: false
+                        },
+                        x: {
+                            display: false
+                        }
+                    },
+                    tooltips: {
+                        enabled: false
+                    },
+                    elements: {
+                        point: {
+                            radius: 0
+                        }
+                    },
+                    animation: {
+                        duration: 0
+                    }
+                };
+            }
+
+            function storeAChartExtender() {
+                storeChartExtender(this.cfg.config);
+            }
+
+            function storeBChartExtender() {
+                storeChartExtender(this.cfg.config);
+            }
+
+            function storeCChartExtender() {
+                storeChartExtender(this.cfg.config);
+            }
+
+            function storeDChartExtender() {
+                storeChartExtender(this.cfg.config);
+            }
+
+            var timer = undefined;
+            $(function() {
+                clearInterval(timer);
+                timer = setInterval(function() {
+                    storeGroupPoll && storeGroupPoll();
+                }, 2000);
+            });
+        //]]>
+        </script>
+    </ui:define>
+
+    <ui:define name="breadcrumb">
+        <f:metadata>
+            <f:viewParam name="homeOutcome" value="/paginas/principal.xhtml" />
+            <f:viewParam name="value" value="Dashboard Analytics" />
+            <f:viewParam name="outcome" value="/paginas/principal.xhtmlanalytics" />
+        </f:metadata>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="dashboardAnalyticsForm">
+            <p:remoteCommand name="forceUpdate" update="@form" />
+            
+            <div class="grid dashboard">
+                <div class="col-12 md:col-8">
+                    <div class="card height-100">
+                        <div class="card-header">
+                            <h5>Monthly Comparison</h5>
+                            <p:commandButton type="button" value="Vertical/Stacked Data" styleClass="ui-button-flat" onclick="changeMonthlyDataView(PF('monthlyChartWidget'))" />
+                        </div>
+                        <p:barChart widgetVar="monthlyChartWidget" model="#{dashboardAnalyticsView.monthlyChartModel}" style="height: 400px;"/>
+                    </div>
+                </div>
+            
+                <div class="col-12 md:col-4">
+                    <div class="card widget-insights height-100">
+                        <div class="card-header mb-2">
+                            <h5>Insights</h5>
+                            <div>
+                                <p:commandButton type="button" icon="pi pi-ellipsis-h" styleClass="rounded-button ui-button-flat ui-button-plain"/>
+                                <p:menu overlay="true" trigger="@previous" my="left top" at="left bottom">
+                                    <p:menuitem value="Update" icon="pi pi-fw pi-refresh"/>
+                                    <p:menuitem value="Edit" icon="pi pi-fw pi-pencil"/>
+                                </p:menu>
+                            </div>
+                        </div>
+                        <div class="card-subheader mb-2 flex align-items-center justify-content-between">
+                            <span>November 22 - November 29</span>
+                            <p:commandButton type="button" value="Semi/Full Data" styleClass="ui-button-flat" onclick="changeDoughnutDataView(PF('donutChartWidget'))" />
+                        </div>
+                        <p:donutChart widgetVar="donutChartWidget" model="#{dashboardAnalyticsView.donutChartModel}" style="height: 200px;" />
+                        <div class="flex flex-column justify-content-center">
+                            <div class="flex flex-row align-items-center mt-4 px-3">
+                                <i class="pi pi-thumbs-up p-3 rounded-circle lightgreen-bgcolor solid-surface-text-color"></i>
+                                <div class="flex flex-column #{app.rtl ? 'mr-3' : 'ml-3'}">
+                                    <span>Best Day of the Week</span>
+                                    <small>Friday</small>
+                                </div>
+                                <span class="indigo-color #{app.rtl ? 'mr-auto' : 'ml-auto'}">95</span>
+                            </div>
+                            <div class="flex flex-row align-items-center my-4 px-3">
+                                <i class="pi pi-thumbs-down rounded-circle p-3 orange-bgcolor solid-surface-text-color"></i>
+                                <div class="flex flex-column #{app.rtl ? 'mr-3' : 'ml-3'}">
+                                    <span>Worst Day of the Week</span>
+                                    <small>Saturday</small>
+                                </div>
+                                <span class="indigo-color #{app.rtl ? 'mr-auto' : 'ml-auto'}">6</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="col-12 md:col-4">
+                    <div class="card widget-social">
+                        <div class="flex justify-content-between align-items-center p-3">
+                            <div class="social-icon">
+                                <i class="pi pi-twitter blue-color fs-xxlarge"></i>
+                            </div>
+                            <div class="info flex flex-column">
+                                <span class="value">44.995</span>
+                                <span class="subtext mt-2">Retweets</span>
+                            </div>
+                        </div>
+            
+                        <div class="stats flex justify-content-between mt-3">
+                            <div class="left flex flex-column ">
+                                <span class="title">Target</span>
+                                <span class="value mb-2">10.000</span>
+                                <p:progressBar value="50" />
+                            </div>
+                            <div class="right flex flex-column">
+                                <span class="title">All Time Record</span>
+                                <span class="value mb-2">50.702</span>
+                                <p:progressBar value="24" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="col-12 md:col-4">
+                    <div class="card widget-social">
+                        <div class="flex justify-content-between align-items-center p-3">
+                            <div class="social-icon">
+                                <i class="pi pi-facebook indigo-color fs-xxlarge"></i>
+                            </div>
+                            <div class="info flex flex-column">
+                                <span class="value">44.995</span>
+                                <span class="subtext mt-2">Facebook Interactions</span>
+                            </div>
+                        </div>
+            
+                        <div class="stats flex justify-content-between mt-3">
+                            <div class="left flex flex-column ">
+                                <span class="title">Target</span>
+                                <span class="value mb-2">10.000</span>
+                                <p:progressBar value="23" />
+                            </div>
+                            <div class="right flex flex-column">
+                                <span class="title">All Time Record</span>
+                                <span class="value mb-2">99.028</span>
+                                <p:progressBar value="38" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="col-12 md:col-4">
+                    <div class="card widget-social">
+                        <div class="flex justify-content-between align-items-center p-3">
+                            <div class="social-icon">
+                                <i class="pi pi-github text-color fs-xxlarge"></i>
+                            </div>
+                            <div class="info flex flex-column">
+                                <span class="value">81.002</span>
+                                <span class="subtext mt-2">Star</span>
+                            </div>
+                        </div>
+            
+                        <div class="stats flex justify-content-between mt-3">
+                            <div class="left flex flex-column ">
+                                <span class="title">Target</span>
+                                <span class="value mb-2">10.000</span>
+                                <p:progressBar value="62" />
+                            </div>
+                            <div class="right flex flex-column">
+                                <span class="title">All Time Record</span>
+                                <span class="value mb-2">162.550</span>
+                                <p:progressBar value="14" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="col-12 md:col-12">
+                    <h:panelGroup id="storeGroup">
+                        <p:remoteCommand name="storeGroupPoll" actionListener="#{dashboardAnalyticsView.calculateStore}" update=":dashboardAnalyticsForm:storeGroup" />
+
+                        <div class="card grid grid-nogutter widget-sales block sm:flex">
+                            <div class="lg:col-3 md:col-6 sm:col-12 p-0">
+                                <div class="sales-info flex flex-column p-4">
+                                    <span class="muted-text">Store A Sales</span>
+                                    <span class="fs-large mt-2 inline-flex align-items-center gap-1">
+                                        <i class="fw-700 fs-large pi #{dashboardAnalyticsView.storeADiff == 0 ? 'pi-arrows-h purple-color' : (dashboardAnalyticsView.storeADiff gt 0 ? 'pi-arrow-up green-color' : 'pi-arrow-down pink-color')}"></i>
+                                        $#{dashboardAnalyticsView.storeATotalValue}
+                                        <span class="fw-500 fs-normal #{dashboardAnalyticsView.storeADiff == 0 ? 'purple-color' : (dashboardAnalyticsView.storeADiff gt 0 ? 'green-color' : 'pink-color')}">
+                                            #{dashboardAnalyticsView.storeADiff gt 0 ? '+' : ''}#{dashboardAnalyticsView.storeADiff}
+                                        </span>
+                                    </span>
+                                </div>
+                                <div class="px-4">
+                                    <p:lineChart model="#{dashboardAnalyticsView.storeAModel}" />
+                                </div>
+                            </div>
+                            <div class="lg:col-3 md:col-6 sm:col-12 p-0">
+                                <div class="sales-info flex flex-column p-4">
+                                    <span class="muted-text">Store B Sales</span>
+                                    <span class="fs-large mt-2 inline-flex align-items-center gap-1">
+                                        <i class="fw-700 fs-large pi #{dashboardAnalyticsView.storeBDiff == 0 ? 'pi-arrows-h purple-color' : (dashboardAnalyticsView.storeBDiff gt 0 ? 'pi-arrow-up green-color' : 'pi-arrow-down pink-color')}"></i>
+                                        $#{dashboardAnalyticsView.storeBTotalValue}
+                                        <span class="fw-500 fs-normal #{dashboardAnalyticsView.storeBDiff == 0 ? 'purple-color' : (dashboardAnalyticsView.storeBDiff gt 0 ? 'green-color' : 'pink-color')}">
+                                            #{dashboardAnalyticsView.storeBDiff gt 0 ? '+' : ''}#{dashboardAnalyticsView.storeBDiff}
+                                        </span>
+                                    </span>
+                                </div>
+                                <div class="px-4">
+                                    <p:lineChart model="#{dashboardAnalyticsView.storeBModel}" />
+                                </div>
+                            </div>
+                            <div class="lg:col-3 md:col-6 sm:col-12 p-0">
+                                <div class="sales-info flex flex-column p-4">
+                                    <span class="muted-text">Store C Sales</span>
+                                    <span class="fs-large mt-2 inline-flex align-items-center gap-1">
+                                        <i class="fw-700 fs-large pi #{dashboardAnalyticsView.storeCDiff == 0 ? 'pi-arrows-h purple-color' : (dashboardAnalyticsView.storeCDiff gt 0 ? 'pi-arrow-up green-color' : 'pi-arrow-down pink-color')}"></i>
+                                        $#{dashboardAnalyticsView.storeCTotalValue}
+                                        <span class="fw-500 fs-normal #{dashboardAnalyticsView.storeCDiff == 0 ? 'purple-color' : (dashboardAnalyticsView.storeCDiff gt 0 ? 'green-color' : 'pink-color')}">
+                                            #{dashboardAnalyticsView.storeCDiff gt 0 ? '+' : ''}#{dashboardAnalyticsView.storeCDiff}
+                                        </span>
+                                    </span>
+                                </div>
+                                <div class="px-4">
+                                    <p:lineChart model="#{dashboardAnalyticsView.storeCModel}" />
+                                </div>
+                            </div>
+                            <div class="lg:col-3 md:col-6 sm:col-12 p-0">
+                                <div class="sales-info flex flex-column p-4">
+                                    <span class="muted-text">Store A Sales</span>
+                                    <span class="fs-large mt-2 inline-flex align-items-center gap-1">
+                                        <i class="fw-700 fs-large pi #{dashboardAnalyticsView.storeDDiff == 0 ? 'pi-arrows-h purple-color' : (dashboardAnalyticsView.storeDDiff gt 0 ? 'pi-arrow-up green-color' : 'pi-arrow-down pink-color')}"></i>
+                                        $#{dashboardAnalyticsView.storeDTotalValue}
+                                        <span class="fw-500 fs-normal #{dashboardAnalyticsView.storeDDiff == 0 ? 'purple-color' : (dashboardAnalyticsView.storeDDiff gt 0 ? 'green-color' : 'pink-color')}">
+                                            #{dashboardAnalyticsView.storeDDiff gt 0 ? '+' : ''}#{dashboardAnalyticsView.storeDDiff}
+                                        </span>
+                                    </span>
+                                </div>
+                                <div class="px-4">
+                                    <p:lineChart model="#{dashboardAnalyticsView.storeDModel}" />
+                                </div>
+                            </div>
+                        </div>
+                    </h:panelGroup>
+                </div>
+            
+                <div class="col-12 md:col-6">
+                    <div class="card height-100 widget-topsearchs">
+                        <div class="card-header">
+                            <h5>Top Searchs</h5>
+                            <div>
+                                <p:commandButton type="button" icon="pi pi-ellipsis-h" styleClass="rounded-button ui-button-flat ui-button-plain"/>
+                                <p:menu overlay="true" trigger="@previous" my="left top" at="left bottom">
+                                    <p:menuitem value="Update" icon="pi pi-fw pi-refresh"/>
+                                    <p:menuitem value="Edit" icon="pi pi-fw pi-pencil"/>
+                                </p:menu>
+                            </div>
+                        </div>
+                        <div class="flex justify-content-between item">
+                            <span>Mat Orange Case</span>
+                            <span class="value type-green">82% CONV RATE</span>
+                        </div>
+                        <div class="flex justify-content-between item">
+                            <span>Space T-Shirt</span>
+                            <span class="value type-green">78% CONV RATE</span>
+                        </div>
+                        <div class="flex justify-content-between item">
+                            <span>Orange Black Hoodie</span>
+                            <span class="value type-green">61% CONV RATE</span>
+                        </div>
+                        <div class="flex justify-content-between item">
+                            <span>Wonders Notebook</span>
+                            <span class="value type-yellow">48 CONV RATE</span>
+                        </div>
+                        <div class="flex justify-content-between item">
+                            <span>Robots T-Shirt</span>
+                            <span class="value type-yellow">34% CONV RATE</span>
+                        </div>
+                        <div class="flex justify-content-between item">
+                            <span>Green Portal Sticker</span>
+                            <span class="value type-pink">11% CONV RATE</span>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="col-12 md:col-6">
+                    <div class="card">
+                        <p:dataTable var="product" value="#{dashboardView.products}" reflow="true" styleClass="p-datatable-products" paginator="true" rows="4" paginatorPosition="bottom">
+                            <p:column headerText="Image" style="width: 5rem">
+                                <p:graphicImage name="images/product/#{product.image}" library="demo" width="50px" styleClass="shadow-4" />
+                            </p:column>
+                            <p:column headerText="Name" sortBy="#{product.name}">
+                                <h:outputText value="#{product.name}" />
+                            </p:column>
+                            <p:column headerText="Category" sortBy="#{product.category}">
+                                <h:outputText value="#{product.category}" />
+                            </p:column>
+                            <p:column headerText="Price" sortBy="#{product.price}">
+                                <h:outputText value="#{product.price}">
+                                    <f:convertNumber currencySymbol="$" type="currency" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="View" style="width: 4rem">
+                                <p:commandButton type="button" icon="pi pi-search" styleClass="rounded-button ui-button-flat mb-1 #{app.rtl ? 'ml-2' : 'mr-2'}" />
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </div>
+            
+                <div class="col-12 md:col-4">
+                    <div class="card widget-expenses">
+                        <div class="card-header">
+                            <h5>Expenses</h5>
+                            <div>
+                                <p:commandButton type="button" icon="pi pi-ellipsis-h" styleClass="rounded-button ui-button-flat ui-button-plain"/>
+                                <p:menu overlay="true" trigger="@previous" my="left top" at="left bottom">
+                                    <p:menuitem value="Update" icon="pi pi-fw pi-refresh"/>
+                                    <p:menuitem value="Edit" icon="pi pi-fw pi-pencil"/>
+                                </p:menu>
+                            </div>
+                        </div>
+                        <div class="card-subheader mb-2 pb-3">
+                            November 22 - November 29
+                        </div>
+            
+                        <div class="flex justify-content-between align-items-center my-2 item">
+                            <div class="flex flex-column">
+                                <i class="pi pi-cloud type mb-2"></i>
+                                <span class="value mb-1">$30.247</span>
+                                <span class="subtext">Cloud Infrastructure</span>
+                            </div>
+                            <span class="item-button"><a href="#"><i class="pi pi-chevron-right"></i></a></span>
+                        </div>
+                        <div class="flex justify-content-between align-items-center my-2 item">
+                            <div class="flex flex-column">
+                                <i class="pi pi-tag type mb-2"></i>
+                                <span class="value mb-1">$29.550</span>
+                                <span class="subtext">General Goods</span>
+                            </div>
+                            <span class="item-button"><a href="#"><i class="pi pi-chevron-right"></i></a></span>
+                        </div>
+                        <div class="flex justify-content-between align-items-center my-2 item">
+                            <div class="flex flex-column">
+                                <i class="pi pi-desktop type mb-2"></i>
+                                <span class="value mb-1">$16.660</span>
+                                <span class="subtext">Consumer Electronics</span>
+                            </div>
+                            <span class="item-button"><a href="#"><i class="pi pi-chevron-right"></i></a></span>
+                        </div>
+                        <div class="flex justify-content-between align-items-center my-2 item">
+                            <div class="flex flex-column">
+                                <i class="pi pi-compass type mb-2"></i>
+                                <span class="value mb-1">$5.801</span>
+                                <span class="subtext">Incalculables</span>
+                            </div>
+                            <span class="item-button"><a href="#"><i class="pi pi-chevron-right"></i></a></span>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="col-12 md:col-8">
+                    <div class="card widget-traffic height-100">
+                        <div class="card-header">
+                            <h5>All Traffic Channels</h5>
+                            <p:commandButton type="button" value="Pie/Doughnut Data" styleClass="ui-button-flat #{app.rtl ? 'mr-auto' : 'ml-auto'}" onclick="togglePieDoughnut(PF('pieChartWidget'))" />
+                            <p:commandButton type="button" value="Semi/Full Data" styleClass="ui-button-flat mx-2" onclick="changePieDoughnutDataView(PF('pieChartWidget'))" />
+                        </div>
+                        <div class="flex grid">
+                            <div class="col-12 md:col-6 left flex flex-column justify-content-evenly">
+                                <div class="total flex flex-column">
+                                    <span class="title mb-2">Total</span>
+                                    <span class="value mb-5">66.761</span>
+                                </div>
+            
+                                <div class="info flex justify-content-between">
+                                    <div class="organic flex flex-column">
+                                        <span class="title mb-1">Organic</span>
+                                        <span class="value">51.596</span>
+                                    </div>
+                                    <div class="direct flex flex-column">
+                                        <span class="title mb-1">Direct</span>
+                                        <span class="value">11.421</span>
+                                    </div>
+                                    <div class="referral flex flex-column">
+                                        <span class="title mb-1">Referral</span>
+                                        <span class="value">3.862</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 md:col-6 right flex justify-content-center">
+                                <p:pieChart widgetVar="pieChartWidget" model="#{dashboardAnalyticsView.pieChartModel}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        </h:form>    
+    </ui:define>
+
+</ui:composition>

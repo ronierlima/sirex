@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes"/>
+        </f:facet>
+        <title>PrimeFaces Ultima</title>
+        
+        <!-- **JS** -->
+        <!-- OPTIONAL DEPENDENCIES -->
+        <!-- When enabled, ripple animation is activated. -->
+        <h:outputScript name="ripple/ripple.js" library="layout" rendered="#{app.ripple}" />
+    </h:head>
+
+    <h:body styleClass="pages-body contact-page flex flex-column">
+        <div class="topbar p-3 flex justify-content-between flex-row align-items-center">
+            <div class="topbar-left ml-3 flex">
+                <div class="logo">
+                    <p:graphicImage name="images/logo2x.png" library="layout" />
+                </div>
+            </div>
+            <div class="topbar-right mr-3 flex">
+                <p:button value="DASHBOARD" outcome="/paginas/principal.xhtml" styleClass="ui-button-flat ui-button-plain topbar-button" />
+            </div>
+        </div>
+
+        <div class="map">
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d9746.74079475134!2d4.8686484347131325!3d52.35799458335991!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c609e2c5b47ccf%3A0x6cd478550520ca35!2sVondelpark!5e0!3m2!1str!2str!4v1606820468794!5m2!1str!2str"
+                aria-hidden="false" tabindex="0" allowtransparency="true"></iframe>
+            <span></span>
+        </div>
+    
+        <div class="pages-panel">
+            <div class="card grid">
+                <div class="left-panel lg:col-6 md:col-6 sm:col-12">
+                    <h4 class="mb-3">Contact Us</h4>
+                    <p class="mb-6">Subheader of contact us will come here...</p>
+                    <p:inputText styleClass="contact-input mb-3" placeholder="Your Name" />
+                    <p:inputText styleClass="contact-input mb-3" placeholder="Your E-mail" />
+                    <p:inputTextarea styleClass="contact-input contact-message mb-6" rows="8" placeholder="Your Message" />
+                    <p:button value="SEND MESSAGE" styleClass="mb-3" />
+                </div>
+                <div class="right-panel lg:col-6 md:col-6 sm:col-12 mx-auto">
+                    <div class="grid">
+                        <div class="md:col-offset-3 md:col-6 md:col-offset-3 sm:col-offset-2 sm:col-8 sm:col-offset-2">
+                            <i class="pi pi-home mb-2 mt-5"></i>
+                            <p class="title my-3">Headquarters</p>
+                            <p>Van Beekweg 79-93 7825VC Eexterzandvoort</p>
+    
+                            <i class="pi pi-briefcase mb-2 mt-5"></i>
+                            <p class="title my-3">Sales Office</p>
+                            <p>De Roodreef 89k 8502CA Oosternijkerk</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- **CSS** -->
+        <!-- LAYOUT DEPENDENCIES -->
+        <h:outputStylesheet name="styles/#{app.layout}.css" library="layout" />
+
+        <!-- OPTIONAL DEPENDENCIES -->
+        <!-- PrimeFlex is a lightweight responsive CSS utility library. This app contains two seperate packages; primeflex.min.css(v3.x) and primeflex-v2.min.css(v2.x) -->
+        <h:outputStylesheet name="primeflex/primeflex.min.css" library="layout"/>
+        <!-- When enabled, ripple animation is activated. -->
+        <h:outputStylesheet name="ripple/ripple.css" library="layout" rendered="#{app.ripple}" />
+
+        <h:outputStylesheet name="styles/demo.css" library="demo" />
+    </h:body>
+
+</html>

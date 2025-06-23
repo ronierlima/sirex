@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes"/>
+        </f:facet>
+        <title>PrimeFaces Ultima Wizard</title>
+
+        <script type="text/javascript">
+        //<![CDATA[
+            var Wizard = {
+                init: function() {
+                    this.wizardContent = $('.wizard-content');
+                    if (this.wizardContent.length) {
+                        this.wizardCard = this.wizardContent.find('.wizard-card');
+                        this.tabs = this.wizardCard.find('> .wizard-card-header .tab');
+                        this.tabBar = this.wizardCard.find('> .wizard-card-header .tab-bar');
+
+                        var continueButton = $('.continue-button'),
+                            $this = this;
+
+                        this.tabBar.css('width', (100 / this.tabs.length) + '%');
+
+                        this.tabs.off('click.wizard-tab').on('click.wizard-tab', function() {
+                            $this.openNextTab($(this));
+                        });
+                    
+                        continueButton.off('click.cbutton').on('click.cbutton', function() {
+                            var content = $(this).closest('.wizard-card-content'),
+                                index = content.index(),
+                                nextTab = $this.tabs.eq(index);
+                                
+                            content.find('.ink').remove();
+                            $this.openNextTab(nextTab);
+                        });
+                    }
+                },
+
+                openNextTab: function(tab) {
+                    var index = tab.index();
+
+                    if (!tab.hasClass('selected-tab')) {
+                        tab.siblings('.tab').removeClass('selected-tab').end().addClass('selected-tab');
+                        this.wizardCard.children('.wizard-card-content').filter('.active-content').removeClass('active-content').end().eq(index).addClass('active-content');
+                        this.tabBar.css('left', (index * (100 / this.tabs.length)) + '%');
+                    }
+                },
+
+                selectOrderInfo: function(buttonSelector, orderSelector) {
+                    var button = $(buttonSelector),
+                        selectedOrder = $(orderSelector),
+                        content = button.closest('.wizard-card-content'),
+                        index = content.index(),
+                        nextTab = this.tabs.eq(index);
+
+                    content.find('.ink').remove();
+                    selectedOrder.siblings().removeClass('selected-order').end().addClass('selected-order');
+                    this.openNextTab(nextTab);
+                }
+            }
+
+            $(function() {
+                Wizard.init();
+            });            
+        //]]>
+        </script>
+
+        <!-- **JS** -->
+        <!-- OPTIONAL DEPENDENCIES -->
+        <!-- When enabled, ripple animation is activated. -->
+        <h:outputScript name="ripple/ripple.js" library="layout" rendered="#{app.ripple}" />
+    </h:head>
+
+    <h:body styleClass="wizard-body">
+        <h:form>
+            <div class="wizard-wrapper">
+                <div class="wizard-topbar">
+                    <div class="logo"></div>
+                    <div class="profile">
+                        <div class="profile-text">
+                            <h1>Welcome to Ultima</h1>
+                            <p>Please complete steps to register</p>
+                        </div>
+                        <p:graphicImage styleClass="profile-image" name="images/pages/flag-us@2x.png" library="demo" />
+                    </div>
+                </div>
+        
+                <div class="wizard-content">
+                    <div class="wizard-card">
+                        <div class="wizard-card-header">
+                            <div class="grid col">
+                                <div class="col-4 tab register-tab selected-tab">
+                                    <div class="icon">
+                                        <i class="pi pi-sign-in"></i>
+                                    </div>
+                                    <div class="title">REGISTER</div>
+                                </div>
+                                <div class="col-4 tab tier-tab">
+                                    <div class="icon">
+                                        <i class="pi pi-clone"></i>
+                                    </div>
+                                    <div class="title">CHOOSE TIER</div>
+                                </div>
+                                <div class="col-4 tab payment-tab">
+                                    <div class="icon">
+                                        <i class="pi pi-shopping-cart"></i>
+                                    </div>
+                                    <div class="title">PAYMENT</div>
+                                </div>
+                                <div class="tab-bar"></div>
+                            </div>
+                        </div>
+                        <div class="wizard-card-content register active-content">
+                            <div class="grid">
+                                <div class="col-12 lg:col-6">
+                                    <h1>ESSENTIAL INFORMATION</h1>
+                                    <div class="forms ui-fluid">
+                                        <div class="ui-inputgroup">
+                                            <span class="ui-inputgroup-addon">
+                                                <i class="pi pi-user"></i>
+                                            </span>
+                                            <span class="ui-float-label flex align-items-stretch w-full">
+                                                <p:inputText />
+                                                <p:outputLabel for="@previous" value="Username" />
+                                            </span>
+                                        </div>
+                                        <div class="ui-inputgroup">
+                                            <span class="ui-inputgroup-addon">
+                                                <i class="pi pi-user"></i>
+                                            </span>
+                                            <span class="ui-float-label flex align-items-stretch w-full">
+                                                <p:inputText />
+                                                <p:outputLabel for="@previous" value="Email" />
+                                            </span>
+                                        </div>
+                                        <div class="ui-inputgroup">
+                                            <span class="ui-inputgroup-addon">
+                                                <i class="pi pi-sign-in"></i>
+                                            </span>
+                                            <span class="ui-float-label flex align-items-stretch w-full">
+                                                <p:password />
+                                                <p:outputLabel for="@previous" value="Password" />
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 lg:col-6">
+                                    <h1>OPTIONAL</h1>
+                                    <div class="forms ui-fluid">
+                                        <p:selectOneMenu id="timezone" style="margin-bottom:10px;">
+                                            <f:selectItem itemLabel="Select Time Zone" itemValue="" />
+                                            <f:selectItem itemLabel="UTC-12.00" itemValue="UTC-+Value" />
+                                            <f:selectItem itemLabel="UTC-11.00" itemValue="UTC-+Value" />
+                                            <f:selectItem itemLabel="UTC-10.00" itemValue="UTC-+Value" />
+                                            <f:selectItem itemLabel="UTC-09.30" itemValue="UTC-+Value" />
+                                            <f:selectItem itemLabel="UTC-09.00" itemValue="UTC-+Value" />
+                                            <f:selectItem itemLabel="UTC-08.00" itemValue="UTC-+Value" />
+                                            <f:selectItem itemLabel="UTC-07.00" itemValue="UTC-+Value" />
+                                            <f:selectItem itemLabel="UTC-06.00" itemValue="UTC-+Value" />
+                                            <f:selectItem itemLabel="UTC-05.00" itemValue="UTC-+Value" />
+                                            <f:selectItem itemLabel="UTC-04.00" itemValue="UTC-+Value" />
+                                            <f:selectItem itemLabel="UTC-03.30" itemValue="UTC-+Value" />
+                                            <f:selectItem itemLabel="UTC-03.00" itemValue="UTC-+Value" />
+                                            <f:selectItem itemLabel="UTC-02.00" itemValue="UTC-+Value" />
+                                            <f:selectItem itemLabel="UTC-+00.00" itemValue="UTC-+Value" />
+                                            <f:selectItem itemLabel="UTC+01.00" itemValue="UTC-+Value" />
+                                            <f:selectItem itemLabel="UTC+02.00" itemValue="UTC-+Value" />
+                                            <f:selectItem itemLabel="UTC+03.00" itemValue="UTC-+Value" />
+                                            <f:selectItem itemLabel="UTC+03.30" itemValue="UTC-+Value" />
+                                            <f:selectItem itemLabel="UTC+04.00" itemValue="UTC-+Value" />
+                                            <f:selectItem itemLabel="UTC+04.30" itemValue="UTC-+Value" />
+                                            <f:selectItem itemLabel="UTC+05.00" itemValue="UTC-+Value" />
+                                            <f:selectItem itemLabel="UTC+05.30" itemValue="UTC-+Value" />
+                                            <f:selectItem itemLabel="UTC+05.45" itemValue="UTC-+Value" />
+                                            <f:selectItem itemLabel="UTC+06.00" itemValue="UTC-+Value" />
+                                            <f:selectItem itemLabel="UTC+06.30" itemValue="UTC-+Value" />
+                                            <f:selectItem itemLabel="UTC+07.00" itemValue="UTC-+Value" />
+                                            <f:selectItem itemLabel="UTC+08.00" itemValue="UTC-+Value" />
+                                            <f:selectItem itemLabel="UTC+08.45" itemValue="UTC-+Value" />
+                                            <f:selectItem itemLabel="UTC+09.00" itemValue="UTC-+Value" />
+                                            <f:selectItem itemLabel="UTC+09.30" itemValue="UTC-+Value" />
+                                            <f:selectItem itemLabel="UTC+10.00" itemValue="UTC-+Value" />
+                                            <f:selectItem itemLabel="UTC+10.30" itemValue="UTC-+Value" />
+                                            <f:selectItem itemLabel="UTC+11.00" itemValue="UTC-+Value" />
+                                            <f:selectItem itemLabel="UTC+12.00" itemValue="UTC-+Value" />
+                                            <f:selectItem itemLabel="UTC+12.45" itemValue="UTC-+Value" />
+                                            <f:selectItem itemLabel="UTC+13.00" itemValue="UTC-+Value" />
+                                            <f:selectItem itemLabel="UTC+14.00" itemValue="UTC-+Value" />
+                                        </p:selectOneMenu>
+
+                                        <div class="calendar">
+                                            <p:datePicker id="button" showIcon="true" placeholder="Birthdate"/>
+                                        </div>
+
+                                        <p:selectOneMenu id="ultima" style="margin-bottom:10px;">
+                                            <f:selectItem itemLabel="Where did you hear Ultima" itemValue="" />
+                                            <f:selectItem itemLabel="Blogs" itemValue="Blogs" />
+                                            <f:selectItem itemLabel="Google Ads" itemValue="google" />
+                                            <f:selectItem itemLabel="Your Forum" itemValue="prime-forum" />
+                                            <f:selectItem itemLabel="Youtube" itemValue="Youtube" />
+                                            <f:selectItem itemLabel="Events" itemValue="event" />
+                                            <f:selectItem itemLabel="Other" itemValue="other" />
+                                        </p:selectOneMenu>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <p:commandButton type="button" value="CONTINUE" styleClass="continue-button" />
+                                </div>
+                            </div>
+                        </div>
+        
+                        <div class="wizard-card-content tier">
+                            <div class="grid">
+                                <div class="col-12 md:col-6 lg:col-4">
+                                    <div class="card basic">
+                                        <div class="card-header">
+                                            <div class="grid">
+                                                <div class="col-8">
+                                                    <h1>BASIC</h1>
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="flex align-items-baseline">
+                                                        <h1>$5</h1>
+                                                        <span>/m</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-content">
+                                            <div class="card-row grid">
+                                                <div class="col-3">
+                                                    <i class="pi pi-fw pi-check"></i>
+                                                </div>
+                                                <div class="col-9">Responsive</div>
+                                            </div>
+                                            <div class="card-row grid">
+                                                <div class="col-3">
+                                                    <i class="pi pi-fw pi-check"></i>
+                                                </div>
+                                                <div class="col-9">Push Messages</div>
+                                            </div>
+                                            <div class="col-12 tier-button-wrapper">
+                                                <p:commandButton value="BASIC" styleClass="tier-button basic" oncomplete="Wizard.selectOrderInfo('.basic', '.order-basic')" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 md:col-6 lg:col-4">
+                                    <div class="card pro">
+                                        <div class="card-header">
+                                            <div class="grid">
+                                                <div class="col-7">
+                                                    <h1>PRO</h1>
+                                                </div>
+                                                <div class="col-5">
+                                                    <div class="flex align-items-baseline">
+                                                        <h1>$25</h1>
+                                                        <span>/m</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-content">
+                                            <div class="card-row grid">
+                                                <div class="col-3">
+                                                    <i class="pi pi-fw pi-check"></i>
+                                                </div>
+                                                <div class="col-9">Responsive</div>
+                                            </div>
+                                            <div class="card-row grid">
+                                                <div class="col-3">
+                                                    <i class="pi pi-fw pi-check"></i>
+                                                </div>
+                                                <div class="col-9">Push Messages</div>
+                                            </div>
+                                            <div class="card-row grid">
+                                                <div class="col-3">
+                                                    <i class="pi pi-fw pi-check"></i>
+                                                </div>
+                                                <div class="col-9">7/24 Support</div>
+                                            </div>
+                                            <div class="card-row grid">
+                                                <div class="col-3">
+                                                    <i class="pi pi-fw pi-check"></i>
+                                                </div>
+                                                <div class="col-9">Free Shipping</div>
+                                            </div>
+                                            <div class="col-12 tier-button-wrapper">
+                                                <p:commandButton value="SELECT PRO" styleClass="tier-button pro" oncomplete="Wizard.selectOrderInfo('.pro', '.order-pro')" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+        
+                                <div class="col-12 md:col-6 lg:col-4">
+                                    <div class="card pro-plus">
+                                        <div class="card-header">
+                                            <div class="grid">
+                                                <div class="col-7">
+                                                    <h1>PRO+</h1>
+                                                </div>
+                                                <div class="col-5">
+                                                    <div class="flex align-items-baseline">
+                                                        <h1>$50</h1>
+                                                        <span>/m</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-content">
+                                            <div class="card-row grid">
+                                                <div class="col-3">
+                                                    <i class="pi pi-fw pi-check"></i>
+                                                </div>
+                                                <div class="col-9">Responsive</div>
+                                            </div>
+                                            <div class="card-row grid">
+                                                <div class="col-3">
+                                                    <i class="pi pi-fw pi-check"></i>
+                                                </div>
+                                                <div class="col-9">Push Messages</div>
+                                            </div>
+                                            <div class="card-row grid">
+                                                <div class="col-3">
+                                                    <i class="pi pi-fw pi-check"></i>
+                                                </div>
+                                                <div class="col-9">7/24 Support</div>
+                                            </div>
+                                            <div class="card-row grid">
+                                                <div class="col-3">
+                                                    <i class="pi pi-fw pi-check"></i>
+                                                </div>
+                                                <div class="col-9">Free Shipping</div>
+                                            </div>
+                                            <div class="card-row grid">
+                                                <div class="col-3">
+                                                    <i class="pi pi-fw pi-check"></i>
+                                                </div>
+                                                <div class="col-9">Unlimited BW</div>
+                                            </div>
+                                            <div class="card-row grid">
+                                                <div class="col-3">
+                                                    <i class="pi pi-fw pi-check"></i>
+                                                </div>
+                                                <div class="col-9">Special Gift Cards</div>
+                                            </div>
+                                            <div class="col-12 tier-button-wrapper">
+                                                <p:commandButton value="SELECT PRO+" styleClass="tier-button pro-plus" oncomplete="Wizard.selectOrderInfo('.pro-plus', '.order-pro-plus')" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+        
+                        <div class="wizard-card-content payment">
+                            <div class="grid grid-nogutter">
+                                <div class="lg:col-8 col-12 payment-info">
+                                    <div class="grid col" id="customPanel">
+                                        <p:selectOneRadio id="customRadio" layout="custom">
+                                            <f:selectItem itemLabel="" itemValue="Credit" />
+                                            <f:selectItem itemLabel="" itemValue="Paypal" />
+                                        </p:selectOneRadio>
+                                        <div class="col-1 lg:col-1 md:col-1" style="line-height: 2em">
+                                            <p:radioButton id="opt1" for="customRadio" itemIndex="0" />
+                                        </div>
+                                        <div class="col-11 lg:col-5 md:col-5">
+                                            <div class="credits">
+                                                <p:graphicImage name="images/pages/asset-mastercard.svg" library="demo" />
+                                                <p:graphicImage name="images/pages/asset-visa.svg" library="demo" />
+                                                <p:graphicImage name="images/pages/asset-amex.svg" library="demo" />
+                                            </div>
+                                        </div>
+                                        <div class="col-1 lg:col-1 md:col-1" style="line-height: 2em">
+                                            <p:radioButton id="opt2" for="customRadio" itemIndex="1" />
+                                        </div>
+                                        <div class="col-11 lg:col-5 md:col-5">
+                                            <div class="paypal">
+                                                <p:graphicImage name="images/pages/asset-paypal.svg" library="demo" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="grid col">
+                                        <div class="col-12">
+                                            <span class="ui-float-label flex align-items-stretch w-full">
+                                                <p:inputText />
+                                                <p:outputLabel for="@previous" value="Card Holder Name" />
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="grid col">
+                                        <div class="col-6">
+                                            <span class="ui-float-label flex align-items-stretch w-full">
+                                                <p:inputText />
+                                                <p:outputLabel for="@previous" value="Card No" />
+                                            </span>
+                                        </div>
+                                        <div class="col-3">
+                                            <span class="ui-float-label flex align-items-stretch w-full">
+                                                <p:inputText />
+                                                <p:outputLabel for="@previous" value="Date" />
+                                            </span>
+                                        </div>
+                                        <div class="col-3">
+                                            <span class="ui-float-label flex align-items-stretch w-full">
+                                                <p:inputText />
+                                                <p:outputLabel for="@previous" value="CCV" />
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="grid col check-info">
+                                        <p:selectManyCheckbox layout="responsive" columns="1">
+                                            <f:selectItem itemLabel=" Save credit card information for future usage" itemValue="SaveInfo" />
+                                        </p:selectManyCheckbox>
+                                    </div>
+                                </div>
+                                <div class="lg:col-4 col-12 order-info">
+                                    <div class="grid col">
+                                        <div class="col-12">
+                                            <h1>ORDER SUMMARY</h1>
+                                        </div>
+                                    </div>
+                                    <div class="order order-default">
+                                        <div class="grid col">
+                                            <div class="col-8">Tier - </div>
+                                            <div class="col-4 price">$0.00</div>
+                                            <div class="col-8">VAT (%18)</div>
+                                            <div class="col-4 price">$0.00</div>
+                                        </div>
+                                        <div class="grid col total">
+                                            <div class="col-8">Total</div>
+                                            <div class="col-4 price">$0.00</div>
+                                            <div class="col-12">
+                                                Please select one tier.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="order order-basic">
+                                        <div class="grid col">
+                                            <div class="col-8">Tier - Basic</div>
+                                            <div class="col-4 price">$5.00</div>
+                                            <div class="col-8">VAT (%18)</div>
+                                            <div class="col-4 price">$0.90</div>
+                                        </div>
+                                        <div class="grid col total">
+                                            <div class="col-8">Total</div>
+                                            <div class="col-4 price">$5.90</div>
+                                            <div class="col-12">
+                                                <p:commandButton value="CONFIRM ORDER" styleClass="buy-button" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="order order-pro">
+                                        <div class="grid col">
+                                            <div class="col-8">Tier - Pro</div>
+                                            <div class="col-4 price">$25.00</div>
+                                            <div class="col-8">VAT (%18)</div>
+                                            <div class="col-4 price">$4.50</div>
+                                        </div>
+                                        <div class="grid col total">
+                                            <div class="col-8">Total</div>
+                                            <div class="col-4 price">$29.50</div>
+                                            <div class="col-12">
+                                                <p:commandButton value="CONFIRM ORDER" styleClass="buy-button" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="order order-pro-plus">
+                                        <div class="grid col">
+                                            <div class="col-8">Tier - Pro+</div>
+                                            <div class="col-4 price">$50.00</div>
+                                            <div class="col-8">VAT (%18)</div>
+                                            <div class="col-4 price">$9.00</div>
+                                        </div>
+                                        <div class="grid col total">
+                                            <div class="col-8">Total</div>
+                                            <div class="col-4 price">$59.00</div>
+                                            <div class="col-12">
+                                                <p:commandButton value="CONFIRM ORDER" styleClass="buy-button" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+
+        <!-- **CSS** -->
+        <!-- LAYOUT DEPENDENCIES -->
+        <h:outputStylesheet name="styles/#{app.layout}.css" library="layout" />
+
+        <!-- OPTIONAL DEPENDENCIES -->
+        <!-- PrimeFlex is a lightweight responsive CSS utility library. This app contains two seperate packages; primeflex.min.css(v3.x) and primeflex-v2.min.css(v2.x) -->
+        <h:outputStylesheet name="primeflex/primeflex.min.css" library="layout"/>
+        <!-- When enabled, ripple animation is activated. -->
+        <h:outputStylesheet name="ripple/ripple.css" library="layout" rendered="#{app.ripple}" />
+
+        <h:outputStylesheet name="styles/demo.css" library="demo" />
+    </h:body>
+
+</html>
