@@ -69,9 +69,17 @@ Você pode ativar o profile desejado de três formas:
 
 ---
 
-### 📚 JoinFaces  
+### 📚 JoinFaces
 📄 Acesse a documentação oficial do **JoinFaces 5.4.x**:  
 🔗 [Documentação JoinFaces 5.4.x](https://docs.joinfaces.org/5.4.x/reference/)
+
+> Esta documentação cobre toda a configuração e uso do JoinFaces com Spring Boot e JSF 4.
+
+---
+
+### 📚 Primefaces 14 
+📄 Acesse a documentação oficial do **Primefaces 14**:  
+🔗 [Documentação Primefaces 14](https://primefaces.github.io/primefaces/14_0_0/#/)
 
 > Esta documentação cobre toda a configuração e uso do JoinFaces com Spring Boot e JSF 4.
 
