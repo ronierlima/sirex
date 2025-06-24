@@ -96,6 +96,19 @@ Este projeto utiliza o **PrimeFaces Ultima 7.0**, um moderno e responsivo **temp
 > O Ultima oferece uma interface rica, adaptável e pronta para dispositivos móveis, sendo ideal para aplicações administrativas e corporativas.
 
 
+---
+### 🕵️ Auditoria com Hibernate Envers
+
+Este projeto utiliza o **Hibernate Envers** para realizar **auditoria automática** das entidades JPA.
+
+🔍 O Envers permite manter um **histórico completo de alterações** feitas em registros do banco de dados, incluindo:
+
+- Criação, atualização e exclusão de dados;
+- Registro de **quem alterou**, **quando alterou** e **qual o valor anterior**;
+- Acesso às revisões de uma entidade ao longo do tempo.
+
+> Essa funcionalidade é essencial para **rastreabilidade**, **transparência** e **conformidade** com boas práticas de segurança da informação e controle de dados sensíveis.
+
 ### 🚦 Iniciar Projeto  
 
 1. 🐘 No **PostgreSQL 16**, crie um banco chamado `starter`.  
@@ -127,6 +140,7 @@ mvn clean install -P prod
 ```
 ---
 
+---
 ## 📊 Monitoramento com JavaMelody
 
 O projeto utiliza o [**JavaMelody**](https://github.com/javamelody/javamelody) como ferramenta de **monitoramento de performance** da aplicação.
@@ -140,17 +154,4 @@ O projeto utiliza o [**JavaMelody**](https://github.com/javamelody/javamelody) c
 
 ### 🌐 Acesso ao monitor
 O JavaMelody está disponível através do Menu da Aplicação:
-
 ---
-### 🕵️ Auditoria com Hibernate Envers  
-
-Este projeto utiliza o **Hibernate Envers** para realizar **auditoria automática** das entidades JPA.
-
-🔍 O Envers permite manter um **histórico completo de alterações** feitas em registros do banco de dados, incluindo:
-
-- Criação, atualização e exclusão de dados;
-- Registro de **quem alterou**, **quando alterou** e **qual o valor anterior**;
-- Acesso às revisões de uma entidade ao longo do tempo.
-
-> Essa funcionalidade é essencial para **rastreabilidade**, **transparência** e **conformidade** com boas práticas de segurança da informação e controle de dados sensíveis.
-
