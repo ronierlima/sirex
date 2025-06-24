@@ -20,6 +20,7 @@
 - 🎨 **PrimeFaces 14**  
 - 🧾 **JasperReports 6.17**  
 - 🔄 **FlyWay**
+- 📊 JavaMelody – ferramenta de monitoramento de performance da aplicação
 
 ---
 
@@ -126,6 +127,21 @@ mvn clean install -P prod
 ```
 ---
 
+## 📊 Monitoramento com JavaMelody
+
+O projeto utiliza o [**JavaMelody**](https://github.com/javamelody/javamelody) como ferramenta de **monitoramento de performance** da aplicação.
+
+### 🔍 O que o JavaMelody monitora:
+- Utilização de memória e CPU
+- Sessões ativas
+- Execução de métodos (tempo médio, tempo total)
+- Execução de SQLs (inclusive lentas)
+- Chamadas HTTP e tempo de resposta
+
+### 🌐 Acesso ao monitor
+O JavaMelody está disponível através do Menu da Aplicação:
+
+---
 ### 🕵️ Auditoria com Hibernate Envers  
 
 Este projeto utiliza o **Hibernate Envers** para realizar **auditoria automática** das entidades JPA.

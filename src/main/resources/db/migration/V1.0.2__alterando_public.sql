@@ -287,6 +287,10 @@ INSERT INTO public.funcionalidade
 (id, nome, "label", exibir, id_funcionalidade)
 VALUES(30, 'ROLE_UNIDADE_VISUALIZAR', 'Visualizar Unidade', true, 26);
 
+INSERT INTO public.funcionalidade
+(id, nome, "label", exibir, id_funcionalidade)
+VALUES(50, 'ROLE_MONITORA_SISTEMA', 'Monitorar Sistema', true, 1);
+
 INSERT INTO public.macroregional
 (id, nome)
 VALUES(1, 'I');

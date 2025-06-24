@@ -31,10 +31,10 @@ import lombok.RequiredArgsConstructor;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-	
-	private final UserDetailsServiceImpl userDetailsService;
-	
-	public static final String[] ENDPOINTS_WHITELIST = {
+
+    private final UserDetailsServiceImpl userDetailsService;
+
+    public static final String[] ENDPOINTS_WHITELIST = {
             "/login.xhtml",
             "/notfound.xhtml",
             "/error.xhtml",
@@ -49,175 +49,178 @@ public class SecurityConfig {
             "/img/**",
             "/js/**",
             "*.css",
-            "*.js",            
+            "*.js",
             "/jakarta.faces.resource/**",
             "/resources/images/**",
-            "*.png","*.jpeg","*.jpg","*.svg", //imagens
-            "*.eot","*.ttf","*.woff", "*.woff2"//fontes
+            "*.png", "*.jpeg", "*.jpg", "*.svg", //imagens
+            "*.eot", "*.ttf", "*.woff", "*.woff2"//fontes
     };
 
-	@Bean
+    @Bean
     SessionRegistry sessionRegistry() {
         return new SessionRegistryImpl();
     }
-	
-	
-	@Bean
-	@SuppressWarnings("removal")
-	SecurityFilterChain configure(HttpSecurity http) throws Exception {
-
-	    JsfLoginUrlAuthenticationEntryPoint jsfLoginEntry = new JsfLoginUrlAuthenticationEntryPoint();
-	    jsfLoginEntry.setLoginFormUrl("/login.xhtml");
-	    jsfLoginEntry.setRedirectStrategy(new JsfRedirectStrategy());
-
-	    JsfAccessDeniedHandler jsfDeniedEntry = new JsfAccessDeniedHandler();
-	    jsfDeniedEntry.setLoginPath("/acessoNegado.xhtml");
-	    jsfDeniedEntry.setContextRelative(true);
-
-	    http.csrf().disable()
-	        .headers().frameOptions().sameOrigin();
-	    http.csrf(csrf -> csrf.disable());
-
-	    http.sessionManagement(sessionManagement -> sessionManagement
-	            .sessionFixation(sessionFixation -> sessionFixation.migrateSession())
-	            .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-	            .maximumSessions(1)
-	            .sessionRegistry(sessionRegistry())
-	            .expiredUrl("/login.xhtml?sessionExpired=true"));
-
-	    http.authorizeHttpRequests(authorize -> authorize
-	        .requestMatchers(ENDPOINTS_WHITELIST).permitAll()
-
-	        .requestMatchers("/paginas/principal.xhtml", "/pdf/**", "/ultima/**").authenticated()
-
-	        .requestMatchers("/paginas/usuario/listarUsuarios.xhtml", "/paginas/usuario/visualizarUsuario.xhtml")
-	            .hasAnyRole(Permissao.VISUALIZAR_USUARIO.getRole())
-
-	        .requestMatchers("/paginas/usuario/cadastrarUsuario.xhtml")
-	            .hasAnyRole(
-	                Permissao.INCLUIR_USUARIO.getRole(),
-	                Permissao.ALTERAR_USUARIO.getRole()
-	            )
-
-	        .requestMatchers("/paginas/perfil/listarPerfis.xhtml")
-	            .hasAnyRole(Permissao.VISUALIZAR_PERFIL.getRole())
-
-	        .requestMatchers("/paginas/perfil/incluirPerfil.xhtml")
-	            .hasAnyRole(
-	                Permissao.INCLUIR_PERFIL.getRole(),
-	                Permissao.ALTERAR_PERFIL.getRole()
-	            )
-
-	        .requestMatchers("/paginas/unidade/listarUnidades.xhtml")
-	            .hasAnyRole(Permissao.VISUALIZAR_UNIDADE.getRole())
-
-	        .requestMatchers("/paginas/configuracao/configurar.xhtml")
-	            .hasAnyRole(Permissao.GERENCIAR_SISTEMA.getRole())
-
-	        .requestMatchers("/paginas/paciente/listarPacientes.xhtml")
-	            .hasAnyRole(Permissao.VISUALIZAR_PACIENTE.getRole())
-
-	        .requestMatchers("/paginas/paciente/incluirPaciente.xhtml")
-	            .hasAnyRole(
-	                Permissao.INCLUIR_PACIENTE.getRole(),
-	                Permissao.ALTERAR_PACIENTE.getRole()
-	            )
-
-	        .requestMatchers("/paginas/relatorios/usuarios/exportarUsuariosCadastrados.xhtml")
-	            .hasRole(Permissao.EXPORTAR_USUARIOS_CADASTRADOS.getRole())
-
-	        .anyRequest().authenticated()
-	    )
-
-	    .formLogin(formLogin -> formLogin
-	        .usernameParameter("usuario")
-	        .passwordParameter("senha")
-	        .loginPage("/login.xhtml")
-	        .loginProcessingUrl("/login.xhtml")
-	        .failureUrl("/login.xhtml?invalid=true")
-	        .defaultSuccessUrl("/paginas/principal.xhtml", true))
-
-	    .logout(logout -> logout
-	        .logoutUrl("/logout")
-	        .logoutSuccessUrl("/login.xhtml")
-	        .deleteCookies("remember-me", "JSESSIONID")
-	        .invalidateHttpSession(true)
-	        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-	    )
-
-	    .exceptionHandling(exceptionHandling -> exceptionHandling
-	        .accessDeniedPage("/acessoNegado.xhtml")
-	        .authenticationEntryPoint(jsfLoginEntry)
-	        .accessDeniedHandler(jsfDeniedEntry)
-	    )
-
-	    .securityContext(securityContext -> securityContext
-	        .securityContextRepository(new DelegatingSecurityContextRepository(
-	            new RequestAttributeSecurityContextRepository(),
-	            new HttpSessionSecurityContextRepository()
-	        ))
-	    )
-
-	    .authenticationManager(authenticationManager());
-
-	    return http.build();
-	}
 
 
-	@Bean
-	AuthenticationManager authenticationManager() {
-		
-		return authentication -> {
+    @Bean
+    @SuppressWarnings("removal")
+    SecurityFilterChain configure(HttpSecurity http) throws Exception {
 
-			UserDetails usuario = userDetailsService.loadUserByUsername((String) authentication.getPrincipal());
-			String senhaDigitada = (String) authentication.getCredentials();
-			
-			try {
+        JsfLoginUrlAuthenticationEntryPoint jsfLoginEntry = new JsfLoginUrlAuthenticationEntryPoint();
+        jsfLoginEntry.setLoginFormUrl("/login.xhtml");
+        jsfLoginEntry.setRedirectStrategy(new JsfRedirectStrategy());
 
-				if (usuario != null && BCrypt.checkpw(senhaDigitada, usuario.getPassword())) {
+        JsfAccessDeniedHandler jsfDeniedEntry = new JsfAccessDeniedHandler();
+        jsfDeniedEntry.setLoginPath("/acessoNegado.xhtml");
+        jsfDeniedEntry.setContextRelative(true);
 
-					if (!usuario.isEnabled()) {
+        http.csrf().disable()
+                .headers().frameOptions().sameOrigin();
+        http.csrf(csrf -> csrf.disable());
 
-						throw new DisabledException("Usuário com Cadastro Inativo! Procure o Administrador do Sistema.");
-						
-					} else if (!usuario.isAccountNonLocked() && usuario.isAccountNonExpired()) {
+        http.sessionManagement(sessionManagement -> sessionManagement
+                .sessionFixation(sessionFixation -> sessionFixation.migrateSession())
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                .maximumSessions(1)
+                .sessionRegistry(sessionRegistry())
+                .expiredUrl("/login.xhtml?sessionExpired=true"));
 
-						throw new LockedException(
-								"Usuário com Acesso ao Sistema Inativo! Procure o Administrador do Sistema.");
+        http.authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(ENDPOINTS_WHITELIST).permitAll()
 
-					} else if (!usuario.isAccountNonExpired()) {
+                        .requestMatchers("/paginas/principal.xhtml", "/pdf/**", "/ultima/**").authenticated()
 
-						throw new AccountExpiredException(
-								"Usuário com Cadastro de Acesso Pendente! Procure o Administrador do Sistema!");
+                        .requestMatchers("/paginas/usuario/listarUsuarios.xhtml", "/paginas/usuario/visualizarUsuario.xhtml")
+                        .hasAnyRole(Permissao.VISUALIZAR_USUARIO.getRole())
 
-					} else if (usuario.getAuthorities().isEmpty()) {
+                        .requestMatchers("/paginas/usuario/cadastrarUsuario.xhtml")
+                        .hasAnyRole(
+                                Permissao.INCLUIR_USUARIO.getRole(),
+                                Permissao.ALTERAR_USUARIO.getRole()
+                        )
 
-						throw new BadCredentialsException(
-								"Usuário sem Permissões Definidas para Navegação. Procure o Administrador do Sistema.");
+                        .requestMatchers("/monitoring/**", "/actuator/**")
+                        .hasAnyRole(Permissao.MONITORA_SISTEMA.getRole())
 
-					} else {
+                        .requestMatchers("/paginas/perfil/listarPerfis.xhtml")
+                        .hasAnyRole(Permissao.VISUALIZAR_PERFIL.getRole())
 
-						return new UsernamePasswordAuthenticationToken(usuario, usuario.getPassword(),
-								usuario.getAuthorities());
+                        .requestMatchers("/paginas/perfil/incluirPerfil.xhtml")
+                        .hasAnyRole(
+                                Permissao.INCLUIR_PERFIL.getRole(),
+                                Permissao.ALTERAR_PERFIL.getRole()
+                        )
 
-					}
+                        .requestMatchers("/paginas/unidade/listarUnidades.xhtml")
+                        .hasAnyRole(Permissao.VISUALIZAR_UNIDADE.getRole())
 
-				} else {
+                        .requestMatchers("/paginas/configuracao/configurar.xhtml")
+                        .hasAnyRole(Permissao.GERENCIAR_SISTEMA.getRole())
 
-					throw new UsernameNotFoundException("Usuário ou Senha Inválido!");
+                        .requestMatchers("/paginas/paciente/listarPacientes.xhtml")
+                        .hasAnyRole(Permissao.VISUALIZAR_PACIENTE.getRole())
 
-				}
+                        .requestMatchers("/paginas/paciente/incluirPaciente.xhtml")
+                        .hasAnyRole(
+                                Permissao.INCLUIR_PACIENTE.getRole(),
+                                Permissao.ALTERAR_PACIENTE.getRole()
+                        )
 
-			} catch (Exception e) {
-				throw new BadCredentialsException(e.getMessage());
+                        .requestMatchers("/paginas/relatorios/usuarios/exportarUsuariosCadastrados.xhtml")
+                        .hasRole(Permissao.EXPORTAR_USUARIOS_CADASTRADOS.getRole())
 
-			}
+                        .anyRequest().authenticated()
+                )
 
-		};
+                .formLogin(formLogin -> formLogin
+                        .usernameParameter("usuario")
+                        .passwordParameter("senha")
+                        .loginPage("/login.xhtml")
+                        .loginProcessingUrl("/login.xhtml")
+                        .failureUrl("/login.xhtml?invalid=true")
+                        .defaultSuccessUrl("/paginas/principal.xhtml", true))
 
-	}
-	
-	@Bean
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login.xhtml")
+                        .deleteCookies("remember-me", "JSESSIONID")
+                        .invalidateHttpSession(true)
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                )
+
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .accessDeniedPage("/acessoNegado.xhtml")
+                        .authenticationEntryPoint(jsfLoginEntry)
+                        .accessDeniedHandler(jsfDeniedEntry)
+                )
+
+                .securityContext(securityContext -> securityContext
+                        .securityContextRepository(new DelegatingSecurityContextRepository(
+                                new RequestAttributeSecurityContextRepository(),
+                                new HttpSessionSecurityContextRepository()
+                        ))
+                )
+
+                .authenticationManager(authenticationManager());
+
+        return http.build();
+    }
+
+
+    @Bean
+    AuthenticationManager authenticationManager() {
+
+        return authentication -> {
+
+            UserDetails usuario = userDetailsService.loadUserByUsername((String) authentication.getPrincipal());
+            String senhaDigitada = (String) authentication.getCredentials();
+
+            try {
+
+                if (usuario != null && BCrypt.checkpw(senhaDigitada, usuario.getPassword())) {
+
+                    if (!usuario.isEnabled()) {
+
+                        throw new DisabledException("Usuário com Cadastro Inativo! Procure o Administrador do Sistema.");
+
+                    } else if (!usuario.isAccountNonLocked() && usuario.isAccountNonExpired()) {
+
+                        throw new LockedException(
+                                "Usuário com Acesso ao Sistema Inativo! Procure o Administrador do Sistema.");
+
+                    } else if (!usuario.isAccountNonExpired()) {
+
+                        throw new AccountExpiredException(
+                                "Usuário com Cadastro de Acesso Pendente! Procure o Administrador do Sistema!");
+
+                    } else if (usuario.getAuthorities().isEmpty()) {
+
+                        throw new BadCredentialsException(
+                                "Usuário sem Permissões Definidas para Navegação. Procure o Administrador do Sistema.");
+
+                    } else {
+
+                        return new UsernamePasswordAuthenticationToken(usuario, usuario.getPassword(),
+                                usuario.getAuthorities());
+
+                    }
+
+                } else {
+
+                    throw new UsernameNotFoundException("Usuário ou Senha Inválido!");
+
+                }
+
+            } catch (Exception e) {
+                throw new BadCredentialsException(e.getMessage());
+
+            }
+
+        };
+
+    }
+
+    @Bean
     BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
