@@ -31,4 +31,6 @@ public interface UnidadeService {
 	
 	public List<Municipio> listarMunicipios(Gere gere);
 
+	public List<Unidade> listarHospitaisAtivosTesteCache();
+
 }

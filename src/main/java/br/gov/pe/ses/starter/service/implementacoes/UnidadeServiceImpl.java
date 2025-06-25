@@ -2,6 +2,7 @@ package br.gov.pe.ses.starter.service.implementacoes;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -9,7 +10,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import br.gov.pe.ses.starter.builders.UnidadeBuilder;
 import br.gov.pe.ses.starter.data.repository.GereRepository;
 import br.gov.pe.ses.starter.data.repository.UnidadeRepository;
@@ -128,6 +128,12 @@ public class UnidadeServiceImpl implements UnidadeService {
 	@Transactional
 	public void alterarConfiguracao(Unidade hospital) throws NegocioException {
 		hospitalRepository.save(hospital);
+	}
+	
+	@Override
+	@Cacheable(value = "unidadesAtivasCache")
+	public List<Unidade> listarHospitaisAtivosTesteCache() {
+		return hospitalRepository.findAllAtivos();
 	}
 
 }

@@ -40,7 +40,12 @@
                     <p:submenu id="m_real_time" label="Real Time" >
                         <p:menuitem id="m_real_time_2" value="Emitir Mensagem" action="#{notificacoesBean.notificar()}"
                                     title="Ao clicar o sistema emitirá uma msg para todos os usuarios conectados"
-                                    process="@this" icon="fa fa-fw fa-signal" />
+                                    process="@this" icon="fa fa-fw fa-signal"/>
+                    </p:submenu>
+                    
+                    <p:submenu id="m_cache" label="Cache de 2º Nível" >
+                        <p:menuitem id="m_cache_1" value="Cache" url="/paginas/util/cache.xhtml" 
+                        icon="fa fa-clock" />
                     </p:submenu>
                     
                      <p:submenu id="adm" label="Administração" rendered="#{menuChecker.exibirConfiguracoes}">
