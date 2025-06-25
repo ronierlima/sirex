@@ -1,0 +1,102 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/layout/template.xhtml">
+
+	<ui:define name="title">Cache</ui:define>
+
+	<ui:define name="breadcrumb">
+		<f:metadata>
+			<f:viewParam name="homeOutcome" value="/paginas/principal" />
+			<f:viewParam name="value" value="Principal" />
+			<f:viewParam name="outcome" value="/paginas/principal" />
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="content">
+		<h:form>
+			<div class="grid">
+
+
+				<div class="col-12">
+					<div class="card">
+						<h5>Cache de Segundo Nível/Query</h5>
+
+						<div class="field col-12 md:col-12">
+
+							<ul>
+								<li style="margin-bottom: 5px">O Cache utilizado é o <strong>Ehcache</strong> como
+									implementação da especificação <strong>JCache
+										(JSR-107)</strong>.
+								</li>								
+
+								<li style="margin-bottom: 5px">As configurações do cache foram feitas de forma <strong>programática</strong>
+									através da classe <code>CacheConfig</code>, sem uso de arquivos
+									XML.
+								</li>
+
+								<li style="margin-bottom: 5px">A classe <code>CacheConfig</code> define os caches
+									manualmente e registra cada um no <code>CacheManager</code> da
+									JSR-107, com tempos de expiração personalizados por cache.
+								</li>
+
+								<li style="margin-bottom: 5px">As entidades que utilizam o cache de segundo nível
+									estão anotadas com <code>@Cache</code>, indicando a região do
+									cache e a estratégia de concorrência (por exemplo: <code>READ_ONLY</code>).
+								</li>
+
+								<li style="margin-bottom: 5px">O segundo nível de cache do Hibernate foi ativado via
+									propriedades no <code>application.properties</code>, incluindo
+									o uso do <code>JCacheRegionFactory</code>.
+								</li>
+
+								<li style="margin-bottom: 5px">Para configurar o tempo de permanência dos objetos em
+									cache (TTL), foi utilizado o <code>CacheConfigurationBuilder</code>
+									do Ehcache na classe <code>CacheConfig</code>.
+								</li>
+
+								<li style="margin-bottom: 5px">As anotações <code>@Cacheable</code> do Spring também
+									podem ser usadas nos serviços para cachear métodos específicos,
+									como demonstrado no <code>UnidadeServiceImpl</code>.
+								</li>
+
+								<li style="margin-bottom: 5px">O cache de query do Hibernate está habilitado para
+									determinadas consultas. Para funcionar corretamente, é
+									necessário marcar as queries como <code>cacheable</code> no
+									repositório.
+								</li>
+
+								<li style="margin-bottom: 5px">A visualização e o gerenciamento dos caches em tempo de
+									execução podem ser feitos via logs ou via ferramentas JMX, se
+									ativadas.</li>
+
+								<li style="margin-bottom: 5px">Para ambientes de desenvolvimento, recomenda-se ativar
+									estatísticas do Hibernate (<code>hibernate.generate_statistics=true</code>)
+									e logar SQLs para análise do comportamento do cache.
+								</li>
+								
+								<li style="margin-bottom: 5px">O botão <strong>Testar Cache</strong> abaixo simula uma consulta executada no banco e com a aplicação de um cache TTL definido em <strong>(<code>10 segundos</code>)</strong></li>
+								
+								<li>O botão <strong>Limpar Cache</strong> é responsável por eliminar o cache aplicado à consulta específica</li>
+								
+							</ul>							
+							
+							<p:commandButton value="Testar Cache" icon="pi pi-play" styleClass="mr-2 mb-2"
+								title="Teste de Execução de Cache com TTL Definido em 10 segundos"
+								actionListener="#{cacheBean.testarCache()}"/>
+								
+							<p:commandButton value="Limpar Cache" icon="pi pi-trash"
+								styleClass="ui-button-danger"
+								title="Teste de Execução de Cache com TTL Definido em 10 segundos"
+								actionListener="#{cacheBean.limparCache()}"/>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+
+</ui:composition>
