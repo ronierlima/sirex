@@ -46,6 +46,7 @@
                      <p:submenu id="adm" label="Administração" rendered="#{menuChecker.exibirConfiguracoes}">
                         <p:menuitem id="adm_1" value="Sistema" icon="pi pi-cog" url="/paginas/configuracao/configurar.xhtml" rendered="#{menuChecker.gerenciarSistema}" />
                          <p:menuitem id="adm_2" value="Monitoramento" icon="pi pi-eye" url="/monitoring" rendered="#{menuChecker.monitoraSistema}" />
+                         <p:menuitem id="adm_3" value="Usuários Logados" icon="pi pi-users" url="/paginas/administracao/usuariosLogados.xhtml" rendered="#{menuChecker.podeListarUsuariosLogados}" />
                     </p:submenu>
 
 

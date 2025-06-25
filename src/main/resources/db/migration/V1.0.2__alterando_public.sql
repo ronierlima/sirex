@@ -291,6 +291,10 @@ INSERT INTO public.funcionalidade
 (id, nome, "label", exibir, id_funcionalidade)
 VALUES(50, 'ROLE_MONITORA_SISTEMA', 'Monitorar Sistema', true, 1);
 
+INSERT INTO public.funcionalidade
+(id, nome, "label", exibir, id_funcionalidade)
+VALUES(51, 'ROLE_LISTAR_USUARIOS_LOGADOS', 'Listar Usuários Logados', true, 1);
+
 INSERT INTO public.macroregional
 (id, nome)
 VALUES(1, 'I');

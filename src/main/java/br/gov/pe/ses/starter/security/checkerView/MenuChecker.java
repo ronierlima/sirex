@@ -54,6 +54,10 @@ public class MenuChecker {
 		return externalContext.isUserInRole(Permissao.MONITORA_SISTEMA.getRole());
 	}
 
+	public boolean isPodeListarUsuariosLogados() {
+		return externalContext.isUserInRole(Permissao.lISTAR_USUARIOS_LOGADOS.getRole());
+	}
+	
 	private boolean temPermissao(Permissao permissao) {
 		return externalContext.isUserInRole(permissao.getRole());
 	}

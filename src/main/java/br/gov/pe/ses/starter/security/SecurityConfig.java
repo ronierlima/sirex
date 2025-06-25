@@ -128,6 +128,9 @@ public class SecurityConfig {
 
                         .requestMatchers("/paginas/relatorios/usuarios/exportarUsuariosCadastrados.xhtml")
                         .hasRole(Permissao.EXPORTAR_USUARIOS_CADASTRADOS.getRole())
+                        
+                        .requestMatchers("/paginas/administracao/usuariosLogados.xhtml")
+                        .hasAnyRole(Permissao.lISTAR_USUARIOS_LOGADOS.getRole())
 
                         .anyRequest().authenticated()
                 )

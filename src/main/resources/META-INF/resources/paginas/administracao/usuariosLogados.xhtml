@@ -1,0 +1,99 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	template="/WEB-INF/layout/template.xhtml">
+
+    <ui:define name="title">Usuários Logados</ui:define>
+    
+    <ui:define name="head">
+        <style type="text/css">
+            .ui-panelgrid.form-elements .ui-grc-2 {
+                padding-left: 80px;
+            }
+
+            @media (max-width:1024px) {
+                .ui-panelgrid.form-elements .ui-grc-2 {
+                    padding-left: 20px;
+                }
+            }
+            
+            @media (max-width:640px) {
+                .ui-panelgrid.form-elements .ui-grc-2 {
+                    padding-left: 6px;
+                }
+            }
+            
+            body .ui-datatable thead th {
+    			background-color: ;
+    			padding: 10px 10px;    			
+			}
+            		
+			.ui-column-title{
+            font-weight: bold;
+            }
+			                        
+        </style>
+               
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="formLogados" prependId="false" onkeypress="if(event.keyCode==13){document.getElementById('formInterno:buscar').click();return false;}">      	 
+        	
+        	<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+				responsive="true">
+				<div align="center">
+					<p:commandButton value="Sim" type="button"
+						styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
+					<p:commandButton value="Não" type="button"
+						styleClass="ui-confirmdialog-no ui-button-secondary"
+						icon="fa fa-close" />
+				</div>
+			</p:confirmDialog>
+        	
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    
+                    <div class="ui-g-12 ui-lg-12">                        
+                        <div class="card card-w-title">  
+                        
+                        	<h4>Usuários Logados</h4>                            
+                        
+                        	<p:dataTable widgetVar="customersDT2" reflow="true" id="dtusers" emptyMessage="Nenhum Registro Encontrado" var="usuario" value="#{usuariosLogadosBean.usuariosLogados}">
+
+                                <f:facet name="header">
+                                    Registros Encontrados
+                                </f:facet>
+                                
+                                <f:facet name="footer">
+                                    Total: #{usuariosLogadosBean.usuariosLogados.size()}
+                                </f:facet> 
+                                
+                                	<p:column style="text-align:center;white-space:normal !important" headerText="Usuário">
+										<p:outputLabel value="#{usuario.pessoa.nome}"/>                                        
+									</p:column>								
+									
+									<p:column style="text-align:center;white-space:normal !important" headerText="Login">
+										<p:outputLabel value="#{usuario.login}"/>                                        
+									</p:column>									
+									
+									<p:column style="text-align:center;white-space:normal !important" headerText="Encerrar Sessão">
+										<p:commandButton value="Encerrar Sessão" process="@this" style="background-color:red;width:80%" update="@form" action="#{usuariosLogadosBean.encerrarSessaoUsuario(usuario)}">
+											<p:confirm header="Confirmação" message="Confirma o Encerramento da Sessão do Usuário?"
+											icon="fa fa-warning" />
+										</p:commandButton>                                        
+									</p:column>							
+								
+								</p:dataTable>
+                                                
+                             </div>                        
+                        
+                        </div>
+                    </div>
+                </div>            
+        </h:form>
+    </ui:define>
+
+</ui:composition>
