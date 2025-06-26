@@ -80,16 +80,16 @@ public class ListarUnidadesBean implements Serializable {
     }
 
     public String alterar() {
-        utilSessionBean.addParametro("hospitalSelecionado", unidadeSelecionada);
+        utilSessionBean.addParametro("unidadeSelecionada", unidadeSelecionada);
         return "/paginas/unidade/incluirUnidade.xhtml?faces-redirect=true";
     }
 
     public String visualizar() {
-        utilSessionBean.addParametro("hospitalSelecionado", unidadeSelecionada);
+        utilSessionBean.addParametro("unidadeSelecionada", unidadeSelecionada);
         return "/paginas/unidade/visualizarUnidade.xhtml?faces-redirect=true";
     }
 
-    public String incluirHospital() {
+    public String incluirUnidade() {
         utilSessionBean.limparParametros();
         return "/paginas/unidade/incluirUnidade.xhtml?faces-redirect=true";
     }

@@ -1,89 +1,93 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui"
-	template="/WEB-INF/layout/template.xhtml">
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/layout/template.xhtml">
 
-	<ui:define name="title">Visualizar Hospital</ui:define>
+    <ui:define name="title">Visualizar Unidade</ui:define>
 
-	<ui:define name="">
-		<f:metadata>
-		    <f:viewParam name="paginaAnterior" value="/paginas/unidade/listarUnidades" />
-			<f:viewParam name="homeOutcome" value="/paginas/principal" />
-			<f:viewParam name="value" value="Unidade,Listar Unidades" />
-			<f:viewParam name="outcome" value="/paginas/unidade/listarUnidades" />
-		</f:metadata>
-	</ui:define>
+    <ui:define name="">
+        <f:metadata>
+            <f:viewParam name="paginaAnterior" value="/paginas/unidade/listarUnidades"/>
+            <f:viewParam name="homeOutcome" value="/paginas/principal"/>
+            <f:viewParam name="value" value="Unidade, Visualizar Unidade"/>
+            <f:viewParam name="outcome" value="/paginas/unidade/listarUnidades"/>
+        </f:metadata>
+    </ui:define>
 
-	<ui:define name="content">
-		<h:form>
+    <ui:define name="content">
+        <h:form id="formVisualizarUnidade">
 
-			<div class="grid">
-				<div class="col-12 md:col-12">
-					<div class="card ui-fluid">
-						<h5>Visualizar Hospital</h5>
+            <div class="grid">
+                <div class="col-12 md:col-12">
+                    <div class="card ui-fluid">
+                        <div class="surface-section">
+                            <p:toolbar>
+                                <p:toolbarGroup styleClass="grid">
+                                    <div class="col-12 font-medium text-3xl text-900">
+                                        <i class="fa-regular fa-hospital text-primary"/> #{visualizarUnidadeBean.unidade.nome}
+                                    </div>
+                                    <div class="col-12 text-500">
+                                        <i class="pi pi-map-marker"/> #{visualizarUnidadeBean.unidade.municipio.gere.nome}, #{visualizarUnidadeBean.unidade.municipio.nome}
+                                    </div>
+                                </p:toolbarGroup>
 
-						<div class="formgrid grid">
+                                <p:toolbarGroup align="right" styleClass="flex gap-2">
+                                    <p:button outcome="/paginas/unidade/listarUnidades"
+                                              value="Voltar"
+                                              icon="pi pi-arrow-left"
+                                              styleClass="ui-button-outlined"
+                                              title="Voltar para lista de unidades">
+                                    </p:button>
+                                </p:toolbarGroup>
+                            </p:toolbar>
 
-							<div class="field col-12 md:col-4">
-								<p:outputLabel value="Nome" />
-								<p:inputText value="#{visualizarUnidadeBean.hospital.nome}"
-									readonly="true" />
-							</div>
+                            <ul class="list-none p-0 m-0">
+                                <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+                                    <div class="text-500 w-6 md:w-2 font-medium">STATUS</div>
+                                    <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                                        <span class="customer-badge status-#{visualizarUnidadeBean.unidade.statusCss}">
+                                            #{visualizarUnidadeBean.unidade.ativo ? 'Ativo' : 'Inativo'}
+                                        </span>
+                                    </div>
+                                </li>
+                                <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+                                    <div class="text-500 w-6 md:w-2 font-medium">CNPJ</div>
+                                    <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">#{visualizarUnidadeBean.unidade.cnpj}</div>
+                                </li>
+                                <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+                                    <div class="text-500 w-6 md:w-2 font-medium">SIGLA</div>
+                                    <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                                        #{visualizarUnidadeBean.unidade.sigla}
+                                    </div>
+                                </li>
+                                <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+                                    <div class="text-500 w-6 md:w-2 font-medium">TIPO</div>
+                                    <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                                        #{visualizarUnidadeBean.unidade.tipo.descricao}
+                                    </div>
+                                </li>
 
-							<div class="field col-12 md:col-4">
-								<p:outputLabel value="CNPJ" />
-								<p:inputMask value="#{visualizarUnidadeBean.hospital.cnpj}"
-									readonly="true" />
-							</div>
+                                <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+                                    <div class="text-500 w-6 md:w-2 font-medium">MACRO</div>
+                                    <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                                        <p:chip label="#{visualizarUnidadeBean.unidade.municipio.gere.macroRegiao.nome}"/>
+                                    </div>
+                                </li>
+                                <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+                                    <div class="text-500 w-6 md:w-2 font-medium">GERES</div>
+                                    <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                                        <p:chip label="#{visualizarUnidadeBean.unidade.municipio.gere.nome}"/>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-							<div class="field col-12 md:col-4">
-								<p:outputLabel value="Sigla" />
-								<p:inputText readonly="true"
-									value="#{visualizarUnidadeBean.hospital.sigla}" />
-							</div>
-
-							<div class="field col-12 md:col-4">
-
-								<p:outputLabel value="Macro" />
-								<p:inputText readonly="true"
-									value="#{visualizarUnidadeBean.hospital.municipio.gere.macroRegiao.nome}" />
-							</div>
-
-							<div class="field col-12 md:col-4">
-
-								<p:outputLabel value="Geres" for="@next" />
-								<p:inputText readonly="true"
-									value="#{visualizarUnidadeBean.hospital.municipio.gere.nome}" />
-							</div>
-
-							<div class="field col-12 md:col-4">
-
-								<p:outputLabel value="Municipio" for="@next" />
-								<p:inputText readonly="true"
-									value="#{visualizarUnidadeBean.hospital.municipio.nome}" />
-							</div>
-
-
-						</div>
-
-						<div class="grid">
-
-							<div class="col-2">
-								<p:button outcome="/paginas/unidade/listarUnidades"
-									value="Voltar" icon="pi pi-arrow-left"
-									styleClass="ui-button-danger" />
-							</div>
-
-
-						</div>
-					</div>
-				</div>
-			</div>
-
-
-		</h:form>
-	</ui:define>
+        </h:form>
+    </ui:define>
 
 </ui:composition>

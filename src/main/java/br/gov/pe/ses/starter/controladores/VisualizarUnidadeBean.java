@@ -20,10 +20,10 @@ public class VisualizarUnidadeBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private Unidade hospital;
+	private Unidade unidade;
 
 	@Autowired
-	private UnidadeService hospitalService;
+	private UnidadeService unidadeService;
 	
 	@Autowired
 	private UtilSessionBean utilSessionBean;
@@ -31,8 +31,8 @@ public class VisualizarUnidadeBean implements Serializable {
 	@PostConstruct
 	public void inicializar() {
 		try {
-			hospital = (Unidade) utilSessionBean.getParametro("hospitalSelecionado");
-			hospital = hospitalService.porIdComDependencias(hospital.getId());
+			unidade = (Unidade) utilSessionBean.getParametro("unidadeSelecionada");
+			unidade = unidadeService.porIdComDependencias(unidade.getId());
 		} catch (Exception e) {
 			FacesUtil.redirect("/paginas/unidade/listarUnidades.xhtml?faces-redirect=true");
 		}

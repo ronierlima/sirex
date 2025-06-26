@@ -25,14 +25,14 @@
                     <p:panel id="custom">
 
                         <f:facet name="header">
-                            <i class="fa-regular fa-hospital"></i>
+                            <i class="fa-regular fa-hospital" />
                             <h:outputText value=" Unidades"/>
                         </f:facet>
 
                         <f:facet name="actions">
 
                             <p:commandButton value="Novo" icon="pi pi-plus"
-                                             action="#{listarUnidadesBean.incluirHospital}" process="@this"
+                                             action="#{listarUnidadesBean.incluirUnidade}" process="@this"
                                              rendered="#{unidadeChecker.podeIncluir}"
                                              styleClass="ui-button-success mr-2 mb-2"/>
 
@@ -60,7 +60,7 @@
                             <div class="field col-12 sm:col-6 md:col-3">
                                 <label for="tipoUnidade">Tipo</label>
                                 <p:selectCheckboxMenu id="tipoUnidade" multiple="true"
-                                                      emptyLabel="Escolha para filtrar..."
+                                                      emptyLabel="Escolha ..."
                                                       updateLabel="true"
                                                       filter="true"
                                                       filterMatchMode="contains"
@@ -75,7 +75,7 @@
                             <div class="field col-12 sm:col-6 md:col-3">
                                 <label for="gere">Gere</label>
                                 <p:selectCheckboxMenu id="gere" multiple="true"
-                                                      emptyLabel="Escolha para filtrar..."
+                                                      emptyLabel="Escolha ..."
                                                       updateLabel="true"
                                                       filter="true"
                                                       filterMatchMode="contains"
@@ -84,6 +84,21 @@
 
                                     <f:selectItems value="#{listarUnidadesBean.geres}" var="gere"
                                                    itemLabel="#{gere.nome}" itemValue="#{gere.id}"/>
+                                </p:selectCheckboxMenu>
+                            </div>
+
+                            <div class="field col-12 sm:col-6 md:col-3">
+                                <label for="gere">Município</label>
+                                <p:selectCheckboxMenu id="municipio" multiple="true"
+                                                      emptyLabel="Escolha ..."
+                                                      updateLabel="true"
+                                                      filter="true"
+                                                      filterMatchMode="contains"
+                                                      value="#{listarUnidadesBean.filtro.municipios}"
+                                                      styleClass="w-full">
+
+                                    <f:selectItems value="#{listarUnidadesBean.municipios}" var="municipio"
+                                                   itemLabel="#{municipio.nome}" itemValue="#{municipio.id}"/>
                                 </p:selectCheckboxMenu>
                             </div>
 
@@ -123,9 +138,9 @@
                 <div class="col-12">
                     <div class="card">
 
-                        <p:dataTable widgetVar="hospitalDT" var="unidade" lazy="true"
+                        <p:dataTable widgetVar="unidadeDT" var="unidade" lazy="true"
                                      value="#{listarUnidadesBean.model}" reflow="true"
-                                     rowKey="#{hospital.id}" paginator="true" rows="10"
+                                     rowKey="#{unidade.id}" paginator="true" rows="10"
                                      paginatorPosition="bottom" selectionMode="single"
                                      rowsPerPageTemplate="10,20,30,40,50,60,80,90,100"
                                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -188,20 +203,20 @@
                                                 rendered="#{unidadeChecker.podeAlterar}" process="@this"
                                                 action="#{listarUnidadesBean.alterar}">
 
-                                        <f:setPropertyActionListener value="#{hospital}"
+                                        <f:setPropertyActionListener value="#{unidade}"
                                                                      target="#{listarUnidadesBean.unidadeSelecionada}"/>
 
                                     </p:menuitem>
 
-                                    <p:menuitem value="#{hospital.ativo ? 'Desativar' : 'Ativar'}"
-                                                icon="pi pi-thumbs-#{hospital.ativo ? 'down':'up'}-fill"
+                                    <p:menuitem value="#{unidade.ativo ? 'Desativar' : 'Ativar'}"
+                                                icon="pi pi-thumbs-#{unidade.ativo ? 'down':'up'}-fill"
                                                 process="@this" update="@form"
                                                 action="#{listarUnidadesBean.alterarStatus}">
-                                        <f:setPropertyActionListener value="#{hospital}"
+                                        <f:setPropertyActionListener value="#{unidade}"
                                                                      target="#{listarUnidadesBean.unidadeSelecionada}"/>
 
                                         <p:confirm header="Confirmação"
-                                                   message="Deseja Alterar o Status do Hospital?"
+                                                   message="Deseja Alterar o Status da unidade?"
                                                    icon="pi pi-exclamation-triangle"/>
                                     </p:menuitem>
 
