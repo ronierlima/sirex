@@ -1,5 +1,5 @@
-# 🚀 STARTER  
-**Starter JSF - SES/PE**
+# 🚀 SIREX  
+**Sirex 2.0 - SES/PE**
 
 ---
 
@@ -7,6 +7,8 @@
 - **Hudson Alves Moreno**
 - **Luiz Henrique**
 - **Renato Gomes**
+- **Ronier Lima**
+- **Gerson Souza**
 
 ---
 
@@ -122,7 +124,7 @@ Este projeto utiliza o **Hibernate Envers** para realizar **auditoria automátic
 ### 🔐 Dados de Acesso
 
 ```
-Login: estomia.admin
+Login: sirex.admin
 Senha: Tasemsenha2017
 ```
 
