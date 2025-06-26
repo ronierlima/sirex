@@ -52,6 +52,8 @@ public class Unidade extends BaseEntity implements Serializable {
 	@Column(name = "sigla")
 	private String sigla;
 
+	private String cnes;
+
 	@NotAudited
 	@ManyToOne
 	@JoinColumn(name = "id_municipio", referencedColumnName = "id")

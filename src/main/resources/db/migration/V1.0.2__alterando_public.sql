@@ -87,6 +87,7 @@ CREATE TABLE public.unidade (
 	nome varchar(255) NOT NULL,
 	cnpj varchar(255) NULL,
 	sigla varchar(255) NULL,
+    cnes varchar(7) NULL,
 	ativo bool DEFAULT true NOT NULL,
 	usuario_inclusao int8 NULL,
 	usuario_alteracao int8 NULL,
@@ -900,7 +901,7 @@ VALUES(1, 'Admistrador Geral', '000.000.000-00', 'template@ses.pe.gov.br', 84, 0
 
 INSERT INTO public.usuario
 (id, id_pessoa, login, senha, ativo, validade_codigo_redefinicao, codigo_redefinicao, id_unidade, usuario_inclusao, usuario_alteracao, data_inclusao, data_alteracao, reset_token, dt_hora_exp_token, dt_hora_reset_senha, versao)
-VALUES(1, 1, 'estomia.admin', '$2a$12$xovrAHxFy5rLzIkwt9OIvOc0otMAIfPRp.GHIYCZSxhCEWeGplD6O', true, NULL, NULL, 84, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
+VALUES(1, 1, 'sirex.admin', '$2a$12$xovrAHxFy5rLzIkwt9OIvOc0otMAIfPRp.GHIYCZSxhCEWeGplD6O', true, NULL, NULL, 84, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
 
 INSERT INTO public.tipo_unidade
 (id, ativo, data_alteracao, data_inclusao, descricao, versao, usuario_alteracao, usuario_inclusao)
@@ -914,6 +915,7 @@ VALUES(84, 'Hospital Barão de Lucena', '37.471.854/0001-66', 'HBL', true, 1, 1,
 INSERT INTO public.perfil
 (id, nome, ativo, id_unidade, versao)
 VALUES(1, 'Administrador', true, 84, 0);
+
 
 INSERT INTO public.perfil_usuario
 (id_usuario, id_perfil)

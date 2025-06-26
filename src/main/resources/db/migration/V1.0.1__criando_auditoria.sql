@@ -60,6 +60,8 @@ CREATE TABLE auditoria.unidade_aud (
 	nome_mod bool NULL,
 	sigla varchar(255) NULL,
 	sigla_mod bool NULL,
+    cnes varchar(7) NULL,
+    cnes_mod bool NULL,
 	id_tipo_unidade int8 NULL,
 	id_tipo_unidade_mod bool NULL,
 	usuario_alteracao int8 NULL,
