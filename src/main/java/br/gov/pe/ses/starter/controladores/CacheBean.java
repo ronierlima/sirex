@@ -23,7 +23,7 @@ public class CacheBean implements Serializable {
 	private UnidadeService unidadeService;
 
 	public void testarCache() {		
-		unidadeService.listarHospitaisAtivosTesteCache();		
+		unidadeService.listarUnidadesAtivas();
 	}
 	
 	public void limparCache() {

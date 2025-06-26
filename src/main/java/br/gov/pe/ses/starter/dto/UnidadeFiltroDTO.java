@@ -1,5 +1,6 @@
 package br.gov.pe.ses.starter.dto;
 
+import java.util.List;
 import java.util.Map;
 
 import org.primefaces.model.FilterMeta;
@@ -23,8 +24,15 @@ public class UnidadeFiltroDTO {
 	private Map<String, FilterMeta> filterBy;
 	
 	private String nome;
-	
-	
+
+	private Boolean status;
+
+	private List<Long> tipos;
+
+	private List<Long> geres;
+
+	private List<Long> municipios;
+
 	public int getQtdRegistros() {
 		return first / pageSize;
 	}

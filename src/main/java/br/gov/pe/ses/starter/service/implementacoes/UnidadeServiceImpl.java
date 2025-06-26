@@ -2,6 +2,8 @@ package br.gov.pe.ses.starter.service.implementacoes;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import br.gov.pe.ses.starter.util.CacheConst;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,7 +17,7 @@ import br.gov.pe.ses.starter.data.repository.GereRepository;
 import br.gov.pe.ses.starter.data.repository.UnidadeRepository;
 import br.gov.pe.ses.starter.data.repository.MacroRepository;
 import br.gov.pe.ses.starter.data.repository.MunicipioRepository;
-import br.gov.pe.ses.starter.data.specifications.HospitalEspecification;
+import br.gov.pe.ses.starter.data.specifications.UnidadeEspecification;
 import br.gov.pe.ses.starter.data.specifications.OrdenacaoUtil;
 import br.gov.pe.ses.starter.dto.UnidadeFiltroDTO;
 import br.gov.pe.ses.starter.entidades.publico.Funcionalidade;
@@ -33,107 +35,90 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UnidadeServiceImpl implements UnidadeService {
 
-	private final UnidadeRepository hospitalRepository;
+    private final UnidadeRepository hospitalRepository;
 
-	private final MacroRepository macroRepository;
+    private final MacroRepository macroRepository;
 
-	private final GereRepository gereRepository;
+    private final FuncionalidadeService funcionalidadeService;
 
-	private final MunicipioRepository municipioRepository;
+    @Override
+    public Page<Unidade> buscaPaginada(UnidadeFiltroDTO filtro) {
 
-	private final FuncionalidadeService funcionalidadeService;
+        Sort ordenacao = Sort.by(Sort.Order.desc("id"));
 
-	@Override
-	public Page<Unidade> buscaPaginada(UnidadeFiltroDTO filtro) {
+        Specification<Unidade> restricoes = UnidadeEspecification.build(filtro);
+        ordenacao = OrdenacaoUtil.criar(filtro.getSortBy());
 
-		Sort ordenacao = Sort.by(Sort.Order.desc("id"));
+        Pageable page = PageRequest.of(filtro.getQtdRegistros(), filtro.getPageSize(), ordenacao);
 
-		Specification<Unidade> restricoes = HospitalEspecification.build(filtro);
-		ordenacao = OrdenacaoUtil.criar(filtro.getSortBy());
+        return hospitalRepository.findAll(restricoes, page);
 
-		Pageable page = PageRequest.of(filtro.getQtdRegistros(), filtro.getPageSize(), ordenacao);
+    }
 
-		return hospitalRepository.findAll(restricoes, page);
+    @Override
+    @Transactional
+    public Unidade cadastrar(Unidade hospital) throws NegocioException {
 
-	}
+        try {
 
-	@Override
-	@Transactional
-	public Unidade cadastrar(Unidade hospital) throws NegocioException {
+            List<Funcionalidade> funcionalidades;
+            funcionalidades = funcionalidadeService.buscarTodas();
 
-		try {
+            if (hospital.isNovo()) {
 
-			List<Funcionalidade> funcionalidades = new ArrayList<Funcionalidade>();
-			funcionalidades = funcionalidadeService.buscarTodas();
+                hospital = new UnidadeBuilder(hospital).comPerfilAdministradorGeral(funcionalidades).construir();
 
-			if (hospital.isNovo()) {
+            }
 
-				hospital = new UnidadeBuilder(hospital).comPerfilAdministradorGeral(funcionalidades).construir();
+            hospital = hospitalRepository.save(hospital);
 
-			}
+            return hospital;
 
-			hospital = hospitalRepository.save(hospital);
+        } catch (org.springframework.orm.ObjectOptimisticLockingFailureException
+                 | org.hibernate.StaleObjectStateException e) {
+            e.printStackTrace();
+            UtilMensagens.mensagemError("Este registro foi alterado por outro usuário. Por favor, refaça a operação!");
+            return hospital;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new NegocioException("Erro ao Cadastrar/Atualizar o Hospital.");
+        }
+    }
 
-			return hospital;
+    @Override
+    public Unidade alterarStatus(Unidade hospital) throws NegocioException {
+        try {
+            boolean statusAtual = hospital.getAtivo();
+            hospital.setAtivo(!statusAtual);
+            hospital = hospitalRepository.save(hospital);
+            return hospital;
+        } catch (Exception e) {
+            throw new NegocioException("Ocorreu um Erro ao Alterar Status.");
+        }
+    }
 
-		} catch (org.springframework.orm.ObjectOptimisticLockingFailureException
-				| org.hibernate.StaleObjectStateException e) {
-			e.printStackTrace();
-			UtilMensagens.mensagemError("Este registro foi alterado por outro usuário. Por favor, refaça a operação!");
-			return hospital;
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new NegocioException("Erro ao Cadastrar/Atualizar o Hospital.");
-		}
-	}
+    @Override
+    @Cacheable(value = CacheConst.UNIDADES_ATIVAS_CACHE)
+    public List<Unidade> listarUnidadesAtivas() {
+        return hospitalRepository.findAllAtivos();
+    }
 
-	@Override
-	public Unidade alterarStatus(Unidade hospital) throws NegocioException {
-		try {
-			boolean statusAtual = hospital.getAtivo();
-			hospital.setAtivo(!statusAtual);
-			hospital = hospitalRepository.save(hospital);
-			return hospital;
-		} catch (Exception e) {
-			throw new NegocioException("Ocorreu um Erro ao Alterar Status.");
-		}
-	}
+    @Override
+    public Unidade porIdComDependencias(Long id) {
+        return hospitalRepository.findById(id).get();
+    }
 
-	@Override
-	public List<Unidade> listarHospitaisAtivos() {
-		return hospitalRepository.findAllAtivos();
-	}
+    @Override
+    public List<MacroRegiao> listarMacros() {
+        return macroRepository.listar();
+    }
 
-	@Override
-	public Unidade porIdComDependencias(Long id) {
-		return hospitalRepository.findById(id).get();
-	}
+    @Override
+    @Transactional
+    public void alterarConfiguracao(Unidade hospital) throws NegocioException {
+        hospitalRepository.save(hospital);
+    }
 
-	@Override
-	public List<MacroRegiao> listarMacros() {
-		return macroRepository.listar();
-	}
 
-	@Override
-	public List<Gere> listarGeres(MacroRegiao macroRegiao) {
-		return gereRepository.listar(macroRegiao);
-	}
-
-	@Override
-	public List<Municipio> listarMunicipios(Gere gere) {
-		return municipioRepository.listar(gere);
-	}
-
-	@Override
-	@Transactional
-	public void alterarConfiguracao(Unidade hospital) throws NegocioException {
-		hospitalRepository.save(hospital);
-	}
-	
-	@Override
-	@Cacheable(value = "unidadesAtivasCache")
-	public List<Unidade> listarHospitaisAtivosTesteCache() {
-		return hospitalRepository.findAllAtivos();
-	}
 
 }

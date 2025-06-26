@@ -214,7 +214,7 @@ public class CadastroUsuarioBean implements Serializable {
 
 		hospitaisDisponiveis = new ArrayList<Unidade>();
 
-		List<Unidade> hospitais = hospitalService.listarHospitaisAtivos();
+		List<Unidade> hospitais = hospitalService.listarUnidadesAtivas();
 
 		hospitais.stream().forEach(p -> {
 

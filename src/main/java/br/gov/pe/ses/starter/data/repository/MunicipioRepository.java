@@ -13,7 +13,10 @@ import br.gov.pe.ses.starter.entidades.publico.Municipio;
 @Repository
 public interface MunicipioRepository extends JpaRepository<Municipio, Long> {
 
+	@Query("from Municipio m ORDER BY m.nome")
+	List<Municipio> listarTodos();
+
 	@Query("from Municipio m WHERE m.gere=:gere ORDER BY m.nome")
-	List<Municipio> listar(@Param("gere") Gere gere);
+	List<Municipio> listarPorGere(Gere gere);
 
 }

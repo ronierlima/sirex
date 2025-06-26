@@ -2,6 +2,8 @@ package br.gov.pe.ses.starter.service.implementacoes;
 
 import java.util.List;
 
+import br.gov.pe.ses.starter.util.CacheConst;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -61,6 +63,7 @@ public class TipoUnidadeServiceImpl implements TipoUnidadeService {
 	}
 
 	@Override
+	@Cacheable(value = CacheConst.TIPOS_ATIVOS_CACHE)
 	public List<TipoUnidade> listarAtivos() {
 		return tipoUnidadeRepository.findAllAtivos();
 	}

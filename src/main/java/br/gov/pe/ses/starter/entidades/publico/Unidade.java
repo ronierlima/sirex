@@ -63,7 +63,7 @@ public class Unidade extends BaseEntity implements Serializable {
 
 	@NotAudited
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_tipo", nullable = true)
+	@JoinColumn(name = "id_tipo")
 	private TipoUnidade tipo;
 
 	@Version

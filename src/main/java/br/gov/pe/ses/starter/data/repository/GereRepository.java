@@ -14,6 +14,9 @@ import br.gov.pe.ses.starter.entidades.publico.MacroRegiao;
 public interface GereRepository extends JpaRepository<Gere, Long> {
 
 	@Query("from Gere g WHERE g.macroRegiao=:macro ORDER BY g.nome")
-	List<Gere> listar(@Param("macro") MacroRegiao macro);
+	List<Gere> listarPorMacro(@Param("macro") MacroRegiao macro);
+
+	@Query("from Gere g ORDER BY g.nome")
+	List<Gere> listarTodos();
 
 }

@@ -13,24 +13,18 @@ import br.gov.pe.ses.starter.exception.NegocioException;
 
 public interface UnidadeService {
 
-	public Page<Unidade> buscaPaginada(UnidadeFiltroDTO filtro);
+    Page<Unidade> buscaPaginada(UnidadeFiltroDTO filtro);
 
-	public Unidade porIdComDependencias(Long id);
+    Unidade porIdComDependencias(Long id);
 
-	public Unidade cadastrar(Unidade hospital) throws NegocioException;
-	
-	public void alterarConfiguracao(Unidade hospital) throws NegocioException;
+    Unidade cadastrar(Unidade hospital) throws NegocioException;
 
-	public Unidade alterarStatus(Unidade hospital) throws NegocioException;
+    void alterarConfiguracao(Unidade hospital) throws NegocioException;
 
-	public List<Unidade> listarHospitaisAtivos();
+    Unidade alterarStatus(Unidade hospital) throws NegocioException;
 
-	public List<MacroRegiao> listarMacros();
-	
-	public List<Gere> listarGeres(MacroRegiao macroRegiao);
-	
-	public List<Municipio> listarMunicipios(Gere gere);
+    List<Unidade> listarUnidadesAtivas();
 
-	public List<Unidade> listarHospitaisAtivosTesteCache();
+    List<MacroRegiao> listarMacros();
 
 }

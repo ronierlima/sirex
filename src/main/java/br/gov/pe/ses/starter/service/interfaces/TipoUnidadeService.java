@@ -10,10 +10,10 @@ import br.gov.pe.ses.starter.exception.NegocioException;
 
 public interface TipoUnidadeService {
 
-	public Page<TipoUnidade> buscaPaginada(TipoUnidadeFiltroDTO filtro);
+    Page<TipoUnidade> buscaPaginada(TipoUnidadeFiltroDTO filtro);
 
-	public TipoUnidade cadastrar(TipoUnidade tipo) throws NegocioException;
+    TipoUnidade cadastrar(TipoUnidade tipo) throws NegocioException;
 
-	public List<TipoUnidade> listarAtivos();
+    List<TipoUnidade> listarAtivos();
 
 }

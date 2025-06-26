@@ -3,6 +3,8 @@ package br.gov.pe.ses.starter.controladores;
 import java.io.Serializable;
 import java.util.List;
 
+import br.gov.pe.ses.starter.service.interfaces.GereService;
+import br.gov.pe.ses.starter.service.interfaces.MunicipioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -26,76 +28,82 @@ import lombok.Data;
 @Data
 public class IncluirUnidadeBean implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private Unidade hospital;
+    private Unidade hospital;
 
-	private List<TipoUnidade> tipos;
+    private List<TipoUnidade> tipos;
 
-	@Autowired
-	private TipoUnidadeService tipoUnidadeService;
+    @Autowired
+    private TipoUnidadeService tipoUnidadeService;
 
-	public List<MacroRegiao> macros;
+    @Autowired
+    private GereService gereService;
 
-	public List<Gere> geres;
+    @Autowired
+    private MunicipioService municipioService;
 
-	public List<Municipio> municipios;
+    public List<MacroRegiao> macros;
 
-	@Autowired
-	private UnidadeService hospitalService;
+    public List<Gere> geres;
 
-	@Autowired
-	private UtilSessionBean utilSessionBean;
+    public List<Municipio> municipios;
 
-	@PostConstruct
-	public void inicializar() {
-		hospital = new Unidade();
-		buscarHospital();
-	}
+    @Autowired
+    private UnidadeService hospitalService;
 
-	private void buscarHospital() {
-		try {
-			hospital = (Unidade) utilSessionBean.getParametro("hospitalSelecionado");
-			hospital = hospitalService.porIdComDependencias(hospital.getId());
-		} catch (Exception e) {
-			hospital = new Unidade();
-		}
+    @Autowired
+    private UtilSessionBean utilSessionBean;
 
-		macros = hospitalService.listarMacros();
+    @PostConstruct
+    public void inicializar() {
+        hospital = new Unidade();
+        buscarHospital();
+    }
 
-		if (hospital.isExistente()) {
-			aoSelecionarMacro();
-			aoSelecionarGere();
-		}
+    private void buscarHospital() {
+        try {
+            hospital = (Unidade) utilSessionBean.getParametro("hospitalSelecionado");
+            hospital = hospitalService.porIdComDependencias(hospital.getId());
+        } catch (Exception e) {
+            hospital = new Unidade();
+        }
 
-		tipos = tipoUnidadeService.listarAtivos();
-	}
+        macros = hospitalService.listarMacros();
 
-	public void aoSelecionarMacro() {
-		MacroRegiao macroSelecionada = hospital.getMunicipio().getGere().getMacroRegiao();
-		geres = hospitalService.listarGeres(macroSelecionada);
-	}
+        if (hospital.isExistente()) {
+            aoSelecionarMacro();
+            aoSelecionarGere();
+        }
 
-	public void aoSelecionarGere() {
-		Gere gereSelecionada = hospital.getMunicipio().getGere();
-		municipios = hospitalService.listarMunicipios(gereSelecionada);
-	}
+        tipos = tipoUnidadeService.listarAtivos();
+    }
 
-	public void cadastrar() throws NegocioException {
-		try {
-			hospitalService.cadastrar(hospital);
-			inicializar();
-			UtilMensagens.msgInfoAposRequest("Unidade Cadastrada");
-			FacesUtil.redirect("/paginas/unidade/listarUnidades.xhtml?faces-redirect=true");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+    public void aoSelecionarMacro() {
+        MacroRegiao macroSelecionada = hospital.getMunicipio().getGere().getMacroRegiao();
+        geres = gereService.listarPorMacro(macroSelecionada);
+    }
 
-	public void alterarStatus() throws NegocioException {
-		hospitalService.alterarStatus(hospital);
-		inicializar();
-		UtilMensagens.addInfoMessageGrowl("Sucesso", "Status Alterado");
-	}
+    public void aoSelecionarGere() {
+        Gere gereSelecionada = hospital.getMunicipio().getGere();
+        municipios = municipioService.listarPorGere(gereSelecionada);
+    }
+
+    public void cadastrar() throws NegocioException {
+        try {
+            hospitalService.cadastrar(hospital);
+            inicializar();
+            UtilMensagens.msgInfoAposRequest("Unidade Cadastrada");
+            FacesUtil.redirect("/paginas/unidade/listarUnidades.xhtml?faces-redirect=true");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void alterarStatus() throws NegocioException {
+        hospitalService.alterarStatus(hospital);
+        inicializar();
+        UtilMensagens.addInfoMessageGrowl("Sucesso", "Status Alterado");
+    }
 
 }

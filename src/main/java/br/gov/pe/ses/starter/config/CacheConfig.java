@@ -6,6 +6,8 @@ import java.util.Map;
 import javax.cache.CacheManager;
 import javax.cache.Caching;
 import javax.cache.spi.CachingProvider;
+
+import br.gov.pe.ses.starter.util.CacheConst;
 import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.config.builders.ExpiryPolicyBuilder;
 import org.ehcache.config.builders.ResourcePoolsBuilder;
@@ -26,13 +28,15 @@ public class CacheConfig {
 
         Map<String, javax.cache.configuration.Configuration<?, ?>> caches = new HashMap<>();
 
-        javax.cache.configuration.Configuration<Object, Object> defaultConfig = buildCacheConfig(300);
+        javax.cache.configuration.Configuration<Object, Object> defaultConfig = buildCacheConfig(CacheConst.DEFAULT_TTL);
         
-        caches.put("unidadesAtivasCache", buildCacheConfig(10));        
-        
-        caches.forEach((name, config) -> {            
-          cacheManager.createCache(name, config);           
-        });
+        caches.put(CacheConst.UNIDADES_ATIVAS_CACHE, defaultConfig);
+        caches.put(CacheConst.TIPOS_ATIVOS_CACHE, defaultConfig);
+        caches.put(CacheConst.GERES_CACHE, defaultConfig);
+        caches.put(CacheConst.MUNICIPIOS_CACHE, defaultConfig);
+
+
+        caches.forEach(cacheManager::createCache);
 
         return cacheManager;
     }
@@ -42,7 +46,7 @@ public class CacheConfig {
             CacheConfigurationBuilder.newCacheConfigurationBuilder(
                 Object.class,
                 Object.class,
-                ResourcePoolsBuilder.heap(100).offheap(10, MemoryUnit.MB)
+                ResourcePoolsBuilder.heap(CacheConst.DEFAULT_ENTRIES).offheap(10, MemoryUnit.MB)
             ).withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofSeconds(ttlInSeconds)))
              .build()
         );
