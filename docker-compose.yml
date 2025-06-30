@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   app:
     build:
@@ -13,7 +11,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: local
     networks:
-      - template-net
+      - template
     volumes:
       - .:/workspaces/template
     command: sleep infinity
@@ -27,13 +25,11 @@ services:
       POSTGRES_PASSWORD: template
     ports:
       - "5432:5432"
-    networks:
-      - template-net
     volumes:
       - pgdata_template:/var/lib/postgresql/data
 
 networks:
-  template-net:
+  template:
     driver: bridge
     ipam:
       config:

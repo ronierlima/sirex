@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.validation.constraints.Email;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 
@@ -47,12 +48,24 @@ public class Unidade extends BaseEntity implements Serializable {
 	private String nome;
 
 	@NotNull(message = "Você deve informar o CNPJ")
+	@Column(name = "cnpj", length = 18, nullable = false, unique = true)
 	private String cnpj;
 
 	@Column(name = "sigla")
 	private String sigla;
 
 	private String cnes;
+
+	private String telefone;
+
+	@Email
+	private String email;
+
+	private String logradouro;
+	private String numero;
+	private String complemento;
+	private String bairro;
+	private String cep;
 
 	@NotAudited
 	@ManyToOne

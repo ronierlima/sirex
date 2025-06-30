@@ -88,6 +88,13 @@ CREATE TABLE public.unidade (
 	cnpj varchar(255) NULL,
 	sigla varchar(255) NULL,
     cnes varchar(7) NULL,
+    telefone varchar(255) NULL,
+    email varchar(255) NULL,
+    logradouro varchar(255) NULL,
+    numero varchar(255) NULL,
+    complemento varchar(255) NULL,
+    bairro varchar(255) NULL,
+    cep varchar(255) NULL,
 	ativo bool DEFAULT true NOT NULL,
 	usuario_inclusao int8 NULL,
 	usuario_alteracao int8 NULL,
@@ -102,6 +109,14 @@ CREATE TABLE public.unidade (
 	CONSTRAINT unidadel_usuario_fk_1 FOREIGN KEY (usuario_alteracao) REFERENCES public.usuario(id),
 	CONSTRAINT unidadel_tipo_fk_1 FOREIGN KEY (id_tipo) REFERENCES public.tipo_unidade(id)
 );
+
+CREATE UNIQUE INDEX idx_unidade_cnpj_unico
+    ON public.unidade (cnpj)
+    WHERE cnpj IS NOT NULL;
+
+CREATE UNIQUE INDEX idx_unidade_cnes_unico
+    ON public.unidade (cnes)
+    WHERE cnes IS NOT NULL;
 
 -- public.perfil definição
 

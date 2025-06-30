@@ -14,11 +14,14 @@ import br.gov.pe.ses.starter.entidades.publico.Unidade;
 @Repository
 public interface UnidadeRepository extends JpaRepository<Unidade, Long> {
 
-	List<Unidade> findAll(Specification<Unidade> spec);
+    List<Unidade> findAll(Specification<Unidade> spec);
 
-	Page<Unidade> findAll(Specification<Unidade> spec, Pageable page);
+    Page<Unidade> findAll(Specification<Unidade> spec, Pageable page);
 
-	@Query("from Unidade h where h.ativo is true order by h.nome")
-	List<Unidade> findAllAtivos();
+    @Query("from Unidade h where h.ativo is true order by h.nome")
+    List<Unidade> findAllAtivos();
+
+    boolean existsUnidadeByCnpj(String cnpj);
+    boolean existsUnidadeByCnes(String cnes);
 
 }

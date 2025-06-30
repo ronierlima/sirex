@@ -1,7 +1,7 @@
 package br.gov.pe.ses.starter.service.implementacoes;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import br.gov.pe.ses.starter.util.CacheConst;
 import org.springframework.cache.annotation.Cacheable;
@@ -13,18 +13,14 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import br.gov.pe.ses.starter.builders.UnidadeBuilder;
-import br.gov.pe.ses.starter.data.repository.GereRepository;
 import br.gov.pe.ses.starter.data.repository.UnidadeRepository;
 import br.gov.pe.ses.starter.data.repository.MacroRepository;
-import br.gov.pe.ses.starter.data.repository.MunicipioRepository;
 import br.gov.pe.ses.starter.data.specifications.UnidadeEspecification;
 import br.gov.pe.ses.starter.data.specifications.OrdenacaoUtil;
 import br.gov.pe.ses.starter.dto.UnidadeFiltroDTO;
 import br.gov.pe.ses.starter.entidades.publico.Funcionalidade;
-import br.gov.pe.ses.starter.entidades.publico.Gere;
 import br.gov.pe.ses.starter.entidades.publico.Unidade;
 import br.gov.pe.ses.starter.entidades.publico.MacroRegiao;
-import br.gov.pe.ses.starter.entidades.publico.Municipio;
 import br.gov.pe.ses.starter.exception.NegocioException;
 import br.gov.pe.ses.starter.service.interfaces.FuncionalidadeService;
 import br.gov.pe.ses.starter.service.interfaces.UnidadeService;
@@ -57,32 +53,52 @@ public class UnidadeServiceImpl implements UnidadeService {
 
     @Override
     @Transactional
-    public Unidade cadastrar(Unidade hospital) throws NegocioException {
+    public Unidade cadastrar(Unidade unidade) throws NegocioException {
 
         try {
+
+
+            validarUnidade(unidade);
 
             List<Funcionalidade> funcionalidades;
             funcionalidades = funcionalidadeService.buscarTodas();
 
-            if (hospital.isNovo()) {
+            if (unidade.isNovo()) {
 
-                hospital = new UnidadeBuilder(hospital).comPerfilAdministradorGeral(funcionalidades).construir();
+                unidade = new UnidadeBuilder(unidade).comPerfilAdministradorGeral(funcionalidades).construir();
 
             }
 
-            hospital = hospitalRepository.save(hospital);
+            unidade = hospitalRepository.save(unidade);
 
-            return hospital;
+            return unidade;
 
         } catch (org.springframework.orm.ObjectOptimisticLockingFailureException
                  | org.hibernate.StaleObjectStateException e) {
             e.printStackTrace();
             UtilMensagens.mensagemError("Este registro foi alterado por outro usuário. Por favor, refaça a operação!");
-            return hospital;
+            return unidade;
         } catch (Exception e) {
             e.printStackTrace();
             throw new NegocioException("Erro ao Cadastrar/Atualizar o Hospital.");
         }
+    }
+
+    private void validarUnidade(Unidade unidade) throws NegocioException {
+
+        boolean cnpjExiste = hospitalRepository.existsUnidadeByCnpj(unidade.getCnpj());
+
+        if (cnpjExiste) {
+            throw new NegocioException("Já existe uma unidade cadastrada com esse CNPJ.");
+        }
+
+        boolean cnesExiste = hospitalRepository.existsUnidadeByCnes(unidade.getCnes());
+
+        if (Objects.nonNull(unidade.getCnes()) && cnesExiste) {
+            throw new NegocioException("Já existe uma unidade cadastrada com esse CNES.");
+        }
+
+
     }
 
     @Override
@@ -118,7 +134,6 @@ public class UnidadeServiceImpl implements UnidadeService {
     public void alterarConfiguracao(Unidade hospital) throws NegocioException {
         hospitalRepository.save(hospital);
     }
-
 
 
 }

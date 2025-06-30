@@ -30,7 +30,7 @@ public class IncluirUnidadeBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Unidade hospital;
+    private Unidade unidade;
 
     private List<TipoUnidade> tipos;
 
@@ -57,21 +57,21 @@ public class IncluirUnidadeBean implements Serializable {
 
     @PostConstruct
     public void inicializar() {
-        hospital = new Unidade();
-        buscarHospital();
+        unidade = new Unidade();
+        buscarUnidade();
     }
 
-    private void buscarHospital() {
+    private void buscarUnidade() {
         try {
-            hospital = (Unidade) utilSessionBean.getParametro("hospitalSelecionado");
-            hospital = hospitalService.porIdComDependencias(hospital.getId());
+            unidade = (Unidade) utilSessionBean.getParametro("unidadeSelecionada");
+            unidade = hospitalService.porIdComDependencias(unidade.getId());
         } catch (Exception e) {
-            hospital = new Unidade();
+            unidade = new Unidade();
         }
 
         macros = hospitalService.listarMacros();
 
-        if (hospital.isExistente()) {
+        if (unidade.isExistente()) {
             aoSelecionarMacro();
             aoSelecionarGere();
         }
@@ -80,18 +80,18 @@ public class IncluirUnidadeBean implements Serializable {
     }
 
     public void aoSelecionarMacro() {
-        MacroRegiao macroSelecionada = hospital.getMunicipio().getGere().getMacroRegiao();
+        MacroRegiao macroSelecionada = unidade.getMunicipio().getGere().getMacroRegiao();
         geres = gereService.listarPorMacro(macroSelecionada);
     }
 
     public void aoSelecionarGere() {
-        Gere gereSelecionada = hospital.getMunicipio().getGere();
+        Gere gereSelecionada = unidade.getMunicipio().getGere();
         municipios = municipioService.listarPorGere(gereSelecionada);
     }
 
     public void cadastrar() throws NegocioException {
         try {
-            hospitalService.cadastrar(hospital);
+            hospitalService.cadastrar(unidade);
             inicializar();
             UtilMensagens.msgInfoAposRequest("Unidade Cadastrada");
             FacesUtil.redirect("/paginas/unidade/listarUnidades.xhtml?faces-redirect=true");
@@ -101,7 +101,7 @@ public class IncluirUnidadeBean implements Serializable {
     }
 
     public void alterarStatus() throws NegocioException {
-        hospitalService.alterarStatus(hospital);
+        hospitalService.alterarStatus(unidade);
         inicializar();
         UtilMensagens.addInfoMessageGrowl("Sucesso", "Status Alterado");
     }

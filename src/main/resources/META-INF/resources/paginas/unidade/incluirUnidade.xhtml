@@ -1,155 +1,165 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui"
-	template="/WEB-INF/layout/template.xhtml">
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/layout/template.xhtml">
 
-	<ui:define name="title">Incluir Unidade</ui:define>
+    <ui:define name="title">Incluir Unidade</ui:define>
 
-	<ui:define name="">
-		<f:metadata>
-			<f:viewParam name="paginaAnterior"
-				value="/paginas/unidade/listarUnidades.xhtml" />
-			<f:viewParam name="homeOutcome" value="/paginas/principal" />
-			<f:viewParam name="value" value="Unidade,Incluir Unidade" />
-			<f:viewParam name="outcome" value="/paginas/unidade/incluirUnidade" />
-		</f:metadata>
-	</ui:define>
+    <ui:define name="content">
+        <h:form>
+            <div class="grid">
+                <div class="col-12">
+                    <div class="card ui-fluid">
+                        <h5>Incluir Unidade</h5>
 
-	<ui:define name="content">
+                        <!-- Dados principais -->
+                        <div class="formgrid grid">
 
-		<h:form>
-			<div class="grid">
-				<div class="col-12 md:col-12">
-					<div class="card ui-fluid">
-						<h5>Incluir Unidade</h5>
+                            <div class="field col-12 md:col-4">
+                                <p:outputLabel for="name2" value="Nome"/>
+                                <p:inputText id="name2" placeholder="Digite o nome da unidade"
+                                             value="#{incluirUnidadeBean.unidade.nome}" required="true"/>
+                            </div>
 
-						<div class="formgrid grid">
+                            <div class="field col-12 md:col-4">
+                                <p:outputLabel for="cnpj" value="CNPJ"/>
+                                <p:inputMask id="cnpj" mask="99.999.999/9999-99" slotChar="_"
+                                             value="#{incluirUnidadeBean.unidade.cnpj}" required="true"
+                                             placeholder="00.000.000/0000-00"/>
+                            </div>
 
-							<div class="field col-12 md:col-4">
-								<p:outputLabel for="name2" value="Nome" />
-								<p:inputText id="name2"
-											 value="#{incluirUnidadeBean.hospital.nome}" required="true" />
-							</div>
+                            <div class="field col-12 md:col-4">
+                                <p:outputLabel for="sigla" value="Sigla"/>
+                                <p:inputText id="sigla" placeholder="Ex: HGF, UPA, CAPS"
+                                             value="#{incluirUnidadeBean.unidade.sigla}" required="true"/>
+                            </div>
 
-							<div class="field col-12 md:col-4">
-								<p:outputLabel for="cnpj" value="CNPJ" />
-								<p:inputMask slotChar="" mask="99.999.999/9999-99" id="cnpj"
-											 value="#{incluirUnidadeBean.hospital.cnpj}" required="true" />
-							</div>
+                            <div class="field col-12 md:col-4">
+                                <p:outputLabel for="cnes" value="CNES"/>
+                                <p:inputText id="cnes" maxlength="7" placeholder="Código CNES"
+                                             value="#{incluirUnidadeBean.unidade.cnes}"/>
+                            </div>
 
-							<div class="field col-12 md:col-4">
-								<p:outputLabel value="Sigla" />
-								<p:inputText type="text" required="true"
-									value="#{incluirUnidadeBean.hospital.sigla}" />
-							</div>
+                            <div class="field col-12 md:col-4">
+                                <p:outputLabel for="telefone" value="Telefone"/>
+                                <p:inputMask id="telefone" mask="(99) 9 9999-9999" slotChar="_"
+                                             value="#{incluirUnidadeBean.unidade.telefone}"
+                                             placeholder="(00) 00000-0000"/>
+                            </div>
 
-							<div class="field col-12 md:col-3">
+                            <div class="field col-12 md:col-4">
+                                <p:outputLabel for="email" value="Email"/>
+                                <p:inputText id="email" placeholder="exemplo@dominio.com"
+                                             value="#{incluirUnidadeBean.unidade.email}"/>
+                            </div>
 
-								<p:outputLabel value="Tipo de Unidade" for="@next" />
-								<p:selectOneMenu required="true"
-									requiredMessage="Tipo é obrigatório"
-									value="#{incluirUnidadeBean.hospital.tipo}"
-									converter="omnifaces.SelectItemsConverter">
+                            <div class="field col-12 md:col-4">
+                                <p:outputLabel value="Tipo de Unidade" for="@next"/>
+                                <p:selectOneMenu required="true"
+                                                 requiredMessage="Tipo é obrigatório"
+                                                 value="#{incluirUnidadeBean.unidade.tipo}"
+                                                 converter="omnifaces.SelectItemsConverter">
+                                    <f:selectItem itemLabel="Selecione" itemValue="#{null}" noSelectionOption="true"/>
+                                    <f:selectItems value="#{incluirUnidadeBean.tipos}" var="tipo"
+                                                   itemLabel="#{tipo.descricao}" itemValue="#{tipo}"/>
+                                </p:selectOneMenu>
+                            </div>
 
-									<f:selectItem itemLabel="Selecione" itemValue="#{null}"
-										noSelectionOption="true" />
+                            <div class="field col-12 md:col-4">
+                                <p:outputLabel value="Macro" for="@next"/>
+                                <p:selectOneMenu required="true"
+                                                 requiredMessage="Macro é obrigatório"
+                                                 value="#{incluirUnidadeBean.unidade.municipio.gere.macroRegiao}"
+                                                 converter="omnifaces.SelectItemsConverter">
+                                    <p:ajax process="@this" listener="#{incluirUnidadeBean.aoSelecionarMacro}"
+                                            update="geres"/>
+                                    <f:selectItem itemLabel="Selecione" itemValue="#{null}" noSelectionOption="true"/>
+                                    <f:selectItems value="#{incluirUnidadeBean.macros}" var="macro"
+                                                   itemLabel="#{macro.nome}" itemValue="#{macro}"/>
+                                </p:selectOneMenu>
+                            </div>
 
-									<f:selectItems value="#{incluirUnidadeBean.tipos}" var="tipo"
-												   itemLabel="#{tipo.descricao}" itemValue="#{tipo}" />
+                            <div class="field col-12 md:col-4">
+                                <p:outputLabel value="Geres" for="@next"/>
+                                <p:selectOneMenu id="geres" required="true"
+                                                 requiredMessage="Geres é obrigatório"
+                                                 disabled="#{empty incluirUnidadeBean.geres}"
+                                                 value="#{incluirUnidadeBean.unidade.municipio.gere}"
+                                                 converter="omnifaces.SelectItemsConverter">
+                                    <p:ajax process="@this" listener="#{incluirUnidadeBean.aoSelecionarGere}"
+                                            update="municipios"/>
+                                    <f:selectItem itemLabel="Selecione" itemValue="#{null}" noSelectionOption="true"/>
+                                    <f:selectItems value="#{incluirUnidadeBean.geres}" var="gere"
+                                                   itemLabel="#{gere.nome}" itemValue="#{gere}"/>
+                                </p:selectOneMenu>
+                            </div>
 
-								</p:selectOneMenu>
-							</div>
+                            <div class="field col-12 md:col-4">
+                                <p:outputLabel value="Município" for="@next"/>
+                                <p:selectOneMenu id="municipios" required="true"
+                                                 filter="true" filterMatchMode="contains" filterNormalize="true"
+                                                 requiredMessage="Município é obrigatório"
+                                                 disabled="#{empty incluirUnidadeBean.geres}"
+                                                 value="#{incluirUnidadeBean.unidade.municipio}"
+                                                 converter="omnifaces.SelectItemsConverter">
+                                    <f:selectItem itemLabel="Selecione" itemValue="#{null}" noSelectionOption="true"/>
+                                    <f:selectItems value="#{incluirUnidadeBean.municipios}" var="municipio"
+                                                   itemLabel="#{municipio.nome}" itemValue="#{municipio}"/>
+                                </p:selectOneMenu>
+                            </div>
 
-							<div class="field col-12 md:col-3">
+                            <div class="field col-12 md:col-6">
+                                <p:outputLabel for="logradouro" value="Logradouro"/>
+                                <p:inputText id="logradouro" placeholder="Rua, Avenida, Travessa..."
+                                             value="#{incluirUnidadeBean.unidade.logradouro}"/>
+                            </div>
 
-								<p:outputLabel value="Macro" for="@next" />
-								<p:selectOneMenu required="true"
-									requiredMessage="Macro é obrigatório"
-									value="#{incluirUnidadeBean.hospital.municipio.gere.macroRegiao}"
-									converter="omnifaces.SelectItemsConverter">
+                            <div class="field col-12 md:col-2">
+                                <p:outputLabel for="numero" value="Número"/>
+                                <p:inputText id="numero" placeholder="Ex: 123"
+                                             value="#{incluirUnidadeBean.unidade.numero}"/>
+                            </div>
 
-									<p:ajax process="@this"
-										listener="#{incluirUnidadeBean.aoSelecionarMacro}"
-										update="geres" />
+                            <div class="field col-12 md:col-4">
+                                <p:outputLabel for="complemento" value="Complemento"/>
+                                <p:inputText id="complemento" placeholder="Ex: Bloco B, Sala 02"
+                                             value="#{incluirUnidadeBean.unidade.complemento}"/>
+                            </div>
 
-									<f:selectItem itemLabel="Selecione" itemValue="#{null}"
-										noSelectionOption="true" />
+                            <div class="field col-12 md:col-4">
+                                <p:outputLabel for="bairro" value="Bairro"/>
+                                <p:inputText id="bairro" placeholder="Digite o bairro"
+                                             value="#{incluirUnidadeBean.unidade.bairro}"/>
+                            </div>
 
-									<f:selectItems value="#{incluirUnidadeBean.macros}"
-										var="macro" itemLabel="#{macro.nome}" itemValue="#{macro}" />
+                            <div class="field col-12 md:col-4">
+                                <p:outputLabel for="cep" value="CEP"/>
+                                <p:inputMask id="cep" mask="99999-999" slotChar="_"
+                                             value="#{incluirUnidadeBean.unidade.cep}" placeholder="00000-000"/>
+                            </div>
 
-								</p:selectOneMenu>
-							</div>
-
-							<div class="field col-12 md:col-3">
-
-								<p:outputLabel value="Geres" for="@next" />
-								<p:selectOneMenu id="geres" required="true"
-									requiredMessage="Geres é obrigatório"
-									disabled="#{empty incluirUnidadeBean.geres}"
-									value="#{incluirUnidadeBean.hospital.municipio.gere}"
-									converter="omnifaces.SelectItemsConverter">
-
-									<p:ajax process="@this"
-										listener="#{incluirUnidadeBean.aoSelecionarGere}"
-										update="municipios" />
-
-									<f:selectItem itemLabel="Selecione" itemValue="#{null}"
-										noSelectionOption="true" />
-
-									<f:selectItems value="#{incluirUnidadeBean.geres}" var="gere"
-												   itemLabel="#{gere.nome}" itemValue="#{gere}" />
-
-								</p:selectOneMenu>
-							</div>
-
-							<div class="field col-12 md:col-3">
-
-								<p:outputLabel value="Municipio" for="@next" />
-								<p:selectOneMenu id="municipios"
-												 disabled="#{empty incluirUnidadeBean.geres}" required="true"
-												 filter="true" filterMatchMode="contains" filterNormalize="true"
-												 requiredMessage="Municipio é obrigatório"
-												 value="#{incluirUnidadeBean.hospital.municipio}"
-												 converter="omnifaces.SelectItemsConverter">
-
-
-									<f:selectItem itemLabel="Selecione" itemValue="#{null}"
-										noSelectionOption="true" />
-
-									<f:selectItems value="#{incluirUnidadeBean.municipios}"
-										var="municipio" itemLabel="#{municipio.nome}"
-										itemValue="#{municipio}" />
-
-								</p:selectOneMenu>
-
-							</div>
-
-						</div>
-
-						<div class="grid">
-
-							<div class="col-2">
-								<p:commandButton value="Salvar" icon="pi pi-save"
-												 action="#{incluirUnidadeBean.cadastrar}" update="@form"
-												 styleClass="mr-2 mb-2" />
-							</div>
-
-							<div class="col-2">
-								<p:button outcome="/paginas/unidade/listarUnidades"
-									value="Voltar" icon="pi pi-arrow-left"
-									styleClass="ui-button-danger" />
-							</div>
-
-						</div>
-					</div>
-				</div>
-			</div>
+                            <div class="col-12">
+                                <div class="flex justify-content-between flex-wrap">
+                                    <div>
+                                        <p:button outcome="/paginas/unidade/listarUnidades"
+                                                  value="Voltar" icon="pi pi-arrow-left"
+                                                  styleClass="ui-button-outlined ui-button-danger"/>
+                                    </div>
+                                    <div>
+                                        <p:commandButton value="Salvar" icon="pi pi-save"
+                                                         action="#{incluirUnidadeBean.cadastrar}" update="@form"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
 
-		</h:form>
-	</ui:define>
-
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
 </ui:composition>
