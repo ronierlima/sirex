@@ -23,7 +23,6 @@ import lombok.ToString;
 @Table(name = "tipo_unidade")
 @Data
 @EqualsAndHashCode(of = "id", callSuper = false)
-@ToString(of = "id")
 @Audited(withModifiedFlag = true)
 @SequenceGenerator(name = "tipo_unidade_id_seq", sequenceName = "tipo_unidade_id_seq", allocationSize = 1)
 public class TipoUnidade extends BaseEntity implements Serializable {
@@ -58,4 +57,8 @@ public class TipoUnidade extends BaseEntity implements Serializable {
 		return "qualified";
 	}
 
+	@Override
+	public String toString() {
+		return id.toString();
+	}
 }

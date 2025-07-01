@@ -18,11 +18,11 @@
 
     <ui:define name="content">
         <h:form id="formVisualizarUnidade">
-
             <div class="grid">
                 <div class="col-12 md:col-12">
                     <div class="card ui-fluid">
                         <div class="surface-section">
+                            <!-- Título e Localização -->
                             <p:toolbar>
                                 <p:toolbarGroup styleClass="grid">
                                     <div class="col-12 font-medium text-3xl text-900">
@@ -38,56 +38,124 @@
                                               value="Voltar"
                                               icon="pi pi-arrow-left"
                                               styleClass="ui-button-outlined"
-                                              title="Voltar para lista de unidades">
-                                    </p:button>
+                                              title="Voltar para lista de unidades"/>
                                 </p:toolbarGroup>
                             </p:toolbar>
 
-                            <ul class="list-none p-0 m-0">
-                                <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
-                                    <div class="text-500 w-6 md:w-2 font-medium">STATUS</div>
-                                    <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                            <!-- Informações principais -->
+                            <div class="grid">
+                                <div class="col-12 sm:col-6 md:col-4 lg:col-3">
+                                    <div class="field">
+                                        <span class="text-500 font-medium">Status</span><br/>
                                         <span class="customer-badge status-#{visualizarUnidadeBean.unidade.statusCss}">
                                             #{visualizarUnidadeBean.unidade.ativo ? 'Ativo' : 'Inativo'}
                                         </span>
                                     </div>
-                                </li>
-                                <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
-                                    <div class="text-500 w-6 md:w-2 font-medium">CNPJ</div>
-                                    <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">#{visualizarUnidadeBean.unidade.cnpj}</div>
-                                </li>
-                                <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
-                                    <div class="text-500 w-6 md:w-2 font-medium">SIGLA</div>
-                                    <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
-                                        #{visualizarUnidadeBean.unidade.sigla}
-                                    </div>
-                                </li>
-                                <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
-                                    <div class="text-500 w-6 md:w-2 font-medium">TIPO</div>
-                                    <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
-                                        #{visualizarUnidadeBean.unidade.tipo.descricao}
-                                    </div>
-                                </li>
+                                </div>
 
-                                <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
-                                    <div class="text-500 w-6 md:w-2 font-medium">MACRO</div>
-                                    <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                                <div class="col-12 sm:col-6 md:col-4 lg:col-3">
+                                    <div class="field">
+                                        <span class="text-500 font-medium">CNPJ</span><br/>
+                                        <span class="text-900">#{visualizarUnidadeBean.unidade.cnpj}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 sm:col-6 md:col-4 lg:col-3">
+                                    <div class="field">
+                                        <span class="text-500 font-medium">Sigla</span><br/>
+                                        <span class="text-900">#{visualizarUnidadeBean.unidade.sigla}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 sm:col-6 md:col-4 lg:col-3">
+                                    <div class="field">
+                                        <span class="text-500 font-medium">Tipo</span><br/>
+                                        <span class="text-900">#{visualizarUnidadeBean.unidade.tipo.descricao}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 sm:col-6 md:col-4 lg:col-3">
+                                    <div class="field">
+                                        <span class="text-500 font-medium">Macro</span><br/>
                                         <p:chip label="#{visualizarUnidadeBean.unidade.municipio.gere.macroRegiao.nome}"/>
                                     </div>
-                                </li>
-                                <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
-                                    <div class="text-500 w-6 md:w-2 font-medium">GERES</div>
-                                    <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                                </div>
+
+                                <div class="col-12 sm:col-6 md:col-4 lg:col-3">
+                                    <div class="field">
+                                        <span class="text-500 font-medium">Geres</span><br/>
                                         <p:chip label="#{visualizarUnidadeBean.unidade.municipio.gere.nome}"/>
                                     </div>
-                                </li>
-                            </ul>
+                                </div>
+
+                                <div class="col-12 sm:col-6 md:col-4 lg:col-3">
+                                    <div class="field">
+                                        <span class="text-500 font-medium">Município</span><br/>
+                                        <span class="text-900">#{visualizarUnidadeBean.unidade.municipio.nome}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 sm:col-6 md:col-4 lg:col-3">
+                                    <div class="field">
+                                        <span class="text-500 font-medium">CNES</span><br/>
+                                        <span class="text-900">#{visualizarUnidadeBean.unidade.cnes}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 sm:col-6 md:col-4 lg:col-3">
+                                    <div class="field">
+                                        <span class="text-500 font-medium">Telefone</span><br/>
+                                        <span class="text-900">#{visualizarUnidadeBean.unidade.telefone}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 sm:col-6 md:col-4 lg:col-3">
+                                    <div class="field">
+                                        <span class="text-500 font-medium">Email</span><br/>
+                                        <span class="text-900">#{visualizarUnidadeBean.unidade.email}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 sm:col-6 md:col-4 lg:col-3">
+                                    <div class="field">
+                                        <span class="text-500 font-medium">Logradouro</span><br/>
+                                        <span class="text-900">#{visualizarUnidadeBean.unidade.logradouro}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 sm:col-6 md:col-4 lg:col-3">
+                                    <div class="field">
+                                        <span class="text-500 font-medium">Número</span><br/>
+                                        <span class="text-900">#{visualizarUnidadeBean.unidade.numero}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 sm:col-6 md:col-4 lg:col-3">
+                                    <div class="field">
+                                        <span class="text-500 font-medium">Complemento</span><br/>
+                                        <span class="text-900">#{visualizarUnidadeBean.unidade.complemento}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 sm:col-6 md:col-4 lg:col-3">
+                                    <div class="field">
+                                        <span class="text-500 font-medium">Bairro</span><br/>
+                                        <span class="text-900">#{visualizarUnidadeBean.unidade.bairro}</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 sm:col-6 md:col-4 lg:col-3">
+                                    <div class="field">
+                                        <span class="text-500 font-medium">CEP</span><br/>
+                                        <span class="text-900">#{visualizarUnidadeBean.unidade.cep}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Fim das informações -->
                         </div>
                     </div>
                 </div>
             </div>
-
         </h:form>
     </ui:define>
-
 </ui:composition>

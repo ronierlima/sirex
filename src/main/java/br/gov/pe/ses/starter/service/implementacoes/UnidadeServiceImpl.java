@@ -2,8 +2,11 @@ package br.gov.pe.ses.starter.service.implementacoes;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import br.gov.pe.ses.starter.util.CacheConst;
+import jakarta.persistence.EntityNotFoundException;
+import org.apache.commons.logging.Log;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,7 +34,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UnidadeServiceImpl implements UnidadeService {
 
-    private final UnidadeRepository hospitalRepository;
+    private final UnidadeRepository unidadeRepository;
 
     private final MacroRepository macroRepository;
 
@@ -47,16 +50,15 @@ public class UnidadeServiceImpl implements UnidadeService {
 
         Pageable page = PageRequest.of(filtro.getQtdRegistros(), filtro.getPageSize(), ordenacao);
 
-        return hospitalRepository.findAll(restricoes, page);
+        return unidadeRepository.findAll(restricoes, page);
 
     }
 
     @Override
     @Transactional
-    public Unidade cadastrar(Unidade unidade) throws NegocioException {
+    public Unidade cadastrar(Unidade unidade) {
 
         try {
-
 
             validarUnidade(unidade);
 
@@ -64,12 +66,10 @@ public class UnidadeServiceImpl implements UnidadeService {
             funcionalidades = funcionalidadeService.buscarTodas();
 
             if (unidade.isNovo()) {
-
                 unidade = new UnidadeBuilder(unidade).comPerfilAdministradorGeral(funcionalidades).construir();
-
             }
 
-            unidade = hospitalRepository.save(unidade);
+            unidade = unidadeRepository.save(unidade);
 
             return unidade;
 
@@ -78,50 +78,35 @@ public class UnidadeServiceImpl implements UnidadeService {
             e.printStackTrace();
             UtilMensagens.mensagemError("Este registro foi alterado por outro usuário. Por favor, refaça a operação!");
             return unidade;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new NegocioException("Erro ao Cadastrar/Atualizar o Hospital.");
         }
     }
 
     private void validarUnidade(Unidade unidade) throws NegocioException {
 
-        boolean cnpjExiste = hospitalRepository.existsUnidadeByCnpj(unidade.getCnpj());
+        boolean cnpjExiste = unidadeRepository.existsByCnpjAndNotSameId(unidade);
 
         if (cnpjExiste) {
             throw new NegocioException("Já existe uma unidade cadastrada com esse CNPJ.");
         }
 
-        boolean cnesExiste = hospitalRepository.existsUnidadeByCnes(unidade.getCnes());
+        boolean cnesExiste = unidadeRepository.existsByCnesAndNotSameId(unidade);
 
         if (Objects.nonNull(unidade.getCnes()) && cnesExiste) {
             throw new NegocioException("Já existe uma unidade cadastrada com esse CNES.");
         }
 
-
     }
 
-    @Override
-    public Unidade alterarStatus(Unidade hospital) throws NegocioException {
-        try {
-            boolean statusAtual = hospital.getAtivo();
-            hospital.setAtivo(!statusAtual);
-            hospital = hospitalRepository.save(hospital);
-            return hospital;
-        } catch (Exception e) {
-            throw new NegocioException("Ocorreu um Erro ao Alterar Status.");
-        }
-    }
 
     @Override
     @Cacheable(value = CacheConst.UNIDADES_ATIVAS_CACHE)
     public List<Unidade> listarUnidadesAtivas() {
-        return hospitalRepository.findAllAtivos();
+        return unidadeRepository.findAllAtivos();
     }
 
     @Override
     public Unidade porIdComDependencias(Long id) {
-        return hospitalRepository.findById(id).get();
+        return unidadeRepository.findById(id).get();
     }
 
     @Override
@@ -131,8 +116,43 @@ public class UnidadeServiceImpl implements UnidadeService {
 
     @Override
     @Transactional
-    public void alterarConfiguracao(Unidade hospital) throws NegocioException {
-        hospitalRepository.save(hospital);
+    public void alterarConfiguracao(Unidade hospital) {
+        unidadeRepository.save(hospital);
+    }
+
+    @Override
+    @Transactional
+    public void inativarUnidade(Unidade unidade) {
+
+        Unidade unidadeAtual = getById(unidade.getId());
+
+        unidadeAtual.inativar();
+
+        unidadeRepository.save(unidadeAtual);
+
+    }
+
+    @Override
+    @Transactional
+    public void ativarUnidade(Unidade unidade) {
+
+        Unidade unidadeAtual = getById(unidade.getId());
+
+        unidadeAtual.ativar();
+
+        unidadeRepository.save(unidadeAtual);
+
+    }
+
+    private Unidade getById(Long id) {
+
+        Optional<Unidade> optional = unidadeRepository.findById(id);
+
+        if (optional.isEmpty()) {
+            throw new EntityNotFoundException("Unidade não encontrada com o id: " + id + " .");
+        }
+
+        return optional.get();
     }
 
 

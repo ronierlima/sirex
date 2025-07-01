@@ -90,20 +90,11 @@ public class IncluirUnidadeBean implements Serializable {
     }
 
     public void cadastrar() throws NegocioException {
-        try {
-            hospitalService.cadastrar(unidade);
-            inicializar();
-            UtilMensagens.msgInfoAposRequest("Unidade Cadastrada");
-            FacesUtil.redirect("/paginas/unidade/listarUnidades.xhtml?faces-redirect=true");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
-    public void alterarStatus() throws NegocioException {
-        hospitalService.alterarStatus(unidade);
+        hospitalService.cadastrar(unidade);
         inicializar();
-        UtilMensagens.addInfoMessageGrowl("Sucesso", "Status Alterado");
+        UtilMensagens.msgInfoAposRequest("Unidade Cadastrada");
+        FacesUtil.redirect("/paginas/unidade/listarUnidades.xhtml?faces-redirect=true");
     }
 
 }

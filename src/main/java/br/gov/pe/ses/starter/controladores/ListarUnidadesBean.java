@@ -12,7 +12,9 @@ import br.gov.pe.ses.starter.service.interfaces.GereService;
 import br.gov.pe.ses.starter.service.interfaces.MunicipioService;
 import br.gov.pe.ses.starter.service.interfaces.TipoUnidadeService;
 import br.gov.pe.ses.starter.service.interfaces.UnidadeService;
+import br.gov.pe.ses.starter.util.jsf.UtilMensagens;
 import jakarta.annotation.PostConstruct;
+import jakarta.el.MethodExpression;
 import jakarta.faces.view.ViewScoped;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 @ViewScoped
@@ -74,9 +77,16 @@ public class ListarUnidadesBean implements Serializable {
         model.setFiltro(filtro);
     }
 
-    public void alterarStatus() throws NegocioException {
-        unidadeService.alterarStatus(unidadeSelecionada);
+    public void inativarUnidade() {
+        unidadeService.inativarUnidade(unidadeSelecionada);
         inicializar();
+        UtilMensagens.addInfoMessageGrowl("Sucesso", "Status Alterado");
+    }
+
+    public void ativarUnidade() {
+        unidadeService.ativarUnidade(unidadeSelecionada);
+        inicializar();
+        UtilMensagens.addInfoMessageGrowl("Sucesso", "Status Alterado");
     }
 
     public String alterar() {
@@ -94,4 +104,13 @@ public class ListarUnidadesBean implements Serializable {
         return "/paginas/unidade/incluirUnidade.xhtml?faces-redirect=true";
     }
 
+    public void alterarStatus() {
+
+        if (Objects.isNull(unidadeSelecionada.getAtivo()) || !unidadeSelecionada.getAtivo()) {
+            ativarUnidade();
+            return;
+        }
+
+        inativarUnidade();
+    }
 }

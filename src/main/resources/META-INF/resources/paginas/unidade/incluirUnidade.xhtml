@@ -60,7 +60,7 @@
                                 <p:selectOneMenu required="true"
                                                  requiredMessage="Tipo é obrigatório"
                                                  value="#{incluirUnidadeBean.unidade.tipo}"
-                                                 converter="omnifaces.SelectItemsConverter">
+                                                 converter="entityConverter">
                                     <f:selectItem itemLabel="Selecione" itemValue="#{null}" noSelectionOption="true"/>
                                     <f:selectItems value="#{incluirUnidadeBean.tipos}" var="tipo"
                                                    itemLabel="#{tipo.descricao}" itemValue="#{tipo}"/>

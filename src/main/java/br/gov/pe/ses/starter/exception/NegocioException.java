@@ -3,7 +3,7 @@ package br.gov.pe.ses.starter.exception;
 import lombok.Getter;
 import lombok.Setter;
 
-public class NegocioException extends Exception {
+public class NegocioException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 

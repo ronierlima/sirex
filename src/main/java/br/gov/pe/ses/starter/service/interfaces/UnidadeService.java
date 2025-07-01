@@ -17,11 +17,12 @@ public interface UnidadeService {
 
     Unidade porIdComDependencias(Long id);
 
-    Unidade cadastrar(Unidade hospital) throws NegocioException;
+    Unidade cadastrar(Unidade hospital);
 
-    void alterarConfiguracao(Unidade hospital) throws NegocioException;
+    void alterarConfiguracao(Unidade hospital);
 
-    Unidade alterarStatus(Unidade hospital) throws NegocioException;
+    void inativarUnidade(Unidade unidade);
+    void ativarUnidade(Unidade unidade);
 
     List<Unidade> listarUnidadesAtivas();
 

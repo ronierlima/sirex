@@ -43,6 +43,15 @@ public class BaseEntity implements Serializable {
 	@Column(name = "data_alteracao")
 	private Date dataAlteracao;
 
+	public void ativar() {
+		ativo = true;
+	}
+
+	public void inativar() {
+		ativo = false;
+	}
+
+
 	@PrePersist
 	public void prePersist() {
 		ativo = true;
